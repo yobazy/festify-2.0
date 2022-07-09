@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -23,9 +24,65 @@ class App extends Component {
     }) 
   }
 
+  about = () => {
+    axios.get('/about')
+    .then((response) => {
+      console.log(response.data)
+
+      console.log(response.data.message) // Just the message
+      this.setState({
+        message: response.data.message
+      });
+    })
+  }
+
+  home = () => {
+    axios.get('/home')
+    .then((response) => {
+      console.log(response.data)
+
+      console.log(response.data.message) // Just the message
+      this.setState({
+        message: response.data.message
+      });
+    })
+  }
+  
+  event = () => {
+    axios.get('/event')
+    .then((response) => {
+      console.log(response.data)
+
+      console.log(response.data.message) // Just the message
+      this.setState({
+        message: response.data.message
+      });
+    })
+  }
+
+  // home = () => {
+  //   axios.get('/home')
+  //   .then((response) => {
+
+  //   }
+  // }
+
   render() {
     return (
       <div className="App">
+        <h1>Festify App</h1>
+        <nav>
+        <ul>
+          <li><a onClick={this.home}>Logo</a></li>
+          <li><a>User</a></li>
+          <li><a onClick={this.about}>About</a></li>
+          <li><a onClick={this.event}>Shambala</a></li>
+          <li><a>Search</a></li>
+        </ul>
+        </nav>
+        <div>
+          <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
+        </div>
         <h1>{ this.state.message }</h1>
         <button onClick={this.fetchData} >
           Fetch Data
