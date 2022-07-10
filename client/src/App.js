@@ -9,22 +9,22 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      message: 'Click the button to load data!'
+      events: 'Click the button to load data!'
     }
   }
 
-  fetchData = () => {
-    axios.get('/api/data') // You can simply make your requests to "/api/whatever you want"
-    .then((response) => {
-      // handle success
-      console.log(response.data) // The entire response from the Rails API
+  // fetchData = () => {
+  //   axios.get('/api/data') // You can simply make your requests to "/api/whatever you want"
+  //   .then((response) => {
+  //     // handle success
+  //     console.log(response.data) // The entire response from the Rails API
 
-      console.log(response.data.message) // Just the message
-      this.setState({
-        message: response.data.message
-      });
-    }) 
-  }
+  //     console.log(response.data.message) // Just the message
+  //     this.setState({
+  //       message: response.data.message
+  //     });
+  //   }) 
+  // }
 
   about = () => {
     axios.get('/about')
@@ -38,25 +38,21 @@ class App extends Component {
     })
   }
   
-  event = () => {
+  updateEvents = () => {
     console.log('Event triggered')
     axios.get('/events')
     .then((response) => {
       console.log(response.data.data)
       const events = response.data.data
-      console.log(response.data.message) // Just the message
       this.setState({
-        message: response.data.message
+        events: events
       });
     })
   }
 
-  // home = () => {
-  //   axios.get('/home')
-  //   .then((response) => {
-
-  //   }
-  // }
+  printState = () => {
+    console.log(this.state.events)
+  }
 
   render() {
     return (
@@ -75,11 +71,14 @@ class App extends Component {
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
         <EventList
-          events={this.events}/>
+          events={this.state.events}/>
         <h1>{ this.state.message }</h1>
-        <button onClick={this.fetchData} >
+        <button onClick={this.updateEvents} >
           Fetch Data
         </button>        
+        <button onClick={this.printState} >
+          Print state
+        </button>      
       </div>
     );
   }
