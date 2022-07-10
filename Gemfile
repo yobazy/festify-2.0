@@ -16,7 +16,8 @@ gem 'puma', '~> 3.11'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
-
+gem 'rest-client', '~> 2.1'
+gem 'dotenv'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
