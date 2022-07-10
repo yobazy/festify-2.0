@@ -49,7 +49,7 @@ class App extends Component {
   }
   
   event = () => {
-    axios.get('/event')
+    axios.get('/events')
     .then((response) => {
       console.log(response.data)
 
