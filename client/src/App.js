@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
-import Event from './components/Event';
+import EventList from './components/Event/EventList';
+import { useState, useEffect } from "react";
 
 
 class App extends Component {
@@ -36,24 +37,13 @@ class App extends Component {
       });
     })
   }
-
-  home = () => {
-    axios.get('/home')
-    .then((response) => {
-      console.log(response.data)
-
-      console.log(response.data.message) // Just the message
-      this.setState({
-        message: response.data.message
-      });
-    })
-  }
   
   event = () => {
+    console.log('Event triggered')
     axios.get('/events')
     .then((response) => {
-      console.log(response.data)
-
+      console.log(response.data.data)
+      const events = response.data.data
       console.log(response.data.message) // Just the message
       this.setState({
         message: response.data.message
@@ -84,7 +74,8 @@ class App extends Component {
         <div>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
-        <Event/>
+        <EventList
+          events={this.events}/>
         <h1>{ this.state.message }</h1>
         <button onClick={this.fetchData} >
           Fetch Data

@@ -12,7 +12,7 @@ class EventController < ApplicationController
   def events 
     api_key = ENV["EDMTRAIN_API_KEY"]
 
-    @response =  RestClient.get "https://edmtrain.com/api/events?&client=#{api_key}",
+    @response =  RestClient.get "https://edmtrain.com/api/events?events?startDate=2022-07-01&endDate=2022-07-10&locationIds=69&client=#{api_key}",
     {content_type: :json, accept: :json}
 
     @event_info = JSON.parse(@response.body)
