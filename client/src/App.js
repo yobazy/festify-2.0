@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
+import Event from './components/Event';
 
 
 class App extends Component {
@@ -83,6 +84,7 @@ class App extends Component {
         <div>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
+        <Event/>
         <h1>{ this.state.message }</h1>
         <button onClick={this.fetchData} >
           Fetch Data
