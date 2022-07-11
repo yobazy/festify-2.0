@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      events: 'Click the button to load data!'
+      events: [{name:'shambs', date:'asdasd'}]
     }
   }
 
@@ -70,15 +70,14 @@ class App extends Component {
         <div>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
-        <EventList
-          events={this.state.events}/>
-        <h1>{ this.state.message }</h1>
         <button onClick={this.updateEvents} >
           Fetch Data
         </button>        
         <button onClick={this.printState} >
           Print state
         </button>      
+        <EventList
+          events={this.state.events}/>
       </div>
     );
   }

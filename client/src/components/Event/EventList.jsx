@@ -2,10 +2,12 @@ import React from 'react'
 import EventListItem from './EventListItem'
 
 export default function EventList(props)  {
-  console.log(props.events);
+  console.log('EventList props', props.events);
   const listEvents = props.events.map((event) => {
     return (
-      <EventListItem/>
+      <EventListItem
+      name={event.name}
+      date={event.date}/>
     )
   })
 
