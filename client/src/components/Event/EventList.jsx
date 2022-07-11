@@ -7,7 +7,8 @@ export default function EventList(props)  {
     return (
       <EventListItem
       name={event.name}
-      date={event.date}/>
+      date={event.date}
+      artistList={event.artistList}/>
     )
   })
 

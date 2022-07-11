@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      events: [{name:'shambs', date:'asdasd'}]
+      events: [{name:'shambs', date:'asdasd', artistList:[{name:'clams casino'}]}]
     }
   }
 
