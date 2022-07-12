@@ -10,8 +10,6 @@ import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -37,7 +35,7 @@ class App extends Component {
     axios.get('/events')
     .then((response) => {
       console.log(response.data)
-      const events = response.data
+      const events = response.data.data
       this.setState({
         events: events
       });
