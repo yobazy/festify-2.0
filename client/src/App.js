@@ -3,6 +3,13 @@ import axios from 'axios';
 import './App.css';
 import EventList from './components/Event/EventList';
 import { useState, useEffect } from "react";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 
 class App extends Component {
@@ -12,19 +19,6 @@ class App extends Component {
       events: [{name:'shambs', date:'asdasd', artistList:[{name:'clams casino'}]}]
     }
   }
-
-  // fetchData = () => {
-  //   axios.get('/api/data') // You can simply make your requests to "/api/whatever you want"
-  //   .then((response) => {
-  //     // handle success
-  //     console.log(response.data) // The entire response from the Rails API
-
-  //     console.log(response.data.message) // Just the message
-  //     this.setState({
-  //       message: response.data.message
-  //     });
-  //   }) 
-  // }
 
   about = () => {
     axios.get('/about')
@@ -42,8 +36,8 @@ class App extends Component {
     console.log('Event triggered')
     axios.get('/events')
     .then((response) => {
-      console.log(response.data.data)
-      const events = response.data.data
+      console.log(response.data)
+      const events = response.data
       this.setState({
         events: events
       });
@@ -51,31 +45,32 @@ class App extends Component {
   }
 
   printState = () => {
-    console.log(this.state.events)
+    console.log(this.state.events[0])
+    console.log(Event.first)
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Festify App</h1>
-        <nav>
-        <ul>
-          <li><a onClick={this.home}>Logo</a></li>
-          <li><a>User</a></li>
-          <li><a onClick={this.about}>About</a></li>
-          <li><a onClick={this.event}>Shambala</a></li>
-          <li><a>Search</a></li>
-        </ul>
-        </nav>
+        <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="#home">Festify</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#features">User</Nav.Link>
+            <Nav.Link href="#pricing">Search</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
         <div>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
-        <button onClick={this.updateEvents} >
+        <Button onClick={this.updateEvents} >
           Fetch Data
-        </button>        
-        <button onClick={this.printState} >
+        </Button>        
+        <Button onClick={this.printState} >
           Print state
-        </button>      
+        </Button>      
         <EventList
           events={this.state.events}/>
       </div>
