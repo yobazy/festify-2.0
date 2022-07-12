@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get "/events", to: 'event#events'
 
+  get "/artists", to: 'artist#artists'
+
   namespace :api do # /api/data
 
     get '/data', to: 'tests#index'
