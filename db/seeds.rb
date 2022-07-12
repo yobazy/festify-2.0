@@ -10,7 +10,7 @@ require 'json'
 require 'rest-client'
 Dotenv.load
 
-def seedEvents 
+def seed_events 
   api_key = ENV["EDMTRAIN_API_KEY"]
 
   url = "https://edmtrain.com/api/events?events?startDate=2022-07-&endDate=2022-08-25&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
@@ -24,9 +24,27 @@ def seedEvents
     event["artistList"].map do |artist|
       Gig.create(event_id: event["id"], artist_id: artist["id"])
       # if artist["id"] is not in Artist table 
-        # Artist.create(id: artist["id"], name: artist['name'])
+      Artist.create(id: artist["id"], name: artist["name"])
     end
   end
 end
 
-seedEvents()
+seed_events()
+
+# @event_artist_excision = Artist.find_by(id: 258)
+
+# puts "HELLO"
+# puts @event_artist_excision.name
+
+# def seed_artist_spotify_id
+#   access_token = ENV["ACCESS_TOKEN"]
+
+#   auth = {"Authorization": "Bearer #{access_token}"}
+
+ 
+
+#   endpoint1 = RestClient.get("https://api.spotify.com/v1/search?q=#{artist_name}&type=artist&limit=1", headers=auth)
+
+#   data1 = JSON.parse(endpoint1)
+#   render json: data1
+# end
