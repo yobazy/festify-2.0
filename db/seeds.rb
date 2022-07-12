@@ -7,6 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 require 'dotenv'
 require 'json'
+require 'rest-client'
 Dotenv.load
 
 def seedEvents 
