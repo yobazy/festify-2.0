@@ -8,13 +8,14 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import headerImg from "./images/header.jpeg";
 
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      events: [{name:'shambs', date:'asdasd', artistList:[{name:'clams casino'}]}]
+      events: [{name:'shambs', date:'asdasd', venue: {name:"Max Bell", location: "YYC"}, artistList:[{name:'clams casino'}]}]
     }
   }
 
@@ -61,6 +62,7 @@ class App extends Component {
         </Container>
       </Navbar>
         <div>
+          <img src={headerImg} className="header-photo" alt="header"/>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
         <Button onClick={this.updateEvents} >

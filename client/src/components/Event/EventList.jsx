@@ -8,13 +8,15 @@ export default function EventList(props)  {
       <EventListItem
       name={event.name}
       date={event.date}
+      venueName={event.venue.name}
+      venueLocation={event.venue.location}
       artistList={event.artistList}/>
     )
   })
 
   return (
     <section className="events">
-      <h4 className="events__header text--light">Events</h4>
+      <h2 className="events__header text--light">All Events</h2>
       <ul className="events__list">{listEvents}</ul>
     </section>
   );
