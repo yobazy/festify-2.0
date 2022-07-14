@@ -21,4 +21,10 @@ class EventController < ApplicationController
     @event_info = JSON.parse(@response.body)
     render json: @event_info
   end
+
+  def event
+    id = params[:id]
+    @event = Event.joins("join gigs on gigs.event_id = events.edmtrain_event_id").joins("join artists on gigs.artist_id = artists.id").where(events: {edmtrain_event_id: id}).select("artists.name as artist_name, events.name as event_name, events.date as event_date, artists.id as artist_id")
+    render json: @event
+  end
 end
