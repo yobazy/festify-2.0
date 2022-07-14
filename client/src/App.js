@@ -30,36 +30,10 @@ export default function App() {
       })
   }, []);
 
-  // about = () => {
-  //   axios.get('/about')
-  //   .then((response) => {
-  //     console.log(response.data)
-
-  //     console.log(response.data.message) // Just the message
-  //     this.setState({
-  //       message: response.data.message
-  //     });
-  //   })
+  // const printState = () => {
+  //   console.log(state.events[0])
+  //   console.log(Event.first)
   // }
-
-
-
-  // const updateEvents = () => {
-  //   console.log('Event triggered')
-  //   axios.get('/events')
-  //     .then((response) => {
-  //       console.log("response.data", response.data)
-  //       const events = response.data.data
-  //       setState({
-  //         events: events
-  //       });
-  //     })
-  // }
-
-  const printState = () => {
-    console.log(state.events[0])
-    console.log(Event.first)
-  }
 
   return (
     <BrowserRouter>
@@ -78,9 +52,9 @@ export default function App() {
           <img src={headerImg} className="header-photo" alt="header"/>
           <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
         </div>
-      <Button onClick={printState} >
+      {/* <Button onClick={printState} >
         Print state
-      </Button>
+      </Button> */}
       <Routes>
         <Route path="/events" element={
           <EventList

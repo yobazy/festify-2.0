@@ -26,14 +26,14 @@ export default function Event() {
   console.log("EVENTS", events);
   return (
     <div>
-      <h3 class="date-header">
+      <h3 className="date-header">
         {events[0] && <h1>{events[0].event_date}</h1>}</h3>
       <Card style={{ width: '18rem' }}>
         {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
         <Card.Body>
           <Card.Title>{events[0] && <h1>{events[0].event_name}</h1>}</Card.Title>
-          <Card.Text>{events.venueName}</Card.Text>
-          <Card.Text>{events.venueLocation}</Card.Text>
+          {/* <Card.Text>{events.venueName}</Card.Text> */}
+          {/* <Card.Text>{events.venueLocation}</Card.Text> */}
           { artists }
           {/* <Button variant="primary">Go somewhere</Button> */}
         </Card.Body>
