@@ -7,7 +7,7 @@ export default function EventList(props)  {
   const listEvents = props.events.map((event) => {
     return (
       <>
-      <Link key={event.id} to={`/events/${event.id}`}>{event.name}</Link>
+      <Link key={event.id} to={`/events/${event.id}`} style={{textDecoration: 'none', color: 'black' }}><h2>{event.name}</h2></Link>
       <EventListItem
       // name={event.name}
       date={event.date}
