@@ -1,14 +1,19 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import EventListItem from './EventListItem'
 
 export default function EventList(props)  {
   console.log('EventList props', props.events);
   const listEvents = props.events.map((event) => {
-    return (
-      <EventListItem
-      name={event.name}
-      date={event.date}
-      artistList={event.artistList}/>
+    return ( 
+      <Link key={event.id} to={`/events/${event.id}`}>{event.name}</Link>
+      // <EventListItem
+      // key={event.id}
+      // id={event.id}
+      // name={event.name}
+      // date={event.date}
+      // artistList={event.artistList}
+      // />
     )
   })
 
