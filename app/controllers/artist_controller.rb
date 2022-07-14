@@ -10,7 +10,7 @@ class ArtistController < ApplicationController
 
     auth = {"Authorization": "Bearer #{access_token}"}
 
-    artist_name = 'Excision'
+    artist_name = 'Stickybuds'
 
     endpoint1 = RestClient.get("https://api.spotify.com/v1/search?q=#{artist_name}&type=artist&limit=1", headers=auth)
 
