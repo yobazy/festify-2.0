@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import headerImg from "./images/header.jpeg";
 
 
 
@@ -73,9 +74,10 @@ export default function App() {
           </Nav>
         </Container>
       </Navbar>
-      <header>
-        <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
-      </header>
+      <div>
+          <img src={headerImg} className="header-photo" alt="header"/>
+          <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
+        </div>
       <Button onClick={printState} >
         Print state
       </Button>
@@ -94,3 +96,5 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
