@@ -5,9 +5,14 @@ Rails.application.routes.draw do
   
   get '/about', to: 'about#index'
 
-  get "/events", to: 'event#events'
-
+  
   get "/artists", to: 'artist#artists'
+  
+
+    get "/events", to: 'event#events'
+
+    get "/events/:id", to: 'event#event'
+
 
   namespace :api do # /api/data
 
