@@ -16,7 +16,8 @@ import headerImg from "./images/header.jpeg";
 
 export default function App() {
   const [state, setState] = useState({
-    events: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
+    events: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }],
+    allEvents: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
   })
 
   const [query, setQuery] = useState('')
@@ -28,39 +29,31 @@ export default function App() {
         console.log("response.data", response.data)
         const events = response.data.data
         setState({
-          events: events
+          events: events,
+          allEvents: events
         });
       })
   }, []);
 
-  const filterSearch = (events, query) => {
-    const search = events.filter(function(event) {
+  const filterSearch = (allEvents, query) => {
+    const search = allEvents.filter(function(event) {
       return event.name.includes(query)
     })
     return search;
   }
   const handleSearch = () => {
     console.log('Search triggered')
-    console.log('events-pre-filter', state.events)
-    console.log('state', state)
-    console.log('query', query)
+    console.log('all events', state.allEvents)
 
-    let searchResults = filterSearch(state.events, query)
+    let allEvents = state.allEvents
+    let searchResults = filterSearch(state.allEvents, query)
     setState({
-      events: searchResults
+      events: searchResults,
+      allEvents: allEvents
         });
+    console.log('events', state.events)
+    
   };
-
-
-  // updateSearch = (value) => {
-  //   this.setState({searchValue: value})
-  //   axios
-  //     .get(
-  //       `https://api.spoonacular.com/food/products/search?apiKey{1234}&query=${value}&number=100`
-  //     )
-  //     .then((res) => {
-  //       this.setState({ data: res.data });
-  //     })
 
   return (
     <BrowserRouter>
