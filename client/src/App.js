@@ -18,6 +18,9 @@ export default function App() {
   const [state, setState] = useState({
     events: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
   })
+
+  const [query, setQuery] = useState('')
+
   useEffect(() => {
     console.log('Event triggered')
     axios.get('/events')
@@ -30,10 +33,34 @@ export default function App() {
       })
   }, []);
 
-  // const printState = () => {
-  //   console.log(state.events[0])
-  //   console.log(Event.first)
-  // }
+  const filterSearch = (events, query) => {
+    const search = events.filter(function(event) {
+      return event.name.includes(query)
+    })
+    return search;
+  }
+  const handleSearch = () => {
+    console.log('Search triggered')
+    console.log('events-pre-filter', state.events)
+    console.log('state', state)
+    console.log('query', query)
+
+    let searchResults = filterSearch(state.events, query)
+    setState({
+      events: searchResults
+        });
+  };
+
+
+  // updateSearch = (value) => {
+  //   this.setState({searchValue: value})
+  //   axios
+  //     .get(
+  //       `https://api.spoonacular.com/food/products/search?apiKey{1234}&query=${value}&number=100`
+  //     )
+  //     .then((res) => {
+  //       this.setState({ data: res.data });
+  //     })
 
   return (
     <BrowserRouter>
@@ -44,7 +71,12 @@ export default function App() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="#features">User</Nav.Link>
-            <Nav.Link href="#pricing">Search</Nav.Link>
+            <Nav.Link href="#search">
+            {/* <form action="/events/search" method="get" > */}
+              <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query}/>
+              <input name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch}/>
+            {/* </form> */}
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -65,6 +97,10 @@ export default function App() {
           <EventListItem/>
         }>
         </Route>
+        {/* <Route path="/events/search" element={
+          <EventListItem/>
+        }> */}
+        {/* </Route> */}
       </Routes>
     </div>
     </BrowserRouter>
