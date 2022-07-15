@@ -20,11 +20,10 @@ def seed_events
   @events_info = JSON.parse(@response.body)
 
   @events_info["data"].map do |event|
-    Event.create(edmtrain_event_id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
+    Event.create(id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
     event["artistList"].map do |artist|
-      Gig.create(event_id: event["id"], artist_id: artist["id"])
-      # if artist["id"] is not in Artist table 
       Artist.create(id: artist["id"], name: artist["name"])
+      Gig.create(event_id: event["id"], artist_id: artist["id"])
     end
   end
 end

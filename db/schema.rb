@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_233605) do
   create_table "events", force: :cascade do |t|
     t.bigint "edmtrain_event_id"
     t.string "name"
-    t.datetime "date"
+    t.date "date"
     t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -34,12 +34,10 @@ ActiveRecord::Schema.define(version: 2022_07_08_233605) do
   create_table "gigs", force: :cascade do |t|
     t.bigint "event_id"
     t.bigint "artist_id"
-    t.bigint "events_id"
-    t.bigint "artists_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["artists_id"], name: "index_gigs_on_artists_id"
-    t.index ["events_id"], name: "index_gigs_on_events_id"
+    t.index ["artist_id"], name: "index_gigs_on_artist_id"
+    t.index ["event_id"], name: "index_gigs_on_event_id"
   end
 
   create_table "playlists", force: :cascade do |t|
@@ -49,10 +47,10 @@ ActiveRecord::Schema.define(version: 2022_07_08_233605) do
     t.bigint "events_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["events_id"], name: "index_playlists_on_events_id"
+    t.index ["event_id"], name: "index_playlists_on_event_id"
   end
 
-  add_foreign_key "gigs", "artists", column: "artists_id"
-  add_foreign_key "gigs", "events", column: "events_id"
-  add_foreign_key "playlists", "events", column: "events_id"
+  add_foreign_key "gigs", "artists", column: "artist_id"
+  add_foreign_key "gigs", "events", column: "event_id"
+  add_foreign_key "playlists", "events", column: "event_id"
 end
