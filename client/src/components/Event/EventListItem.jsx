@@ -18,12 +18,10 @@ export default function Event() {
   const artistList = events.map(event => {
     return event.artist_name;
   });
-  console.log("artistList", artistList);
 
   const artists = artistList.map((artist) => {
     return <h3 key={events.artist_id}>{artist}</h3>
   })
-  console.log("EVENTS", events);
   return (
     <div>
       <h3 className="date-header">
