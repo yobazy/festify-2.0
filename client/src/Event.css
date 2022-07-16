@@ -1,4 +1,4 @@
-.artist-n-info {
+.event-info {
   display: flex;
   justify-content: space-between;
 }
@@ -6,7 +6,8 @@
 .artist-info {
   display: flex;
   width: 75%;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .artist-name {

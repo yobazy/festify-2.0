@@ -27,11 +27,11 @@ export default function Event() {
   // console.log("EVENTS", events);
   return (
     <div>
-      <div className="date-header">
+      <div className="event-header">
         <Card.Title>{events[0] && <h1>{events[0].event_name}</h1>}</Card.Title>
         {events[0] && <h1>{events[0].event_date}</h1>}
       </div>
-      <div className='artist-n-info'>
+      <div className='event-info'>
       <Card style={{ width: '18rem' }}>
         {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
         <Card.Body>

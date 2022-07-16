@@ -10,7 +10,7 @@ class ArtistController < ApplicationController
   
     auth = {"Authorization": "Bearer #{access_token}"}
 
-    # artist_name = 'Steve Wonder'
+    # artist_name = 'Stevie Wonder'
 
     artist_id = '7guDJrEfX3qb6FEbdPA5qi'
 
