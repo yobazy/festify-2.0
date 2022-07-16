@@ -23,10 +23,10 @@ export default function App() {
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    console.log('Event triggered')
+    // console.log('Event triggered')
     axios.get('/events')
       .then((response) => {
-        console.log("response.data", response.data)
+        // console.log("response.data", response.data)
         const events = response.data.data
         setState({
           events: events,
@@ -73,10 +73,10 @@ export default function App() {
           </Nav>
         </Container>
       </Navbar>
-      <div>
-          <img src={headerImg} className="header-photo" alt="header"/>
-          <h2>Get started? Click one of the many festivals or search for your favourite ones!</h2>
-        </div>
+      <header>
+          {/* <img src={headerImg} className="header-photo" alt="header"/> */}
+          <h2>Get started? Click one of the many festivals below or search for your favourite ones!</h2>
+        </header>
       {/* <Button onClick={printState} >
         Print state
       </Button> */}
