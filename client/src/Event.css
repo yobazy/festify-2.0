@@ -1,0 +1,14 @@
+.artist-n-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.artist-info {
+  display: flex;
+  width: 75%;
+  justify-content: center;
+}
+
+.artist-name {
+  height: fit-content;
+}

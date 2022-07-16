@@ -6,12 +6,12 @@ Rails.application.routes.draw do
   get '/about', to: 'about#index'
 
   
-  get "/artists", to: 'artist#artists'
+  get "/artist", to: 'artist#artist'
   
 
-    get "/events", to: 'event#events'
+  get "/events", to: 'event#events'
 
-    get "/events/:id", to: 'event#event'
+  get "/events/:id", to: 'event#event'
 
 
   namespace :api do # /api/data
