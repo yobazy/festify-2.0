@@ -24,9 +24,15 @@ export default function Tracklist(props) {
   //       });
   //     })
   // }, []);
+  // const [img, setImg] = useState();
+
   const listTracks = props.tracks.map((track) => {
+    const img = track.album.images[2].url;
     return (
+      <>
       <h3>{track.name}</h3>
+      <img src={img} alt="icons" />
+      </>
     )
   })
 

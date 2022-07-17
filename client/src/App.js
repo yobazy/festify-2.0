@@ -73,19 +73,21 @@ export default function App() {
           </Nav>
         </Container>
       </Navbar>
-      <header>
-          {/* <img src={headerImg} className="header-photo" alt="header"/> */}
-          <h2>Get started? Click one of the many festivals below or search for your favourite ones!</h2>
-        </header>
       {/* <Button onClick={printState} >
         Print state
       </Button> */}
       <Routes>
         <Route path="/events" element={
+          <header>
+          {/* <img src={headerImg} className="header-photo" alt="header"/> */}
+          <h2>Get started? Click one of the many festivals below or search for your favourite ones!</h2>
           <EventList
             events={state.events} />
+        </header>
+        }/>
+        {/* <Route path="/events" element={
         }>
-        </Route>
+        </Route> */}
         <Route path="/events/:id" element={
           <EventListItem/>
         }>
