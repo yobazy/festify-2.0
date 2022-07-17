@@ -5,6 +5,7 @@ Dotenv.load
 
 class ArtistController < ApplicationController
   
+  # get top 10 tracks for artist
   def artist
     access_token = ENV["ACCESS_TOKEN"]
   

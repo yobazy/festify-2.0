@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   
   get "/artist", to: 'artist#artist'
 
+  get "/searchevents", to: 'event#searchEvents'
+
+  get "/user", to: 'spotify#getUserID'
 
   namespace :api do # /api/data
 
