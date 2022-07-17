@@ -6,25 +6,33 @@ import Card from 'react-bootstrap/Card';
 import '../../../src/Event.css'
 
 export default function Tracklist(props) {
-
-  const [tracklist, setTracklist] = useState([]);
-
-  useEffect(() => {
-    axios.get(`/tracks`)
-      .then(result => setTracklist(result.data))
-  }, []);
-
-  console.log("TRACKLIST", tracklist.tracks);
-
-  // const listTracks = tracklist.tracks.map((track) => {
-  //   return (
-  //     <h3>{track.name}</h3>
-  //   )
+  console.log('tracklist props', props)
+  // const [tracklist, setTracklist] = useState([]);
+  // const [state, setState] = useState({
+    // tracks: [],
   // })
+
+  // useEffect(() => {
+  //   // console.log('Event triggered')
+  //   axios.get('/tracks')
+  //     .then((response) => {
+  //       // console.log("response.data", response.data)
+  //       const tracks = response.data
+  //       console.log(response.data)
+  //       setState({
+  //         tracks: tracks
+  //       });
+  //     })
+  // }, []);
+  const listTracks = props.tracks.map((track) => {
+    return (
+      <h3>{track.name}</h3>
+    )
+  })
 
   return (
     <div className='tracklist'>
-      {/* <ul>{listTracks}</ul> */}
+      <ul>{listTracks}</ul>
     </div>
   )
 }

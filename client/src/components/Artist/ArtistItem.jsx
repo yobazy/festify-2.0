@@ -8,12 +8,28 @@ import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
 
 export default function Artist() {
+  const [state, setState] = useState({
+    tracks: [],
+  })
 
   const [artist, setArtist] = useState({});
 
   useEffect(() => {
     axios.get(`/artist`)
       .then(result => setArtist(result.data))
+  }, []);
+
+  useEffect(() => {
+    // console.log('Event triggered')
+    axios.get('/tracks')
+      .then((response) => {
+        // console.log("response.data", response.data)
+        const tracks = response.data.tracks
+        console.log(response.data)
+        setState({
+          tracks: tracks
+        });
+      })
   }, []);
 
   // console.log("ARTIST", artist);
@@ -23,7 +39,8 @@ export default function Artist() {
     <h1 className='artist-name'>
       {artist.name}
     </h1>
-    <Tracklist/>
+    <Tracklist
+      tracks={state.tracks}/>
     </div>
   )
 }
