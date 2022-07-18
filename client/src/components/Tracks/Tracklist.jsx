@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import '../../../src/Event.css'
+// import '../../../src/Event.css'
+import Player from './Player';
+import '../../../src/Tracks.css'
 
 export default function Tracklist(props) {
-  console.log('tracklist props', props)
+  // console.log('tracklist props', props)
   // const [tracklist, setTracklist] = useState([]);
   // const [state, setState] = useState({
-    // tracks: [],
+  //   tracks: [],
   // })
 
   // useEffect(() => {
@@ -26,13 +28,17 @@ export default function Tracklist(props) {
   // }, []);
   // const [img, setImg] = useState();
 
+  // function handlePlay() {
+  //   console.log("HELLLOOO");
+  // }
+
   const listTracks = props.tracks.map((track) => {
-    const img = track.album.images[2].url;
+    const img = track.album.images[1].url;
     return (
-      <>
-      <h3>{track.name}</h3>
-      <img src={img} alt="icons" />
-      </>
+      <div className='track-info'>
+      <h3 className='track-name'>{track.name}</h3>
+      <img className='track-img' src={img} alt="icons" />
+      </div>
     )
   })
 

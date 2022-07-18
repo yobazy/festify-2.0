@@ -1,6 +1,16 @@
 .event-info {
   display: flex;
-  justify-content: space-between;
+  align-self: center;
+  width: 100%;
+  margin-top: 2em;
+}
+
+.event_header_name {
+  font-size: 4em;
+}
+
+.event_header_date {
+  font-size: 3em;
 }
 
 .artist-info {
@@ -8,16 +18,18 @@
   width: 75%;
   flex-direction: column;
   justify-content: flex-start;
+  margin-top: 2em;
 }
 
 .event-header {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   text-transform: uppercase;
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 3em;
-  color: rgb(197, 207, 216);
-  margin-right: 2px;
-  transition: margin 1s ease-in-out;
+  margin-bottom: 1.5em;
+  color: rgb(228, 231, 234);
   text-shadow: 0 1px 0 rgb(22, 19, 19),
     0 3px 0 rgb(22, 19, 19),
     0 4px 0 rgb(22, 19, 19),
@@ -32,14 +44,28 @@
 }
 
 .artist-name {
-  height: fit-content;
+  font-size: 3em;
+  margin-bottom: 1.5em;
+  color: rgb(197, 207, 216);
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgb(22, 19, 19),
+    0 3px 0 rgb(22, 19, 19),
+    0 4px 0 rgb(22, 19, 19),
+    0 5px 0 rgb(22, 19, 19),
+    0 6px 1px rgba(0, 0, 0, .1),
+    0 0 5px rgba(0, 0, 0, .1),
+    0 1px 3px rgba(0, 0, 0, .3),
+    0 3px 5px rgba(0, 0, 0, .2),
+    0 5px 10px rgba(0, 0, 0, .25),
+    0 10px 10px rgba(0, 0, 0, .2),
+    0 20px 20px rgba(0, 0, 0, .15);
 }
 
 .list-name {
   text-transform: uppercase;
   font-size: 2rem;
   color: rgb(197, 207, 216);
-  margin-bottom: 2rem;
+  margin-top: 1rem;
   text-shadow: 0 1px 0 rgb(22, 19, 19),
     0 2px 0 rgb(22, 19, 19),
     0 2px 0 rgb(22, 19, 19),
@@ -70,6 +96,7 @@
 .artist-card.card {
   margin-left: 1rem;
   border-width: thick;
+  border-radius: 5px;
   border-color: rgb(95, 119, 138);
 }
 

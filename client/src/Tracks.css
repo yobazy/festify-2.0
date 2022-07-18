@@ -1,0 +1,17 @@
+.track-name {
+  color: rgb(197, 207, 216);;
+}
+
+.track-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2em;
+  align-items: center;
+  width: 70vw;
+  margin-left: 2em;
+}
+
+.track-img {
+  width: 13rem;
+  border-radius: 10px;
+}

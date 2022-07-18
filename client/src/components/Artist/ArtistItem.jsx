@@ -25,19 +25,21 @@ export default function Artist() {
       .then((response) => {
         // console.log("response.data", response.data)
         const tracks = response.data.tracks
-        console.log(response.data)
+        // console.log(response.data)
         setState({
           tracks: tracks
         });
       })
   }, []);
 
+  const tempArtistName = state.tracks[0].artists[0].name;
+
   // console.log("ARTIST", artist);
 
   return (
     <div className='artist-info'>
     <h1 className='artist-name'>
-      {artist.name}
+      {tempArtistName}
     </h1>
     <Tracklist
       tracks={state.tracks}/>

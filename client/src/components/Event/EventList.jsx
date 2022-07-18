@@ -4,11 +4,11 @@ import Card from 'react-bootstrap/Card';
 import '../../.././src/EventList.css';
 import axios from 'axios';
 import chasingPoster from '../../images/chasing-summer.jpeg';
-import friendzyPoster from '../../images/friendzy-fest.jpeg'
+import friendzyPoster from '../../images/friendzy-fest.jpeg';
 import hardWest from '../../images/hard-west.jpeg';
 
 export default function EventList(props) {
-  console.log('EventList props', props.events);
+  // console.log('EventList props', props.events);
 
   const listEvents = props.events.map((event) => {
     // console.log(event.id);
@@ -31,7 +31,7 @@ export default function EventList(props) {
 
     return (
       <Card className='event-card'>
-        <div className='event-info'>
+        <div className='event-preview'>
           <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name'>{event.name}</h2></Link>
           <h3 className='event-date'>{event.date}</h3>
           <div className='event-location'>

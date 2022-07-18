@@ -36,7 +36,7 @@ export default function App() {
   }, []);
 
   const filterSearch = (allEvents, query) => {
-    const search = allEvents.filter(function(event) {
+    const search = allEvents.filter(function (event) {
       return event.name.includes(query)
     })
     return search;
@@ -50,61 +50,66 @@ export default function App() {
     setState({
       events: searchResults,
       allEvents: allEvents
-        });
+    });
     console.log('events', state.events)
-    
+
   };
 
   return (
-    <BrowserRouter>
-    <div className="App">
-      <Navbar className='nav' bg="dark" variant="dark">
-        <Container>
-          <Navbar.Brand href="/">Festify</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#features">User</Nav.Link>
-            <Nav.Link href="#search">
-            {/* <form action="/events/search" method="get" > */}
-              <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query}/>
-              <input name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch}/>
-            {/* </form> */}
-            </Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
-      {/* <Button onClick={printState} >
+    <>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Roboto+Condensed:wght@700&family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap');
+      </style>
+      <BrowserRouter>
+        <div className="App">
+          <Navbar className='nav' bg="dark" variant="dark">
+            <Container>
+              <Navbar.Brand href="/">FESTIFY</Navbar.Brand>
+              <Nav className="me-auto">
+                <Nav.Link href="/">HOME</Nav.Link>
+                <Nav.Link href="#features">USER</Nav.Link>
+                <Nav.Link href="#search">
+                  {/* <form action="/events/search" method="get" > */}
+                  <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query} />
+                  <input name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch} />
+                  {/* </form> */}
+                </Nav.Link>
+              </Nav>
+            </Container>
+          </Navbar>
+          {/* <Button onClick={printState} >
         Print state
       </Button> */}
-      {/* <headerImg>
+          {/* <headerImg>
         <img href="/images/header-banner.jpg" alt='banner'/>
       </headerImg> */}
-      <Routes>
-        <Route path="/events" element={
-          <div>
-            <div className="header-box">
-          <img src={headerImg} className="header-photo" alt="header"/>
-          <h2 className='greeting'>Get started? Click one of the many festivals below or search for your favourite ones! Get started? Click one of the many festivals below or search for your favourite ones!</h2>
-          </div>
-          <EventList
-            events={state.events} />
-        </div>
-        }/>
+          <Routes>
+            <Route path="/events" element={
+              <div>
+                <div className="header-box">
+                  <img src={headerImg} className="header-photo" alt="header" />
+                  <h2 className='greeting'>Get started? Click one of the many festivals below or search for your favourite ones! Get started? Click one of the many festivals below or search for your favourite ones!</h2>
+                </div>
+                <EventList
+                  events={state.events} />
+              </div>
+            } />
 
-        {/* <Route path="/events" element={
+            {/* <Route path="/events" element={
         }>
         </Route> */}
-        <Route path="/events/:id" element={
-          <EventListItem/>
-        }>
-        </Route>
-        {/* <Route path="/events/search" element={
+            <Route path="/events/:id" element={
+              <EventListItem />
+            }>
+            </Route>
+            {/* <Route path="/events/search" element={
           <EventListItem/>
         }> */}
-        {/* </Route> */}
-      </Routes>
-    </div>
-    </BrowserRouter>
+            {/* </Route> */}
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </>
   );
 }
 
