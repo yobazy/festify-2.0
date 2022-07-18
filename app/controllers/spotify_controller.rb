@@ -17,7 +17,7 @@ class SpotifyController < ApplicationController
 
     data1 = JSON.parse(endpoint1)
     userID = data1["id"]
-    render json: userID
+    # render json: userID
     return userID
   end
 
@@ -30,10 +30,9 @@ class SpotifyController < ApplicationController
 
     # puts spotify_user.country
 
-
-
     access_token = ENV["ACCESS_TOKEN"]
-    auth = {"Authorization": "Bearer #{access_token}"}
+    # auth = {"Authorization": "Bearer #{access_token}"}
+    auth1 = 'Bearer ' + access_token
 
     user_id = getUserID
 
@@ -42,15 +41,31 @@ class SpotifyController < ApplicationController
       # "description": "New playlist description",
       "public": true
     }
-
-    headers = {
-      "Authorization": "Bearer #{access_token}"
-    }
  
-    endpoint1 = RestClient.post("https://api.spotify.com/v1/users/#{user_id}/playlists", headers=auth)
+    url = 'https://api.spotify.com/v1/users/'+ user_id +'/playlists'
 
-    data1 = JSON.parse(endpoint1)
+    puts url
+
+    response = RestClient.post(url, header={Authorization: auth1}, data=data)
+
+    #   {
+    #   "name": "New Playlist",
+    #   # "description": "New playlist description",
+    #   "public": true}
+
+    # url = 'https://api.spotify.com/v1/users/'+user_id+'/playlists'
+
+    # response = RestClient::Request.new({
+    # method: :post,
+    # url: url,
+    # headers: {content_type: 'application/json', Authorization: auth1},
+    # data: data,
+    # dadad: 'dada'
+    # }).execute
+    # end
+    data1 = JSON.parse(response)
     render json: data1
+    
   end
 
   def addCoverImage
@@ -61,21 +76,14 @@ class SpotifyController < ApplicationController
 
   def addTracks
     access_token = ENV["ACCESS_TOKEN"]
+    
     auth = {"Authorization": "Bearer #{access_token}"}
 
-    playlist_id = "6l9KdWDlnALLTPq35hi8Y7"
+    response = RestClient.get("https://api.spotify.com/v1/users/#{user_id}/playlists/#{playlist_id}/tracks?uris=#{uris}
+    ", header=auth)
 
-    uris = ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh","spotify:track:1301WleyT98MSxVHPZCA6M", "spotify:episode:512ojhOuo1ktJprKbVcKyQ"]
-
-    data = {
-      "uris": uris
-      }
-
-    url = "https://api.spotify.com/v1/playlists/#{playlist_id}/tracks"
-
-    endpoint1 = RestClient.post("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks", headers=auth, data=data)
-
-    data1 = JSON.parse(endpoint1)
+    data1 = JSON.parse(response)
+    
     render json: data1
 
   end
