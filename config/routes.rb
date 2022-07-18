@@ -17,6 +17,10 @@ Rails.application.routes.draw do
 
   get "/user", to: 'spotify#getUserID'
 
+  post "/playlist", to: 'spotify#createPlaylist'
+
+  post "/tracks", to: 'spotify#addTracks'
+
   namespace :api do # /api/data
 
     get '/data', to: 'tests#index'
