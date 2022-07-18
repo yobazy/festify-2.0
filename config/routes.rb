@@ -13,6 +13,13 @@ Rails.application.routes.draw do
   
   get "/artist", to: 'artist#artist'
 
+  get "/searchevents", to: 'event#searchEvents'
+
+  get "/user", to: 'spotify#getUserID'
+
+  post "/playlist", to: 'spotify#createPlaylist'
+
+  post "/tracks", to: 'spotify#addTracks'
 
   namespace :api do # /api/data
 
