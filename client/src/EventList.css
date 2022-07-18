@@ -1,0 +1,89 @@
+.event-card.card {
+  display: flex;
+  align-self: center;
+  width: 90%;
+  margin-left: 3rem;
+  margin-bottom: 1rem;
+  border-width: thin;
+  border-radius: 10px;
+  border-color: rgb(119, 152, 179);
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #352738;
+background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+.events__header.text--light {
+  font-size: 5em;
+  color: rgb(197, 207, 216);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 55em;
+}
+
+.event-name {
+  text-transform: uppercase;
+  font-size: 3em;
+  color: rgb(197, 207, 216);
+  margin-right: 2px;
+  transition: margin 1s ease-in-out;
+  text-shadow: 0 1px 0 rgb(22, 19, 19),
+               0 3px 0 rgb(22, 19, 19),
+               0 4px 0 rgb(22, 19, 19),
+               0 5px 0 rgb(22, 19, 19),
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+}
+
+/* .tag {
+  margin-right: 2px;
+  transition: margin 0.2s ease-in-out;
+  background-color: gray;
+}
+
+.tag:hover {
+  margin-top: -2; */
+/* } */
+
+.event-name:hover {
+  text-shadow: 0 5px 0 rgb(22, 19, 19),
+               0 9px 0 rgb(22, 19, 19),
+               0 9px 0 rgb(22, 19, 19),
+               0 10px 0 rgb(22, 19, 19),
+               0 9px 6px rgba(0,0,0,.1),
+               0 0 8px rgba(0,0,0,.1),
+               0 5px 8px rgba(0,0,0,.3),
+               0 7px 9px rgba(0,0,0,.2),
+               0 9px 15px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 25px 25px rgba(0,0,0,.15);
+}
+
+.event-date {
+  color: rgb(116, 140, 160);
+}
+
+.event-location {
+  color: rgb(166, 180, 192);
+
+}
+
+.event-poster {
+  width: 250px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-radius: 10px;
+  margin-right: 5em;
+}

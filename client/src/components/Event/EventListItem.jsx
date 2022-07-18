@@ -15,14 +15,13 @@ export default function Event() {
       .then(result => setEvents(result.data))
   }, [params.id]);
 
-
   const artistList = events.map(event => {
     return event.artist_name;
   });
   // console.log("artistList", artistList);
 
   const artists = artistList.map((artist, i) => {
-    return <h3 key={i}>{artist}</h3>
+    return <h3 className='list-name' key={i}>{artist}</h3>
   })
   // console.log("EVENTS", events);
   return (
@@ -32,9 +31,9 @@ export default function Event() {
         {events[0] && <h1>{events[0].event_date}</h1>}
       </div>
       <div className='event-info'>
-      <Card style={{ width: '18rem' }}>
+      <Card className='artist-card' style={{ width: '18rem' }}>
         {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-        <Card.Body>
+        <Card.Body className='artist-list'>
           {/* <Card.Text>{events.venueName}</Card.Text> */}
           {/* <Card.Text>{events.venueLocation}</Card.Text> */}
           {artists}

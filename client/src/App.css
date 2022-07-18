@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  background-color: rgb(34, 37, 40);
+  background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
 .App-logo {
@@ -9,14 +12,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: (35, 39, 47);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(119, 152, 179);
 }
 
 .App-link {
@@ -27,6 +30,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -34,4 +38,24 @@
 
 .header-photo {
   width: 100vw;
+}
+
+.header-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.greeting {
+  border-style: solid;
+  border-radius: 10px;
+  border-width: thin;
+  background-color: rgba(23, 29, 34, 0.954);
+  color: rgb(197, 207, 216);
+  width: 90%;
+  display: flex;
+  position: absolute;
+  margin-top: 2rem;
+  border-color: rgb(119, 152, 179);
+  box-shadow: 0.15rem 0.15rem 0.05rem 0.05rem rgb(119, 152, 179);
 }

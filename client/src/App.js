@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import headerImg from "./images/header.jpeg";
+import headerImg from "./images/banner.jpeg";
 
 
 
@@ -58,7 +58,7 @@ export default function App() {
   return (
     <BrowserRouter>
     <div className="App">
-      <Navbar bg="dark" variant="dark">
+      <Navbar className='nav' bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/">Festify</Navbar.Brand>
           <Nav className="me-auto">
@@ -76,15 +76,21 @@ export default function App() {
       {/* <Button onClick={printState} >
         Print state
       </Button> */}
+      {/* <headerImg>
+        <img href="/images/header-banner.jpg" alt='banner'/>
+      </headerImg> */}
       <Routes>
         <Route path="/events" element={
-          <header>
-          {/* <img src={headerImg} className="header-photo" alt="header"/> */}
-          <h2>Get started? Click one of the many festivals below or search for your favourite ones!</h2>
+          <div>
+            <div className="header-box">
+          <img src={headerImg} className="header-photo" alt="header"/>
+          <h2 className='greeting'>Get started? Click one of the many festivals below or search for your favourite ones! Get started? Click one of the many festivals below or search for your favourite ones!</h2>
+          </div>
           <EventList
             events={state.events} />
-        </header>
+        </div>
         }/>
+
         {/* <Route path="/events" element={
         }>
         </Route> */}
