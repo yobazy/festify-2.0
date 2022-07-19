@@ -93,6 +93,23 @@ class SpotifyController < ApplicationController
     render json: response
   end
 
+  def eventPlaylist
+    # event details for playlist name
+    eventName = params[:eventName]
+    eventDate = params[:eventDate]
+
+    # artist ids for event in array
+    artistArr = 
+
+    # create playlist using event name, date for name
+    playlist_id = createPlaylist(eventName, eventDate)
+
+    # populate playlist based on artists top tracks
+    # get top tracks for artist
+    top_tracks = getTopTracks(artist_id)
+    # input into playlist 
+    addTracksToPlaylist(playlist_id, top_tracks)
+
   def followPlaylist
   end
 
