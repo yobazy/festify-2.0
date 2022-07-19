@@ -23,7 +23,6 @@ ActiveRecord::Schema.define(version: 2022_07_15_234158) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.bigint "edmtrain_event_id"
     t.string "name"
     t.date "date"
     t.string "location"

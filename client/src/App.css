@@ -63,3 +63,8 @@
 * {
   font-family: 'Roboto Condensed', sans-serif;
 }
+
+.nav {
+  position: fixed;
+  width: 100vw;
+}

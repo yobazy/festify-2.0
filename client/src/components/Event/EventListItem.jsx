@@ -11,6 +11,11 @@ export default function Event() {
 
   const [events, setEvents] = useState([]);
 
+  // const [artist, setArtist] = useState([]);
+
+  const [tracks, setTracks] = useState([]);
+
+
   useEffect(() => {
     axios.get(`/events/${params.id}`)
       .then(result => setEvents(result.data))
@@ -21,8 +26,15 @@ export default function Event() {
   });
   // console.log("artistList", artistList);
 
+  // console.log(events);
+  const showTopTracks = (e) => {
+    // console.log("e", e.target.innerHTML);
+    axios.post('/tracks', { data: e.target.innerHTML })
+      .then(result => setTracks(result.data.tracks))
+  }
+
   const artists = artistList.map((artist, i) => {
-    return <h3 className='list-name' key={i}>{artist}</h3>
+    return <button onClick={showTopTracks} className='list-name' key={i}>{artist}</button>
   })
   // console.log("EVENTS", events);
   return (
@@ -39,13 +51,10 @@ export default function Event() {
         <Card className='artist-card' style={{ width: '18rem' }}>
           {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
           <Card.Body className='artist-list'>
-            {/* <Card.Text>{events.venueName}</Card.Text> */}
-            {/* <Card.Text>{events.venueLocation}</Card.Text> */}
             {artists}
-            {/* <Button variant="primary">Go somewhere</Button> */}
           </Card.Body>
         </Card>
-        <Artist />
+        <Artist tracks={tracks} />
       </div>
     </div>
   )

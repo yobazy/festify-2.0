@@ -46,7 +46,7 @@ export default function EventList(props) {
 
   return (
     <section className="events">
-      <h1 className="events__header text--light">All Events</h1>
+      <h1 className="events__header text--light">Events</h1>
       <ul className="events__list">{listEvents}</ul>
     </section>
   );

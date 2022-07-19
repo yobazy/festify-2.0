@@ -7,42 +7,45 @@ import '../../../src/Event.css'
 import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
 
-export default function Artist() {
-  const [state, setState] = useState({
-    tracks: [],
-  })
+export default function Artist(props) {
+  // const [state, setState] = useState({
+  //   tracks: [],
+  // })
 
   const [artist, setArtist] = useState({});
 
-  useEffect(() => {
-    axios.get(`/artist`)
-      .then(result => setArtist(result.data))
-  }, []);
+  //MAKE FUNCTION
+  // useEffect(() => {
+  //   axios.get(`/artist`)
+  //     .then(result => setArtist(result.data))
+  // }, []);
 
-  useEffect(() => {
-    // console.log('Event triggered')
-    axios.get('/tracks')
-      .then((response) => {
-        // console.log("response.data", response.data)
-        const tracks = response.data.tracks
-        // console.log(response.data)
-        setState({
-          tracks: tracks
-        });
-      })
-  }, []);
 
-  const tempArtistName = state.tracks[0].artists[0].name;
+  //MAKE FUNCTION
+  // useEffect(() => {
+  //   // console.log('Event triggered')
+  //   axios.get('/tracks')
+  //     .then((response) => {
+  //       // console.log("response.data", response.data)
+  //       const tracks = response.data.tracks
+  //       // console.log(response.data)
+  //       setState({
+  //         tracks: tracks
+  //       });
+  //     })
+  // }, []);
 
-  // console.log("ARTIST", artist);
+  // const tempArtistName = state.tracks[0].artists[0].name;
+
+  // console.log("ARTIST", art);
 
   return (
     <div className='artist-info'>
     <h1 className='artist-name'>
-      {tempArtistName}
+      {/* {tempArtistName} */}
     </h1>
     <Tracklist
-      tracks={state.tracks}/>
+      tracks={props.tracks}/>
     </div>
   )
 }
