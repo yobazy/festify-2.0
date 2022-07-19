@@ -1,6 +1,5 @@
 require 'dotenv'
 require 'json'
-require 'rspotify'
 require 'uri'
 require 'net/http'
 
@@ -23,6 +22,7 @@ class SpotifyController < ApplicationController
   end
 
   def createPlaylist
+    puts 'creating playlist'
     user_id = getUserID
     access_token = ENV["ACCESS_TOKEN"]
 
@@ -49,28 +49,66 @@ class SpotifyController < ApplicationController
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    
+    render json: response
   end
 
   def addCoverImage
+    # playlist_id = "0103aYYzgGTxNnhywPvbQt"
+    
   end
 
   def updateDetails
   end
 
-  def addTracks
+  def addTracksToPlaylist
     access_token = ENV["ACCESS_TOKEN"]
+
+    ## this should be an input
+    playlist_id = "0103aYYzgGTxNnhywPvbQt"
+
+    ## this should be an input for either artist_id or the top tracks
+    uris =[
+      "spotify:track:7IZJ77l62dgOeHwoKzJQTv",
+      "spotify:track:2MrrxPBSQRYcuNfEeChkaR"
+    ]
+
+    uri = URI.parse("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks")
+    request = Net::HTTP::Post.new(uri)
+    request.content_type = "application/json"
+    request["Authorization"] = "Bearer #{access_token}"
+    request["Content-Length"] = 49
+    request.body = JSON.dump({
+      "uris" => uris,
+      "position" => 0
+    })
     
-    auth = {"Authorization": "Bearer #{access_token}"}
-
-    response = RestClient.get("https://api.spotify.com/v1/users/#{user_id}/playlists/#{playlist_id}/tracks?uris=#{uris}
-    ", header=auth)
-
-    data1 = JSON.parse(response)
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
     
-    render json: data1
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
 
+    render json: response
   end
+
+  def eventPlaylist
+    # event details for playlist name
+    eventName = params[:eventName]
+    eventDate = params[:eventDate]
+
+    # artist ids for event in array
+    artistArr = 
+
+    # create playlist using event name, date for name
+    playlist_id = createPlaylist(eventName, eventDate)
+
+    # populate playlist based on artists top tracks
+    # get top tracks for artist
+    top_tracks = getTopTracks(artist_id)
+    # input into playlist 
+    addTracksToPlaylist(playlist_id, top_tracks)
 
   def followPlaylist
   end
