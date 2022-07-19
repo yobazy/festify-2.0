@@ -21,7 +21,7 @@ class SpotifyController < ApplicationController
     return userID
   end
 
-  def createPlaylist
+  def createPlaylist(name, date)
     puts 'creating playlist'
     user_id = getUserID
     access_token = ENV["ACCESS_TOKEN"]
@@ -37,7 +37,7 @@ class SpotifyController < ApplicationController
     request["Authorization"] = "Bearer #{access_token}"
 
     request.body = JSON.dump({
-      "name" => "Test Playlist",
+      "name" => name+" "+date,
       "description" => "New playlist description",
       "public" => true
     })
@@ -49,7 +49,8 @@ class SpotifyController < ApplicationController
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    render json: response
+    return response["location"]
+    # return JSON.parse(response)
   end
 
   def addCoverImage
@@ -60,17 +61,17 @@ class SpotifyController < ApplicationController
   def updateDetails
   end
 
-  def addTracksToPlaylist
+  def addTracksToPlaylist(tracks, playlist_id)
+    puts 'adding tracks'
     access_token = ENV["ACCESS_TOKEN"]
 
     ## this should be an input
-    playlist_id = "0103aYYzgGTxNnhywPvbQt"
+    # playlist_id = "0103aYYzgGTxNnhywPvbQt"
 
     ## this should be an input for either artist_id or the top tracks
-    uris =[
-      "spotify:track:7IZJ77l62dgOeHwoKzJQTv",
-      "spotify:track:2MrrxPBSQRYcuNfEeChkaR"
-    ]
+    uris = tracks
+    puts uris
+    puts playlist_id
 
     uri = URI.parse("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks")
     request = Net::HTTP::Post.new(uri)
@@ -95,24 +96,50 @@ class SpotifyController < ApplicationController
 
   def eventPlaylistGenerator
     # event details for playlist name
-    eventName = params[:eventName]
-    eventDate = params[:eventDate]
+    event_name = 'Chasing Summer'
+    # eventName = params[:eventName]
+    event_date = '31-07-22'
+    # eventDate = params[:eventDate]
 
     # artist ids for event in array
-    artistArr = 
+    # artistArr = getArtistIDs
+    artistArr = ['5FKchcZpQOkqFvXBj1aCvb']
 
     # create playlist using event name, date for name
-    playlist_id = createPlaylist(eventName, eventDate)
-
+    result = createPlaylist(event_name, event_date)
+    puts 'playlist_id'
+    pid = URI.parse(result)
+    playlist_id = pid.path.split('/').last
+    puts playlist_id
+    
     # populate playlist based on artists top tracks
-    # get top tracks for artist
-    top_tracks = getTopTracks(artist_id)
-    # input into playlist 
-    addTracksToPlaylist(playlist_id, top_tracks)
+    access_token = ENV["ACCESS_TOKEN"]
+    auth = {"Authorization": "Bearer #{access_token}"}
+
+    artistArr.each do |artist|
+      # puts 'artist'
+      # puts artist
+      #get top tracks
+      tracks_response = RestClient.get("https://api.spotify.com/v1/artists/#{artist}/top-tracks?market=CA", headers=auth)
+
+      top_tracks = JSON.parse(tracks_response)
+      artistUris = []
+      top_tracks['tracks'].each do |track|
+        # puts track['name']
+        # puts track['uri']
+
+        artistUris.append(track['uri'])
+      end
+      # puts artistUris
+      addTracksToPlaylist(artistUris, playlist_id)
+    end
+
+    # # get top tracks for artist
+    # top_tracks = getTopTracks(artist_id)
+    # # input into playlist 
+    # addTracksToPlaylist(playlist_id, top_tracks)
 
   end
-  # def followPlaylist
-  # end
 
   def getArtistInfo
     access_token = ENV["ACCESS_TOKEN"]
@@ -127,6 +154,35 @@ class SpotifyController < ApplicationController
     data1 = JSON.parse(endpoint1)
     artistURI = data1["artists"]["items"]
     render json: artistURI
+  end
+
+  def getArtistIDs
+    ## this artists var assignment needs to be fixed
+    artists = Artist.joins("join gigs on gigs.artist_id = artists.id")
+    artistArr = []
+    artists.each do |artist|
+      artistArr.append(artist.spotify_artist_id)  
+    end
+    return artistArr
+  end
+
+  def top_tracks
+    access_token = ENV["ACCESS_TOKEN"]
+  
+    auth = {"Authorization": "Bearer #{access_token}"}
+
+    artist_name = params[:data]
+
+    puts artist_name
+
+    artist = Artist.find_by(name: "#{artist_name}")
+
+    artist_id = artist.spotify_artist_id
+
+    endpoint1 = RestClient.get("https://api.spotify.com/v1/artists/#{artist_id}/top-tracks?market=CA", headers=auth)
+
+    data1 = JSON.parse(endpoint1)
+    return data1
   end
 
 end

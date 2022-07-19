@@ -5,15 +5,17 @@ Rails.application.routes.draw do
   
   get '/about', to: 'about#index'
 
-  get "/tracks", to: 'tracks#top_tracks'
+  get "/tracks", to: 'spotify#top_tracks'
 
-  post "/tracks", to: 'tracks#top_tracks'
+  post "/tracks", to: 'spotify#top_tracks'
   
   get "/events", to: 'event#events'
   
   get "/events/:id", to: 'event#event'
   
   get "/artist", to: 'artist#artist'
+
+  get "/artists", to: 'spotify#getArtistIDs'
 
   get "/artistInfo", to: 'spotify#getArtistInfo'
 
@@ -24,6 +26,8 @@ Rails.application.routes.draw do
   post "/playlist", to: 'spotify#createPlaylist'
 
   post "/addtracks", to: 'spotify#addTracksToPlaylist'
+
+  post "/genPlay", to: 'spotify#eventPlaylistGenerator'
 
   namespace :api do # /api/data
 
