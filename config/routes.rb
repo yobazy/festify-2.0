@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   
   get "/artist", to: 'artist#artist'
 
+  get "/artistInfo", to: 'spotify#getArtistInfo'
+
   get "/searchevents", to: 'event#searchEvents'
 
   get "/user", to: 'spotify#getUserID'

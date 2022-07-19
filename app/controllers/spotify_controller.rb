@@ -93,7 +93,7 @@ class SpotifyController < ApplicationController
     render json: response
   end
 
-  def eventPlaylist
+  def eventPlaylistGenerator
     # event details for playlist name
     eventName = params[:eventName]
     eventDate = params[:eventDate]
@@ -110,7 +110,23 @@ class SpotifyController < ApplicationController
     # input into playlist 
     addTracksToPlaylist(playlist_id, top_tracks)
 
-  def followPlaylist
+  end
+  # def followPlaylist
+  # end
+
+  def getArtistInfo
+    access_token = ENV["ACCESS_TOKEN"]
+    auth = {"Authorization": "Bearer #{access_token}"}
+
+    puts auth
+    artist_name = 'Dalek One'
+
+    endpoint1 = RestClient.get("https://api.spotify.com/v1/search?q=#{artist_name}&type=artist&limit=1", headers=auth)
+    # endpoint1 = RestClient.get("https://api.spotify.com/v1/artists/#{artist_id}", headers=auth)
+
+    data1 = JSON.parse(endpoint1)
+    artistURI = data1["artists"]["items"]
+    render json: artistURI
   end
 
 end
