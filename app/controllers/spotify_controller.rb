@@ -60,11 +60,13 @@ class SpotifyController < ApplicationController
   def updateDetails
   end
 
-  def addTracks
+  def addTracksToPlaylist
     access_token = ENV["ACCESS_TOKEN"]
 
+    ## this should be an input
     playlist_id = "0103aYYzgGTxNnhywPvbQt"
 
+    ## this should be an input for either artist_id or the top tracks
     uris =[
       "spotify:track:7IZJ77l62dgOeHwoKzJQTv",
       "spotify:track:2MrrxPBSQRYcuNfEeChkaR"

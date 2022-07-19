@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   post "/playlist", to: 'spotify#createPlaylist'
 
-  post "/tracks", to: 'spotify#addTracks'
+  post "/tracks", to: 'spotify#addTracksToPlaylist'
 
   namespace :api do # /api/data
 
