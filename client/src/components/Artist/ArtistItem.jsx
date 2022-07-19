@@ -8,6 +8,7 @@ import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
 
 export default function Artist(props) {
+  console.log(props)
   // const [state, setState] = useState({
   //   tracks: [],
   // })
@@ -42,7 +43,7 @@ export default function Artist(props) {
   return (
     <div className='artist-info'>
     <h1 className='artist-name'>
-      {/* {tempArtistName} */}
+      {props.artist}
     </h1>
     <Tracklist
       tracks={props.tracks}/>

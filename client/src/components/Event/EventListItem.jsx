@@ -11,7 +11,7 @@ export default function Event() {
 
   const [events, setEvents] = useState([]);
 
-  // const [artist, setArtist] = useState([]);
+  const [artist, setArtist] = useState('');
 
   const [tracks, setTracks] = useState([]);
 
@@ -28,9 +28,14 @@ export default function Event() {
 
   // console.log(events);
   const showTopTracks = (e) => {
-    // console.log("e", e.target.innerHTML);
+    console.log("e", e.target.innerHTML);
+    setArtist(e.target.innerHTML)
     axios.post('/tracks', { data: e.target.innerHTML })
-      .then(result => setTracks(result.data.tracks))
+      .then((result) => {
+        console.log('result.data', result.data)
+        setTracks(result.data.tracks)
+        // setArtist()
+      })
   }
 
   const artists = artistList.map((artist, i) => {
@@ -54,7 +59,7 @@ export default function Event() {
             {artists}
           </Card.Body>
         </Card>
-        <Artist tracks={tracks} />
+        <Artist tracks={tracks} artist={artist}/>
       </div>
     </div>
   )
