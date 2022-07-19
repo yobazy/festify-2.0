@@ -90,20 +90,18 @@ class SpotifyController < ApplicationController
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-
-    render json: response
   end
 
   def eventPlaylistGenerator
     # event details for playlist name
     event_name = 'Chasing Summer'
     # eventName = params[:eventName]
-    event_date = '31-07-22'
+    event_date = '2022-07-30'
     # eventDate = params[:eventDate]
 
     # artist ids for event in array
-    # artistArr = getArtistIDs
-    artistArr = ['5FKchcZpQOkqFvXBj1aCvb']
+    artistArr = getArtistIDs
+    # artistArr = ['5FKchcZpQOkqFvXBj1aCvb']
 
     # create playlist using event name, date for name
     result = createPlaylist(event_name, event_date)
@@ -133,12 +131,7 @@ class SpotifyController < ApplicationController
       # puts artistUris
       addTracksToPlaylist(artistUris, playlist_id)
     end
-
-    # # get top tracks for artist
-    # top_tracks = getTopTracks(artist_id)
-    # # input into playlist 
-    # addTracksToPlaylist(playlist_id, top_tracks)
-
+    render json: pid
   end
 
   def getArtistInfo
