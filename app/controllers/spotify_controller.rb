@@ -55,7 +55,6 @@ class SpotifyController < ApplicationController
   def addCoverImage
     # playlist_id = "0103aYYzgGTxNnhywPvbQt"
     
-
   end
 
   def updateDetails
@@ -64,16 +63,20 @@ class SpotifyController < ApplicationController
   def addTracks
     access_token = ENV["ACCESS_TOKEN"]
 
-    uri = URI.parse("https://api.spotify.com/v1/playlists/0103aYYzgGTxNnhywPvbQt/tracks")
+    playlist_id = "0103aYYzgGTxNnhywPvbQt"
+
+    uris =[
+      "spotify:track:7IZJ77l62dgOeHwoKzJQTv",
+      "spotify:track:2MrrxPBSQRYcuNfEeChkaR"
+    ]
+
+    uri = URI.parse("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks")
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
     request["Authorization"] = "Bearer #{access_token}"
     request["Content-Length"] = 49
     request.body = JSON.dump({
-      "uris" => [
-        "spotify:track:7IZJ77l62dgOeHwoKzJQTv",
-        "spotify:track:2MrrxPBSQRYcuNfEeChkaR"
-      ],
+      "uris" => uris,
       "position" => 0
     })
     
@@ -84,6 +87,8 @@ class SpotifyController < ApplicationController
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
+
+    render json: response
   end
 
   def followPlaylist
