@@ -151,7 +151,7 @@ class SpotifyController < ApplicationController
 
   def getArtistIDs
     ## this artists var assignment needs to be fixed
-    artists = Artist.joins("join gigs on gigs.artist_id = artists.id")
+    artists = Artist.joins("join gigs on gigs.artist_id = artists.id").where(gigs: {event_id: 206106}).select("artists.name ,spotify_artist_id")
     artistArr = []
     artists.each do |artist|
       artistArr.append(artist.spotify_artist_id)  

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   get "/tracks", to: 'spotify#top_tracks'
 
-  post "/tracks", to: 'spotify#top_tracks'
+  post "/tracks", to: 'tracks#top_tracks'
   
   get "/events", to: 'event#events'
   
