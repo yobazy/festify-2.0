@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get '/about', to: 'about#index'
 
   get "/tracks", to: 'tracks#top_tracks'
+
+  post "/tracks", to: 'tracks#top_tracks'
   
   get "/events", to: 'event#events'
   
