@@ -10,8 +10,7 @@ import TracklistItem from '../Tracks/TrackListItem';
 import '../../../src/Artist.css'
 
 export default function Artist(props) {
-  console.log(props);
-  // const [pic, setPic] = useState('')
+  // console.log(props);
 
   let artistGenres = null
   let artistPic = null
@@ -19,13 +18,16 @@ export default function Artist(props) {
 
   console.log('check length', Object.keys(props.artistInfo).length !== 0)
   if (Object.keys(props.artistInfo).length !== 0) {
-    // console.log(props.artistInfo[0].genres);
     spotLink = props.artistInfo[0].href
 
     artistPic = props.artistInfo[0].images[0].url
 
     artistGenres = props.artistInfo[0].genres.join(', ');
+
   }
+  
+    // const trackPreview = props.tracks[0].preview_url
+  
 
   return (
     <div className='artist-info'>

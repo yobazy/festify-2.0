@@ -77,3 +77,8 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
   border-radius: 10px;
   margin-right: 5em;
 }
+
+.events__list {
+  padding-bottom: 3em;
+  margin-bottom: 0;
+}

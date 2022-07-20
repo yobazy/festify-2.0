@@ -73,7 +73,7 @@ export default function App() {
                 <Nav.Link href="#search">
                   {/* <form action="/events/search" method="get" > */}
                   <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query} />
-                  <input name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch} />
+                  <input id ="search" name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch} />
                   {/* </form> */}
                 </Nav.Link>
               </Nav>

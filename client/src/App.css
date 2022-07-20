@@ -106,8 +106,23 @@
 
 #query {
   width: 20vw;
+  border-style: hidden;
+  background-color: rgb(66, 47, 66);
+  border-radius: 7px;
+  color: white;
+  height: 2em;
 }
 
 .disco {
   display: flex;
+}
+
+#search {
+  background-color: rgb(128, 109, 128);
+  border-radius: 7px;
+  color: white;
+  border-style: hidden;
+  height: 2em;
+  width: 5em;
+  text-transform: uppercase;
 }

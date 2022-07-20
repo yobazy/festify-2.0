@@ -8,29 +8,6 @@ import Player from './Player';
 import '../../../src/Tracks.css'
 
 export default function Tracklist(props) {
-  // console.log('tracklist props', props)
-  // const [tracklist, setTracklist] = useState([]);
-  // const [state, setState] = useState({
-  //   tracks: [],
-  // })
-
-  // useEffect(() => {
-  //   // console.log('Event triggered')
-  //   axios.get('/tracks')
-  //     .then((response) => {
-  //       // console.log("response.data", response.data)
-  //       const tracks = response.data
-  //       console.log(response.data)
-  //       setState({
-  //         tracks: tracks
-  //       });
-  //     })
-  // }, []);
-  // const [img, setImg] = useState();
-
-  // function handlePlay() {
-  //   console.log("HELLLOOO");
-  // }
 
   const listTracks = props.tracks.map((track) => {
     const img = track.album.images[1].url;
@@ -41,6 +18,8 @@ export default function Tracklist(props) {
       </div>
     )
   })
+
+  console.log(props.tracks);
 
   return (
     <div className='tracklist'>

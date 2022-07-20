@@ -33,11 +33,11 @@ export default function Event() {
         setTracks(result.data.tracks)
       })
       .then(
-        axios.post('/artistInfo', { data: e.target.innerHTML})
-      .then((result) => {
-        // console.log('result.data', result.data)
-        setArtistInfo(result.data)
-      })
+        axios.post('/artistInfo', { data: e.target.innerHTML })
+          .then((result) => {
+            // console.log('result.data', result.data)
+            setArtistInfo(result.data)
+          })
       )
   }
 
@@ -64,7 +64,7 @@ export default function Event() {
             </Card.Body>
           </Card>
         </div>
-        <Artist tracks={tracks} artist={artist} artistInfo={artistInfo}/>
+        <Artist tracks={tracks} artist={artist} artistInfo={artistInfo} />
       </div>
     </div>
   )
