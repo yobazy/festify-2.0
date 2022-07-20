@@ -18,7 +18,7 @@
   width: 75%;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: 2em;
+  align-items: center;
 }
 
 .event-header {
@@ -28,7 +28,7 @@
   flex-direction: column;
   text-transform: uppercase;
   margin-top: 1rem;
-  margin-bottom: 1.5em;
+  margin-bottom: 0;
   color: rgb(228, 231, 234);
   text-shadow: 0 1px 0 rgb(22, 19, 19),
     0 3px 0 rgb(22, 19, 19),
@@ -44,8 +44,8 @@
 }
 
 .artist-name {
-  font-size: 3em;
-  margin-bottom: 1.5em;
+  font-size: 4em;
+  margin-bottom: 0.4em;
   color: rgb(197, 207, 216);
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgb(22, 19, 19),
@@ -99,6 +99,7 @@
 }
 
 .artist-card.card {
+  height: fit-content;
   margin-left: 1rem;
   border-width: thick;
   border-radius: 5px;
@@ -112,4 +113,27 @@
   background-color: #352738;
   background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
   /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+.artist-list-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.9em;
+}
+
+#artist-header {
+  color: rgb(197, 207, 216);
+  font-size: 3em;
+  margin-left: 0.3em;
+  text-shadow: 0 1px 0 rgb(22, 19, 19),
+    0 2px 0 rgb(22, 19, 19),
+    0 2px 0 rgb(22, 19, 19),
+    0 2px 0 rgb(22, 19, 19),
+    0 2px 2px rgba(0, 0, 0, .1),
+    0 0 2px rgba(0, 0, 0, .1),
+    0 1px 3px rgba(0, 0, 0, .3),
+    0 1px 1px rgba(0, 0, 0, .2),
+    0 1px 1px rgba(0, 0, 0, .25),
+    0 5px 5px rgba(0, 0, 0, .2),
+    0 10px 10px rgba(0, 0, 0, .15);
 }

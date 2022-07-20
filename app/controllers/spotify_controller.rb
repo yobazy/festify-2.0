@@ -139,7 +139,9 @@ class SpotifyController < ApplicationController
     auth = {"Authorization": "Bearer #{access_token}"}
 
     puts auth
-    artist_name = 'Dalek One'
+    # artist_name = 'Excision'
+
+    artist_name = params[:data]
 
     endpoint1 = RestClient.get("https://api.spotify.com/v1/search?q=#{artist_name}&type=artist&limit=1", headers=auth)
     # endpoint1 = RestClient.get("https://api.spotify.com/v1/artists/#{artist_id}", headers=auth)

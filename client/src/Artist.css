@@ -1,0 +1,28 @@
+.artist-icon {
+  border-style: solid;
+  height: 15em;
+  width: 15em;
+  border-radius: 9em;
+  border-width: thick;
+  border-color: rgb(95, 119, 138);
+  margin-bottom: 3em;
+}
+
+.genres {
+  display: flex;
+  font-size: 2em;
+  margin-bottom: 0.4em;
+  color: rgb(197, 207, 216);
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgb(22, 19, 19),
+    0 3px 0 rgb(22, 19, 19),
+    0 4px 0 rgb(22, 19, 19),
+    0 5px 0 rgb(22, 19, 19),
+    0 6px 1px rgba(0, 0, 0, .1),
+    0 0 5px rgba(0, 0, 0, .1),
+    0 1px 3px rgba(0, 0, 0, .3),
+    0 3px 5px rgba(0, 0, 0, .2),
+    0 5px 10px rgba(0, 0, 0, .25),
+    0 10px 10px rgba(0, 0, 0, .2),
+    0 20px 20px rgba(0, 0, 0, .15);
+}

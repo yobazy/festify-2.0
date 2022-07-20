@@ -6,47 +6,38 @@ import Card from 'react-bootstrap/Card';
 import '../../../src/Event.css'
 import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
+// import artistLink from '../../../src/images/spot-link4.jpeg';
+import '../../../src/Artist.css'
 
 export default function Artist(props) {
-  console.log(props)
-  // const [state, setState] = useState({
-  //   tracks: [],
-  // })
+  console.log(props);
+  // const [pic, setPic] = useState('')
+  if (typeof props.artistInfo == 'undefined') {
 
-  const [artist, setArtist] = useState({});
-
-  //MAKE FUNCTION
-  // useEffect(() => {
-  //   axios.get(`/artist`)
-  //     .then(result => setArtist(result.data))
-  // }, []);
-
-
-  //MAKE FUNCTION
-  // useEffect(() => {
-  //   // console.log('Event triggered')
-  //   axios.get('/tracks')
-  //     .then((response) => {
-  //       // console.log("response.data", response.data)
-  //       const tracks = response.data.tracks
-  //       // console.log(response.data)
-  //       setState({
-  //         tracks: tracks
-  //       });
-  //     })
-  // }, []);
-
-  // const tempArtistName = state.tracks[0].artists[0].name;
-
-  // console.log("ARTIST", art);
+    console.log(props.artistInfo[0].genres);
+    const artistGenres = props.artistInfo[0].genres.map((g) => {
+      console.log(g);
+      return <h3>{g}</h3>
+    });
+  
+    // const spotLink = props.artistInfo[0].href;
+  
+    const artistPic = props.artistInfo[0].images[0].url;
+  }
 
   return (
     <div className='artist-info'>
-    <h1 className='artist-name'>
-      {props.artist}
-    </h1>
-    <Tracklist
-      tracks={props.tracks}/>
+      {/* <img src={artistLink} href={spotLink}/> */}
+      {/* <img className='artist-icon' src={artistPic} /> */}
+      <h1 className='artist-name'>
+        {props.artist}
+      </h1>
+
+      <div className='genres'>
+        {/* {artistGenres} */}
+      </div>
+      <Tracklist
+        tracks={props.tracks} />
     </div>
   )
 }

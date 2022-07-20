@@ -15,6 +15,7 @@ export default function Event() {
 
   const [tracks, setTracks] = useState([]);
 
+  const [artistInfo, setArtistInfo] = useState({});
 
   useEffect(() => {
     axios.get(`/events/${params.id}`)
@@ -24,24 +25,26 @@ export default function Event() {
   const artistList = events.map(event => {
     return event.artist_name;
   });
-  // console.log("artistList", artistList);
 
-  // console.log(events);
   const showTopTracks = (e) => {
-    console.log("e", e.target.innerHTML);
     setArtist(e.target.innerHTML)
     axios.post('/tracks', { data: e.target.innerHTML })
       .then((result) => {
-        console.log('result.data', result.data)
         setTracks(result.data.tracks)
-        // setArtist()
       })
+      .then(
+        axios.post('/artistInfo', { data: e.target.innerHTML})
+      .then((result) => {
+        // console.log('result.data', result.data)
+        setArtistInfo(result.data)
+      })
+      )
   }
 
   const artists = artistList.map((artist, i) => {
     return <button onClick={showTopTracks} className='list-name' key={i}>{artist}</button>
   })
-  // console.log("EVENTS", events);
+
   return (
     <div>
       <div className='header-box'>
@@ -53,13 +56,15 @@ export default function Event() {
         </div>
       </div>
       <div className='event-info'>
-        <Card className='artist-card' style={{ width: '18rem' }}>
-          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-          <Card.Body className='artist-list'>
-            {artists}
-          </Card.Body>
-        </Card>
-        <Artist tracks={tracks} artist={artist}/>
+        <div className='artist-list-content'>
+          <h2 id="artist-header">ARTISTS</h2>
+          <Card className='artist-card' style={{ width: '18rem' }}>
+            <Card.Body className='artist-list'>
+              {artists}
+            </Card.Body>
+          </Card>
+        </div>
+        <Artist tracks={tracks} artist={artist} artistInfo={artistInfo}/>
       </div>
     </div>
   )

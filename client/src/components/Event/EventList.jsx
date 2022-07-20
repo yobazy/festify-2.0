@@ -8,6 +8,7 @@ import friendzyPoster from '../../images/friendzy-fest.jpeg';
 import hardWest from '../../images/hard-west.jpeg';
 
 export default function EventList(props) {
+  
   // console.log('EventList props', props.events);
 
   const listEvents = props.events.map((event) => {

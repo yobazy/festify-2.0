@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: rgb(34, 37, 40);
+  background-color: rgb(35, 33, 40);
   background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
   /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
@@ -48,6 +48,10 @@
 }
 
 .greeting {
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
   border-style: solid;
   border-radius: 10px;
   border-width: thin;
@@ -67,4 +71,43 @@
 .nav {
   position: fixed;
   width: 100vw;
+  height: 4em;
+}
+
+.brand.navbar-brand {
+  font-size: 2em;
+}
+
+.home {
+  font-size: 1.5em;
+  margin-right: 0.75em;
+  margin-left: 0.75em;
+}
+
+.user {
+  font-size: 1.5em;
+}
+
+.nav-container {
+  display: flex;
+  /* justify-items: ; */
+  align-items: baseline;
+  width: 100vw;
+  align-self: baseline;
+  max-width: 100vw;
+}
+
+
+.me-auto {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+}
+
+#query {
+  width: 20vw;
+}
+
+.disco {
+  display: flex;
 }
