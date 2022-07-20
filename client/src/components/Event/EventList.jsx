@@ -11,8 +11,21 @@ export default function EventList(props) {
   
   // console.log('EventList props', props.events);
 
+  console.log('props',props)
+  
   const listEvents = props.events.map((event) => {
     // console.log(event.id);
+    let venueLocation = null
+    let venueName = null
+
+    console.log('event.venue',event.venue)
+    console.log('bool check == false', typeof event.venue !== 'undefined')
+
+    if(typeof event.venue !== 'undefined'){
+      venueLocation = event.venue.location
+      venueName = event.venue.name
+    }
+
     const getPoster = () => {
       let evntImg;
       if (event.id === 206106 || event.id === 206107) {
@@ -28,7 +41,7 @@ export default function EventList(props) {
         <img className='event-poster' src={evntImg} />
       )
     }
-    const eventPoster = getPoster();
+    const eventPoster = getPoster()
 
     return (
       <Card className='event-card'>
@@ -36,8 +49,8 @@ export default function EventList(props) {
           <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name'>{event.name}</h2></Link>
           <h3 className='event-date'>{event.date}</h3>
           <div className='event-location'>
-            {/* <h3>{event.venue.name}</h3>
-            <h3>{event.venue.location}</h3> */}
+            <h3>{venueName}</h3> 
+            <h3>{venueLocation}</h3> 
           </div>
         </div>
         {eventPoster}
