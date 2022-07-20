@@ -1,5 +1,5 @@
 .track-name {
-  color: rgb(197, 207, 216);;
+  color: rgb(197, 207, 216);
 }
 
 .track-info {
@@ -31,4 +31,12 @@
 
 .unordered {
   padding-left: 0;
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  color: rgb(197, 207, 216);
+  font-size: 3em;
+  margin-left: 1.1em;
 }

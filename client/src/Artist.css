@@ -29,8 +29,8 @@
 }
 
 .artist-header {
-  margin-top: 4em;
-  margin-bottom: 2em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
   display: flex;
   flex-direction: row;
   width: 75vw;
@@ -52,5 +52,5 @@
   flex-direction: column;
   justify-content: center;
   margin-left: 1em;
-  width: 70%;
+  width: 60%;
 }

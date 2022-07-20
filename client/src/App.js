@@ -16,7 +16,7 @@ import headerImg from "./images/banner.jpeg";
 
 export default function App() {
   const [state, setState] = useState({
-    events: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }],
+    events: [],
     allEvents: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
   })
 
@@ -64,10 +64,10 @@ export default function App() {
         <div className="App">
           <Navbar className='nav' bg="dark" variant="dark">
             <Container className="nav-container">
-              <Navbar.Brand className="brand" href="/">FESTIFY</Navbar.Brand>
+              <Navbar.Brand className="brand" href="/events">FESTIFY</Navbar.Brand>
               <Nav className="me-auto">
                 <div className='disco'>
-                <Nav.Link className='home' href="/">HOME</Nav.Link>
+                <Nav.Link className='home' href="/events">HOME</Nav.Link>
                 <Nav.Link className='user' href="#features">USER</Nav.Link>
                 </div>
                 <Nav.Link href="#search">

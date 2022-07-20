@@ -64,7 +64,10 @@ export default function Event() {
             </Card.Body>
           </Card>
         </div>
-        <Artist tracks={tracks} artist={artist} artistInfo={artistInfo} />
+        <div >
+          <h2 className="click">Listen to your new playlist<a id="here" style={{ textDecoration: 'none'}} href="https://open.spotify.com/playlist/4OJzv9KUCxcQzjuiR7Klgl"> here</a> !</h2>
+          <Artist tracks={tracks} artist={artist} artistInfo={artistInfo} />
+        </div>
       </div>
     </div>
   )

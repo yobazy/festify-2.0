@@ -8,6 +8,7 @@ import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
 // import artistLink from '../../../src/images/spot-link4.jpeg';
 import '../../../src/Artist.css'
+import chasingPoster from '../../images/chasing-summer.jpeg';
 
 export default function Artist(props) {
   // console.log(props);
@@ -15,6 +16,8 @@ export default function Artist(props) {
   let artistGenres = null
   let artistPic = null
   let spotLink = null
+  let emptyBox = null
+  let evntImg = null
 
   console.log('check length', Object.keys(props.artistInfo).length !== 0)
   if (Object.keys(props.artistInfo).length !== 0) {
@@ -25,27 +28,36 @@ export default function Artist(props) {
     artistGenres = props.artistInfo[0].genres.join(', ');
 
   }
+
+  else {
+    emptyBox = "Click on an artist and check out their tracks!!"
+
+    evntImg = chasingPoster;
+  }
   
     // const trackPreview = props.tracks[0].preview_url
   
 
   return (
+    <>
     <div className='artist-info'>
       <div className='artist-header'>
-          {/* <img src={artistLink} href={spotLink}/> */}
+        <p className='empty'>{emptyBox}</p>
           {artistPic && <img className='artist-icon' src={artistPic} />}
-        <div className='artist-title'>
+        {props.artist && <div className='artist-title'>
           <h1 className='artist-name'>
             {props.artist}
           </h1>
           {artistGenres && <div className='genres'>
             {artistGenres}
           </div>}
-        </div>
+        </div>}
       </div>
       <Tracklist
         tracks={props.tracks} />
     </div>
+    <img id="poster2"src={evntImg} />
+    </>
   )
 }
 

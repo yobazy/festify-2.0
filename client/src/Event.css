@@ -16,10 +16,9 @@
 
 .artist-info {
   display: flex;
-  width: 75%;
   flex-direction: column;
   align-items: center;
-  margin-right: 2em;
+  width: 80vw;
 }
 
 .event-header {
@@ -138,4 +137,41 @@
     0 1px 1px rgba(0, 0, 0, .25),
     0 5px 5px rgba(0, 0, 0, .2),
     0 10px 10px rgba(0, 0, 0, .15);
+}
+
+.click {
+  text-transform: uppercase;
+  font-size: 3em;
+  color: rgb(197, 207, 216);
+  text-shadow: 0 1px 0 rgb(22, 19, 19),
+               0 3px 0 rgb(22, 19, 19),
+               0 4px 0 rgb(22, 19, 19),
+               0 5px 0 rgb(22, 19, 19),
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+               display: flex;
+    width: 70vw;
+    justify-content: start;
+    margin-left: 1.2em;
+    margin-bottom: 0;
+    /* margin-top: 0.6em; */
+}
+
+#here {
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  color: blueviolet;
+}
+
+#poster2 {
+  width: 60.5vw;
+  border-radius: 10px;
+  border-style: solid;
+  border-width: thick;
+  border-color: rgb(95, 119, 138);
 }
