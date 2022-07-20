@@ -24,22 +24,22 @@ export default function Artist(props) {
 
     artistPic = props.artistInfo[0].images[0].url
 
-    artistGenres = props.artistInfo[0].genres.map((g) => {
-      console.log(g);
-      return <h3>{g}</h3>
-    });
+    artistGenres = props.artistInfo[0].genres.join(', ');
   }
 
   return (
     <div className='artist-info'>
-      {/* <img src={artistLink} href={spotLink}/> */}
-      {artistPic && <img className='artist-icon' src={artistPic} />}
-      <h1 className='artist-name'>
-        {props.artist}
-      </h1>
-
-      <div className='genres'>
-        {artistGenres}
+      <div className='artist-header'>
+          {/* <img src={artistLink} href={spotLink}/> */}
+          {artistPic && <img className='artist-icon' src={artistPic} />}
+        <div className='artist-title'>
+          <h1 className='artist-name'>
+            {props.artist}
+          </h1>
+          {artistGenres && <div className='genres'>
+            {artistGenres}
+          </div>}
+        </div>
       </div>
       <Tracklist
         tracks={props.tracks} />

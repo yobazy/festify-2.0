@@ -57,7 +57,7 @@ export default function Event() {
       </div>
       <div className='event-info'>
         <div className='artist-list-content'>
-          <h2 id="artist-header">ARTISTS</h2>
+          <h2 id="artists-header">ARTISTS</h2>
           <Card className='artist-card' style={{ width: '18rem' }}>
             <Card.Body className='artist-list'>
               {artists}

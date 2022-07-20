@@ -5,11 +5,12 @@
   border-radius: 9em;
   border-width: thick;
   border-color: rgb(95, 119, 138);
-  margin-bottom: 3em;
+  align-self: center;
 }
 
 .genres {
   display: flex;
+  justify-content: center;
   font-size: 2em;
   margin-bottom: 0.4em;
   color: rgb(197, 207, 216);
@@ -25,4 +26,31 @@
     0 5px 10px rgba(0, 0, 0, .25),
     0 10px 10px rgba(0, 0, 0, .2),
     0 20px 20px rgba(0, 0, 0, .15);
+}
+
+.artist-header {
+  margin-top: 4em;
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: row;
+  width: 75vw;
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  border-color: rgb(95, 119, 138);
+  border-style: solid;
+  border-width: thick;
+  border-radius: 10px;
+  background-color: #231925;
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+.artist-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 1em;
+  width: 70%;
 }

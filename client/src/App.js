@@ -63,11 +63,13 @@ export default function App() {
       <BrowserRouter>
         <div className="App">
           <Navbar className='nav' bg="dark" variant="dark">
-            <Container>
-              <Navbar.Brand href="/">FESTIFY</Navbar.Brand>
+            <Container className="nav-container">
+              <Navbar.Brand className="brand" href="/">FESTIFY</Navbar.Brand>
               <Nav className="me-auto">
-                <Nav.Link href="/">HOME</Nav.Link>
-                <Nav.Link href="#features">USER</Nav.Link>
+                <div className='disco'>
+                <Nav.Link className='home' href="/">HOME</Nav.Link>
+                <Nav.Link className='user' href="#features">USER</Nav.Link>
+                </div>
                 <Nav.Link href="#search">
                   {/* <form action="/events/search" method="get" > */}
                   <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query} />
@@ -88,7 +90,7 @@ export default function App() {
               <div>
                 <div className="header-box">
                   <img src={headerImg} className="header-photo" alt="header" />
-                  <h2 className='greeting'>Get started? Click one of the many festivals below or search for your favourite ones! Get started? Click one of the many festivals below or search for your favourite ones!</h2>
+                  <h2 className='greeting'>Welcome to Festify! Where you can experience your favourite festivals in your room or on your way to the real thing! Choose an event and Festify will generate a Spotify playlist based on the event's lineup!</h2>
                 </div>
                 <EventList
                   events={state.events} />

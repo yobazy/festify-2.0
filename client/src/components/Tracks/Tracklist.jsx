@@ -44,7 +44,7 @@ export default function Tracklist(props) {
 
   return (
     <div className='tracklist'>
-      <ul>{listTracks}</ul>
+      <ul className='unordered'> {listTracks}</ul>
     </div>
   )
 }

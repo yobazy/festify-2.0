@@ -3,15 +3,32 @@
 }
 
 .track-info {
+  margin-bottom: 1em;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2em;
   align-items: center;
   width: 70vw;
-  margin-left: 2em;
+  display: flex;
+  flex-direction: row;
+  width: 75vw;
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  border-color: rgb(95, 119, 138);
+  border-style: solid;
+  border-width: medium;
+  border-radius: 10px;
+  background-color: #2b292b;
+  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
 .track-img {
   width: 13rem;
   border-radius: 10px;
+}
+
+.unordered {
+  padding-left: 0;
 }

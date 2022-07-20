@@ -1,6 +1,7 @@
 .event-info {
   display: flex;
   align-self: center;
+  justify-content: space-between;
   width: 100%;
   margin-top: 2em;
 }
@@ -17,8 +18,8 @@
   display: flex;
   width: 75%;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
+  margin-right: 2em;
 }
 
 .event-header {
@@ -45,7 +46,7 @@
 
 .artist-name {
   font-size: 4em;
-  margin-bottom: 0.4em;
+  /* margin-bottom: 0.4em; */
   color: rgb(197, 207, 216);
   text-transform: uppercase;
   text-shadow: 0 1px 0 rgb(22, 19, 19),
@@ -102,7 +103,7 @@
   height: fit-content;
   margin-left: 1rem;
   border-width: thick;
-  border-radius: 5px;
+  border-radius: 7px;
   border-color: rgb(95, 119, 138);
 }
 
@@ -118,10 +119,11 @@
 .artist-list-content {
   display: flex;
   flex-direction: column;
-  margin-top: 0.9em;
 }
 
-#artist-header {
+#artists-header {
+  display: flex;
+  justify-content: center;
   color: rgb(197, 207, 216);
   font-size: 3em;
   margin-left: 0.3em;
