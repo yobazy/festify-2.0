@@ -8,12 +8,20 @@ import Player from './Player';
 import '../../../src/Tracks.css'
 
 export default function Tracklist(props) {
-
+ console.log(props)
   const listTracks = props.tracks.map((track) => {
     const img = track.album.images[1].url;
+    const featArtists = track.artists.map((artist) => {
+      return (<h5>{artist['name']}</h5>)
+    })
     return (
       <div className='track-info'>
-      <h3 className='track-name'>{track.name}</h3>
+      <div>
+        <h3 className='track-name'>{track.name}</h3>
+        <h5>Artists:</h5>
+        <h5>{featArtists}</h5>
+      </div>
+      
       <img className='track-img' src={img} alt="icons" />
       </div>
     )
