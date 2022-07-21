@@ -63,6 +63,7 @@ export default function Artist(props) {
           <h1 className='artist-name'>
             {props.artist}
           </h1>
+          <h2 className='genre-title'>Genres:</h2>
           {artistGenres && 
           <div className='genres'>
             {artistGenres}

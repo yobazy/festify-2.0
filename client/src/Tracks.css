@@ -40,3 +40,14 @@
   font-size: 3em;
   margin-left: 0.8em;
 }
+
+.feat {
+  display: flex;
+  color: rgb(163, 155, 169);
+}
+
+.track-box {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
