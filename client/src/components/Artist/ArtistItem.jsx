@@ -69,10 +69,10 @@ export default function Artist(props) {
           </div>}
         </div>}
       </div>
-      <div className="player-container">
+      <div >
       {playlistEmbed && 
       <EmbedContainer markup={playlistEmbed}>
-      <div  dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
+      <div className="player-container" dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
       </EmbedContainer>}
       </div>
       <Tracklist
