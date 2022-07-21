@@ -9,6 +9,8 @@ import TracklistItem from '../Tracks/TrackListItem';
 // import artistLink from '../../../src/images/spot-link4.jpeg';
 import '../../../src/Artist.css'
 import chasingPoster from '../../images/chasing-summer.jpeg';
+import EmbedContainer from "react-oembed-container";
+
 
 export default function Artist(props) {
   // console.log(props);
@@ -18,10 +20,12 @@ export default function Artist(props) {
   let spotLink = null
   let emptyBox = null
   let evntImg = null
+  let playlistEmbed = null
 
   console.log('check length', Object.keys(props.artistInfo).length !== 0)
   if (Object.keys(props.artistInfo).length !== 0) {
     spotLink = props.artistInfo[0].href
+    console.log('spotlink', spotLink)
 
     artistPic = props.artistInfo[0].images[0].url
 
@@ -33,6 +37,16 @@ export default function Artist(props) {
     emptyBox = "Click on an artist and check out their tracks!!"
 
     evntImg = chasingPoster;
+    
+    playlistEmbed ='<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4OJzv9KUCxcQzjuiR7Klgl?utm_source=generator&theme=0" width="93%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>';
+
+    const player = () => {
+      return(
+      <EmbedContainer markup={playlistEmbed}>
+      <div dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
+    </EmbedContainer>
+      )
+    }
   }
   
     // const trackPreview = props.tracks[0].preview_url
@@ -44,14 +58,22 @@ export default function Artist(props) {
       <div className='artist-header'>
         <p className='empty'>{emptyBox}</p>
           {artistPic && <img className='artist-icon' src={artistPic} />}
-        {props.artist && <div className='artist-title'>
+        {props.artist && 
+        <div className='artist-title'>
           <h1 className='artist-name'>
             {props.artist}
           </h1>
-          {artistGenres && <div className='genres'>
+          {artistGenres && 
+          <div className='genres'>
             {artistGenres}
           </div>}
         </div>}
+      </div>
+      <div>
+      {playlistEmbed && 
+      <EmbedContainer markup={playlistEmbed}>
+      <div dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
+      </EmbedContainer>}
       </div>
       <Tracklist
         tracks={props.tracks} />
