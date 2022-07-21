@@ -34,7 +34,7 @@ export default function Artist(props) {
   }
 
   else {
-    emptyBox = "Click on an artist and check out their tracks!!"
+    emptyBox = "👈 Click on an artist and check out their tracks!"
 
     evntImg = chasingPoster;
     
@@ -69,10 +69,10 @@ export default function Artist(props) {
           </div>}
         </div>}
       </div>
-      <div>
+      <div className="player-container">
       {playlistEmbed && 
       <EmbedContainer markup={playlistEmbed}>
-      <div dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
+      <div  dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
       </EmbedContainer>}
       </div>
       <Tracklist
