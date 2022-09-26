@@ -5,11 +5,16 @@ Festify is a festival companion react app that allows users to view and save pla
 
 ## Setup
 
-Install dependencies with `npm install`.
+Install dependencies with `npm install`, `gem install`
+
+Create .env file in root folder, input information in such as how was done in .env example.
+
+
+## Running the App 
 
 Run `npm start` in client folder.
 
-Run `bin rails` in main project folder.
+Run `bin/rails s` in main project folder.
 
 ## URLs
 The app can be viewed at the following URL once setup:
