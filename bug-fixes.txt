@@ -1,2 +1,7 @@
 bug fixes:
 
+-search bar does not work as intended for input
+-events are not showing properly
+
+other:
+-CSS: move to tailwindcss
