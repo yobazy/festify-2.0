@@ -11,7 +11,7 @@ class EventController < ApplicationController
 
   def events 
     api_key = ENV["EDMTRAIN_API_KEY"]
-    url = "https://edmtrain.com/api/events?events?startDate=2022-07-&endDate=2022-08-25&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
+    url = "https://edmtrain.com/api/events?events?startDate=2022-07-&endDate=2023-01-25&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
     
     @response = RestClient::Request.execute(method: :get, url: url, headers: headers, verify_ssl: false)
 
