@@ -33,6 +33,10 @@ export default function App() {
           allEvents: events
         });
       })
+      .catch((err) =>  {
+        console.log('err')
+      }
+      )
   }, []);
 
   const filterSearch = (allEvents, query) => {
@@ -90,7 +94,7 @@ export default function App() {
               <div>
                 <div className="header-box">
                   <img src={headerImg} className="header-photo" alt="header" />
-                  <h2 className='greeting'>Welcome to Festify! Where you can experience your favourite festivals in your room or on your way to the real thing! Choose an event and Festify will generate a Spotify playlist based on the event's lineup!</h2>
+                  <h3 className='greeting'>Welcome to Festify! Where you can experience your favourite festivals on the go! Choose an event and Festify will generate a Spotify playlist based on the event's lineup!</h3>
                 </div>
                 <EventList
                   events={state.events} />
