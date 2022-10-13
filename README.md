@@ -9,9 +9,15 @@ Install dependencies with `npm install`, `gem install`
 
 Create .env file in root folder, input information in such as how was done in .env example.
 
+### Database Setup
+Run `rake db:create` in main project folder.
+
+Run `rake db:migrate` in main project folder.
+
+Run `rake db:seed` in main project folder.
+
 
 ## Running the App 
-
 Run `npm start` in client folder.
 
 Run `bin/rails s` in main project folder.
