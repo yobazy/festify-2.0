@@ -16,15 +16,16 @@ ActiveRecord::Schema.define(version: 2022_07_15_234158) do
   enable_extension "plpgsql"
 
   create_table "artists", force: :cascade do |t|
-    t.string "spotify_artist_id"
+    t.bigint "edmtrain_artist_id"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "events", force: :cascade do |t|
+    t.bigint "edmtrain_event_id"
     t.string "name"
-    t.date "date"
+    t.datetime "date"
     t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -48,7 +49,7 @@ ActiveRecord::Schema.define(version: 2022_07_15_234158) do
     t.bigint "events_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_playlists_on_event_id"
+    t.index ["events_id"], name: "index_playlists_on_events_id"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -63,5 +64,5 @@ ActiveRecord::Schema.define(version: 2022_07_15_234158) do
 
   add_foreign_key "gigs", "artists", column: "artists_id"
   add_foreign_key "gigs", "events", column: "events_id"
-  add_foreign_key "playlists", "events"
+  add_foreign_key "playlists", "events", column: "events_id"
 end

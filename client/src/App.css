@@ -48,10 +48,10 @@
 }
 
 .greeting {
-  padding-top: 0.6em;
+  /* padding-top: 0.6em;
   padding-bottom: 0.6em;
   padding-right: 0.5em;
-  padding-left: 0.5em;
+  padding-left: 0.5em; */
   border-style: solid;
   border-radius: 10px;
   border-width: thin;

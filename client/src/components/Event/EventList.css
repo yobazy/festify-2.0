@@ -15,10 +15,10 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 }
 
 .events__header.text--light {
-  font-size: 5em;
-  color: rgb(197, 207, 216);
+  font-size: 3em;
+  color: rgb(197, 207, 216); 
   margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; 
 }
 
 .event-preview {

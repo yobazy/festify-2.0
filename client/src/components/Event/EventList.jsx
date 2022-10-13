@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import '../../.././src/EventList.css';
+import './EventList.css';
 import axios from 'axios';
 import chasingPoster from '../../images/chasing-summer.jpeg';
 import friendzyPoster from '../../images/friendzy-fest.jpeg';
@@ -14,7 +14,7 @@ export default function EventList(props) {
   console.log('props',props)
   
   const listEvents = props.events.map((event) => {
-    // console.log(event.id);
+    console.log(event.id);
     let venueLocation = null
     let venueName = null
 
