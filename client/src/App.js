@@ -11,6 +11,7 @@ import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import headerImg from "./images/banner.jpeg";
+import festifyIcon from './images/icon.png'
 
 
 
@@ -46,7 +47,7 @@ export default function App() {
     })
     return search;
   }
-  
+
   const handleSearch = () => {
     console.log('Search triggered')
     console.log('all events', state.allEvents)
@@ -70,7 +71,9 @@ export default function App() {
         <div className="App">
           <Navbar className='nav' bg="dark" variant="dark">
             <Container className="nav-container">
-              <Navbar.Brand className="brand" href="/events">FESTIFY</Navbar.Brand>
+              <Navbar.Brand className="brand" href="/events">
+                <img src={festifyIcon} width={35}></img>
+                FESTIFY</Navbar.Brand>
               <Nav className="me-auto">
                 <div className='disco'>
                 <Nav.Link className='home' href="/events">HOME</Nav.Link>
@@ -85,9 +88,6 @@ export default function App() {
               </Nav>
             </Container>
           </Navbar>
-          {/* <headerImg>
-        <img href="/images/header-banner.jpg" alt='banner'/>
-      </headerImg> */}
           <Routes>
             <Route path="/events" element={
               <div>
