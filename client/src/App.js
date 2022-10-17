@@ -5,7 +5,7 @@ import EventList from './components/Event/EventList';
 import EventListItem from './components/Event/EventListItem';
 import { useState, useEffect } from "react";
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import Navbar from './components/Navbar';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -69,25 +69,7 @@ export default function App() {
       </style>
       <BrowserRouter>
         <div className="App">
-          <Navbar className='nav' bg="dark" variant="dark">
-            <Container className="nav-container">
-              <Navbar.Brand className="brand" href="/events">
-                <img src={festifyIcon} width={35}></img>
-                FESTIFY</Navbar.Brand>
-              <Nav className="me-auto">
-                <div className='disco'>
-                <Nav.Link className='home' href="/events">HOME</Nav.Link>
-                <Nav.Link className='user' href="#features">USER</Nav.Link>
-                </div>
-                <Nav.Link href="#search">
-                  {/* <form action="/events/search" method="get" > */}
-                  <input id="query" name="query" type="text" placeholder='Search...' onChange={(event) => setQuery(event.target.value)} value={query} />
-                  <input id ="search" name="commit" type="submit" value="Search" data-disable-with="Search" onClick={handleSearch} />
-                  {/* </form> */}
-                </Nav.Link>
-              </Nav>
-            </Container>
-          </Navbar>
+          <Navbar />
           <Routes>
             <Route path="/events" element={
               <div>
