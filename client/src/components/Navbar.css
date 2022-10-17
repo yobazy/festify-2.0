@@ -9,7 +9,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: #1c3879;
+    background-color: rgba(118, 9, 118, 0.846);
     height: 45px;
     width: 100%;
   }
