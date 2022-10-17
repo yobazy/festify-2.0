@@ -4,14 +4,9 @@ import './App.css';
 import EventList from './components/Event/EventList';
 import EventListItem from './components/Event/EventListItem';
 import { useState, useEffect } from "react";
-import Nav from 'react-bootstrap/Nav';
 import Navbar from './components/Navbar';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import headerImg from "./images/banner.jpeg";
-import festifyIcon from './images/icon.png'
 
 
 
@@ -81,14 +76,10 @@ export default function App() {
                   events={state.events} />
               </div>
             } />
-
             <Route path="/events/:id" element={
               <EventListItem />
             }>
             </Route>
-            {/* <Route path="/events/search" element={
-          <EventListItem/>
-        }> */}
           </Routes>
         </div>
       </BrowserRouter>
