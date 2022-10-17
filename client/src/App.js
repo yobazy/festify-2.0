@@ -22,6 +22,7 @@ export default function App() {
 
   const [query, setQuery] = useState('')
 
+  // api call to get events
   useEffect(() => {
     // console.log('Event triggered')
     axios.get('/events')
@@ -45,6 +46,7 @@ export default function App() {
     })
     return search;
   }
+  
   const handleSearch = () => {
     console.log('Search triggered')
     console.log('all events', state.allEvents)
@@ -83,9 +85,6 @@ export default function App() {
               </Nav>
             </Container>
           </Navbar>
-          {/* <Button onClick={printState} >
-        Print state
-      </Button> */}
           {/* <headerImg>
         <img href="/images/header-banner.jpg" alt='banner'/>
       </headerImg> */}
@@ -101,9 +100,6 @@ export default function App() {
               </div>
             } />
 
-            {/* <Route path="/events" element={
-        }>
-        </Route> */}
             <Route path="/events/:id" element={
               <EventListItem />
             }>
@@ -111,7 +107,6 @@ export default function App() {
             {/* <Route path="/events/search" element={
           <EventListItem/>
         }> */}
-            {/* </Route> */}
           </Routes>
         </div>
       </BrowserRouter>

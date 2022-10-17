@@ -30,7 +30,7 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 
 .event-name {
   text-transform: uppercase;
-  font-size: 4em;
+  font-size: 3em;
   color: rgb(197, 207, 216);
   margin-right: 2px;
   transition: margin 1s ease-in-out;
@@ -67,7 +67,6 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 
 .event-location {
   color: rgb(166, 180, 192);
-
 }
 
 .event-poster {

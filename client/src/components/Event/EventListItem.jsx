@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Artist from '../Artist/ArtistItem';
 import Banner2 from '../../../src/images/banner2.jpeg';
+// import './EventListItem.css';
 
 export default function Event() {
   const params = useParams();
@@ -57,7 +57,7 @@ export default function Event() {
       </div>
       <div className='event-info'>
         <div className='artist-list-content'>
-          <h2 id="artists-header">ARTISTS</h2>
+          <h3 id="artists-header">Artists</h3>
           <Card className='artist-card' style={{ width: '18rem' }}>
             <Card.Body className='artist-list'>
               {artists}
