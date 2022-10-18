@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Gotham-Bold';
+  src: local('Gotham-Bold'), url(./fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
+}
+
 .App {
   text-align: center;
   background-color: rgb(58, 27, 71);

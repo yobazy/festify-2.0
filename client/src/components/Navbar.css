@@ -9,8 +9,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(118, 9, 118, 0.846);
-    height: 45px;
+    background-color: rgba(67, 4, 67, 0.846);
+    height: 75px;
     width: 100%;
   }
   
@@ -84,7 +84,8 @@
   
   .name  {
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 2rem;
+      font-family: Gotham-Bold;
   }
   
   /* .nav-links-mobile {
