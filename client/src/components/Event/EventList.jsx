@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import Card from 'react-bootstrap/Card';
+// import Card from 'react-bootstrap/Card';
 import './EventList.css';
 import axios from 'axios';
 import chasingPoster from '../../images/chasing-summer.jpeg';
@@ -41,20 +41,25 @@ export default function EventList(props) {
         <img className='event-poster' src={evntImg} />
       )
     }
-    const eventPoster = getPoster()
-
+    // const eventPoster = getPoster()
+    const eventPoster = () => {
+      return (
+        <>
+          <img width={250}></img>
+        </>
+      )
+    }
     return (
-      <Card className='event-card'>
+      <div className='event-card'>
         <div className='event-preview'>
           <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name'>{event.name}</h2></Link>
           <h3 className='event-date'>{event.date}</h3>
           <div className='event-location'>
-            <h3>{venueName}</h3> 
-            <h3>{venueLocation}</h3> 
+            <h3>{venueName} - {venueLocation}</h3> 
           </div>
         </div>
         {eventPoster}
-      </Card>
+      </div>
     )
   })
 

@@ -3,6 +3,10 @@
   src: local('Gotham-Bold'), url(./fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
 }
 
+.text {
+  font-family: Gotham-Bold;
+  font-size: 1.5rem;
+}
 .App {
   text-align: center;
   background-color: rgb(58, 27, 71);
@@ -50,28 +54,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .greeting {
-  /* padding-top: 0.6em;
-  padding-bottom: 0.6em;
-  padding-right: 0.5em;
-  padding-left: 0.5em; */
-  border-style: solid;
-  border-radius: 10px;
-  border-width: thin;
-  background-color: rgba(23, 29, 34, 0.837);
   color: rgb(197, 207, 216);
   width: 90%;
-  display: flex;
-  position: absolute;
-  border-color: rgb(119, 152, 179);
-  box-shadow: 0.15rem 0.15rem 0.05rem 0.05rem rgb(119, 152, 179);
-}
-
-* {
-  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .nav {

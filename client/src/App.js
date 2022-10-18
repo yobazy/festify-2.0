@@ -59,9 +59,6 @@ export default function App() {
 
   return (
     <>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Roboto+Condensed:wght@700&family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap');
-      </style>
       <BrowserRouter>
         <div className="App">
           <Navbar />
@@ -70,7 +67,8 @@ export default function App() {
               <div>
                 <div className="header-box">
                   <img src={headerImg} className="header-photo" alt="header" />
-                  <h3 className='greeting'>Welcome to Festify! Where you can experience your favourite festivals on the go! Choose an event and Festify will generate a Spotify playlist based on the event's lineup!</h3>
+                  <p className='greeting text'>Welcome to Festify!</p>
+                  <p className='greeting text'>Search for a event below. Festify will generate a Spotify playlist based on the event's lineup!</p>
                 </div>
                 <EventList
                   events={state.events} />
