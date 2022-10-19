@@ -52,11 +52,14 @@ export default function EventList(props) {
     return (
       <div className='event-card'>
         <div className='event-preview'>
-          <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name'>{event.name}</h2></Link>
-          <h3 className='event-date'>{event.date}</h3>
-          <div className='event-location'>
-            <h3>{venueName} - {venueLocation}</h3> 
+          <div className="event-info border">
+            <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name border'>{event.name}</h2></Link>
+            <div className='event-location border'>
+              <h3>{venueName} - {venueLocation}</h3> 
+            </div>
           </div>
+          <h3 className='event-date border'>{event.date}</h3>
+
         </div>
         {eventPoster}
       </div>

@@ -1,9 +1,10 @@
-.event-card.card {
+.event-card {
   display: flex;
-  align-self: center;
+  /* align-self: center; */
   width: 90%;
   margin-left: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  border: 2px dotted white;
   border-width: thin;
   border-radius: 10px;
   border-color: rgb(119, 152, 179);
@@ -14,25 +15,29 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
+.border {
+  border: 3px solid white;
+}
+
 .events__header.text--light {
   font-size: 3em;
   color: rgb(197, 207, 216); 
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   margin-bottom: 1rem; 
 }
 
 .event-preview {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-self: flex-start; */
   width: 55em;
 }
 
 .event-name {
-  /* text-transform: uppercase; */
-  font-size: 3em;
+  text-transform: uppercase;
+  font-size: 2.5em;
   color: rgb(197, 207, 216);
-  margin-right: 2px;
+  /* margin-right: 2px; */
   transition: margin 1s ease-in-out;
   text-shadow: 0 1px 0 rgb(22, 19, 19),
                0 3px 0 rgb(22, 19, 19),
@@ -71,13 +76,21 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 
 .event-poster {
   width: 250px;
-  margin-top: 1em;
+  /* margin-top: 1em;
   margin-bottom: 1em;
   border-radius: 10px;
-  margin-right: 5em;
+  margin-right: 5em; */
 }
 
 .events__list {
   padding-bottom: 3em;
   margin-bottom: 0;
+}
+
+.event-info {
+  display:flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
 }
