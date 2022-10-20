@@ -6,6 +6,7 @@ import axios from 'axios';
 import chasingPoster from '../../images/chasing-summer.jpeg';
 import friendzyPoster from '../../images/friendzy-fest.jpeg';
 import hardWest from '../../images/hard-west.jpeg';
+import { DateRangePicker } from 'react-date-range';
 
 export default function EventList(props) {
   
@@ -45,30 +46,39 @@ export default function EventList(props) {
     const eventPoster = () => {
       return (
         <>
-          <img width={250}></img>
+          <img width={250} className="border"></img>
         </>
       )
     }
     return (
-      <div className='event-card'>
-        <div className='event-preview'>
-          <div className="event-info border">
-            <Link key={event.id} to={`/events/${event.id}`} style={{ textDecoration: 'none', color: 'black' }}><h2 className='event-name border'>{event.name}</h2></Link>
-            <div className='event-location border'>
-              <h3>{venueName} - {venueLocation}</h3> 
-            </div>
+      <div className="event-card border">
+        <div className="event-date">{event.date}</div>
+        <div className="event-information event-text">
+          <Link
+            key={event.id}
+            to={`/events/${event.id}`}
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            {event.name}
+          </Link>
+          <div className="event-location">
+              {venueName} - {venueLocation}
           </div>
-          <h3 className='event-date border'>{event.date}</h3>
-
         </div>
-        {eventPoster}
+        {/* {eventPoster} */}
       </div>
-    )
+    );
   })
 
   return (
     <section className="events">
       <h1 className="events__header text--light">Events</h1>
+      <div className="events-filters">
+        <div className="events-filters"><p>Location</p><input></input></div>
+        
+        <div className="events-filters"><p>Date</p><input></input></div>
+        {/* <DateRangePicker/> */}
+      </div>
       <ul className="events__list">{listEvents}</ul>
     </section>
   );

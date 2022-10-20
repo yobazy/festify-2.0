@@ -1,16 +1,15 @@
 .event-card {
   display: flex;
-  /* align-self: center; */
+  flex-direction: column;
+
+  align-self:auto;
   width: 90%;
   margin-left: 3rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem;
   border: 2px dotted white;
-  border-width: thin;
-  border-radius: 10px;
+  border-radius: 5px;
   border-color: rgb(119, 152, 179);
-  flex-direction: row;
   justify-content: space-between;
-  background-color: #352738;
 background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
 /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
@@ -26,11 +25,13 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
   margin-bottom: 1rem; 
 }
 
-.event-preview {
-  /* display: flex; */
-  /* flex-direction: column; */
+.event-information {
+  display: flex;
+  flex-direction: column;
   /* align-self: flex-start; */
-  width: 55em;
+  width: 100%;
+  background-color: #721a86;
+
 }
 
 .event-name {
@@ -88,9 +89,25 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 }
 
 .event-info {
-  display:flex;
-  flex-direction: column;
+  /* display:flex;
+  flex-direction: column; */
   justify-content: flex-start;
   padding: 0;
   margin: 0;
+}
+
+.events-filters  {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.events-filter  {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.event-text {
+  color: white;
 }
