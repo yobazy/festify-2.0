@@ -68,7 +68,7 @@ export default function Navbar(props) {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="logo-name nav-items">
-          <img src={logo} width={40} alt="logo"></img>
+          <img src={logo} width={30} alt="logo"></img>
           <a href="/" className="nav-links name">
             Festify
           </a>
