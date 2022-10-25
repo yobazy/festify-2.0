@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
-import EventList from './components/Event/EventList';
+import Events from './routes/Events';
 import EventListItem from './components/Event/EventListItem';
 import { useState, useEffect } from "react";
 import Navbar from './components/Navbar';
@@ -17,7 +17,7 @@ export default function App() {
   })
 
   const [query, setQuery] = useState('')
-  const [event, setEvent] = useState([])
+  const [eventz, setEventz] = useState({})
 
   console.log()
 
@@ -38,6 +38,11 @@ export default function App() {
       }
       )
   }, []);
+
+  const eventSetter = (event) => {
+    console.log('event clicks', event.currentTarget)
+    setEventz(event)
+  }
 
   const filterSearch = (allEvents, query) => {
     const search = allEvents.filter(function (event) {
@@ -66,19 +71,10 @@ export default function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/events" element={
-              <div>
-                <div className="header-box">
-                  <img src={headerImg} className="header-photo" alt="header" />
-                  <p className='greeting text'>Welcome to Festify!</p>
-                  <p className='greeting text'>Search for a event below. Festify will generate a Spotify playlist based on the event's lineup!</p>
-                </div>
-                <EventList
-                  events={state.events} setEvent={setEvent} />
-              </div>
+            <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
             <Route path="/events/:id" element={
-              <EventListItem event={event}/>
+              <EventListItem event={eventz}/>
             }>
             </Route>
           </Routes>
