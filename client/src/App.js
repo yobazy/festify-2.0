@@ -17,6 +17,9 @@ export default function App() {
   })
 
   const [query, setQuery] = useState('')
+  const [event, setEvent] = useState([])
+
+  console.log()
 
   // api call to get events
   useEffect(() => {
@@ -71,11 +74,11 @@ export default function App() {
                   <p className='greeting text'>Search for a event below. Festify will generate a Spotify playlist based on the event's lineup!</p>
                 </div>
                 <EventList
-                  events={state.events} />
+                  events={state.events} setEvent={setEvent} />
               </div>
             } />
             <Route path="/events/:id" element={
-              <EventListItem />
+              <EventListItem event={event}/>
             }>
             </Route>
           </Routes>
