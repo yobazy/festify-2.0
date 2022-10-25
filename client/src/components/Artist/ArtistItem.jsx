@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import '../../../src/Event.css'
 import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
@@ -10,6 +8,7 @@ import TracklistItem from '../Tracks/TrackListItem';
 import '../../../src/Artist.css'
 import chasingPoster from '../../images/chasing-summer.jpeg';
 import EmbedContainer from "react-oembed-container";
+import '../Event/EventList.css';
 
 
 export default function Artist(props) {
@@ -53,8 +52,7 @@ export default function Artist(props) {
   
 
   return (
-    <>
-    <div className='artist-info'>
+    <div className='artist-info border'>
     {playlistEmbed && 
       <EmbedContainer markup={playlistEmbed}>
       <div className="player-container" dangerouslySetInnerHTML={{ __html: playlistEmbed }}></div>
@@ -80,8 +78,6 @@ export default function Artist(props) {
       <Tracklist
         tracks={props.tracks} />
     </div>
-    <img id="poster2"src={evntImg} />
-    </>
   )
 }
 
