@@ -23,7 +23,6 @@ export default function Navbar(props) {
 
   function CheckUser(props) {
     console.log("check user called");
-    console.log(props, "props");
     
     if (props.token) {
       return (
@@ -69,7 +68,7 @@ export default function Navbar(props) {
       <div className="navbar-container">
         <div className="logo-name nav-items">
           <img src={logo} width={30} alt="logo"></img>
-          <a href="/" className="nav-links name">
+          <a href="/events" className="nav-links name">
             Festify
           </a>
           {/* <div className="menu-icon" onClick={handleClick}>
@@ -79,7 +78,7 @@ export default function Navbar(props) {
         <div >
           <ul className={click ? "nav-menu-active nav-items" : "nav-menu nav-items"}>
             <li className="nav-item">
-              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
+              <Link to="/events" className="nav-links" onClick={closeMobileMenu}>
                 Home
               </Link>
             </li>
