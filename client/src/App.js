@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
 import Events from './routes/Events';
-import EventListItem from './components/Event/EventListItem';
+import Event from './routes/Event';
 import { useState, useEffect } from "react";
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -74,7 +74,7 @@ export default function App() {
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
             <Route path="/events/:id" element={
-              <EventListItem event={eventz}/>
+              <Event event={eventz}/>
             }>
             </Route>
           </Routes>
