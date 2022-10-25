@@ -5,7 +5,7 @@ import Artist from '../Artist/ArtistItem';
 import Banner2 from '../../../src/images/banner2.jpeg';
 // import './EventListItem.css';
 
-export default function Event() {
+export default function Event(props) {
   const params = useParams();
 
   const [events, setEvents] = useState([]);
@@ -19,6 +19,8 @@ export default function Event() {
   useEffect(() => {
     axios.get(`/events/${params.id}`).then((result) => setEvents(result.data));
   }, [params.id]);
+
+  console.log('events results', events)
 
   const artistList = events.map((event) => {
     return event.artist_name;
@@ -49,6 +51,8 @@ export default function Event() {
     );
   });
 
+  console.log('events', events)
+
   return (
     <div>
       <div className="header-box">
@@ -65,14 +69,15 @@ export default function Event() {
         </div>
       </div>
       <div className="">
-        <div className="artist-list-content">
-          {/* <h3 id="artists-header">{event.name}}</h3> */}
+        {/* <div className="artist-list-content">
           <div className="artist-card" style={{ width: "18rem" }}>
             <div className="artist-list">{artists}</div>
           </div>
-        </div>
-        <div>
-          <h2 className="click">
+        </div> */}
+        <div className="center border">
+          <h1>Event</h1>
+          <h1>Location</h1>
+          <h2 className="click border center">
             Event playlist below:
             <a
               id="here"
@@ -83,7 +88,7 @@ export default function Event() {
               here
             </a>
           </h2>
-          <Artist tracks={tracks} artist={artist} artistInfo={artistInfo} className="border" />
+          <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} />
         </div>
       </div>
     </div>

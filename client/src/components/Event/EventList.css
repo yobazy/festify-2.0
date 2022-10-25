@@ -111,3 +111,8 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 .event-text {
   color: white;
 }
+
+.center {
+  align-content: center;
+  justify-content: center;
+}
