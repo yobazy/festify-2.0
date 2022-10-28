@@ -17,9 +17,7 @@ export default function App() {
   })
 
   const [query, setQuery] = useState('')
-  const [eventz, setEventz] = useState({})
-
-  console.log()
+  const [eventz, setEventz] = useState()
 
   // api call to get events
   useEffect(() => {
@@ -40,8 +38,8 @@ export default function App() {
   }, []);
 
   const eventSetter = (event) => {
-    console.log('event clicks', event.currentTarget)
     setEventz(event)
+    console.log('ezz', eventz)
   }
 
   const filterSearch = (allEvents, query) => {

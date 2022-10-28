@@ -6,6 +6,11 @@ import Artist from '../components/Artist/ArtistItem';
 // import './EventListItem.css';
 
 export default function Event(props) {
+  console.log('props', props.event)
+  let event = props.event
+  let eventName = event.name
+  let eventLocation = event.venue.location
+
   const params = useParams();
 
   const [events, setEvents] = useState([]);
@@ -51,8 +56,6 @@ export default function Event(props) {
     );
   });
 
-  console.log('events', events)
-
   return (
     <div>
       <div className="header-box">
@@ -75,8 +78,8 @@ export default function Event(props) {
           </div>
         </div> */}
         <div className="center border">
-          <h1>Event</h1>
-          <h1>Location</h1>
+          <h1>{eventName}</h1>
+          <h1>{eventLocation}</h1>
           <h2 className="click border center">
             Event playlist below:
             <a

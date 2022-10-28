@@ -1,7 +1,11 @@
 bug fixes:
 
+-Homepage has nothing on it
 -search bar does not work as intended for input
 -events are not showing properly
+-events over multiple days appear as seperate
+-artists dont show on events page
+-wrong spotify playlist created on event page
 
 other:
 -CSS: move to tailwindcss
