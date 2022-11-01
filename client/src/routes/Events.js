@@ -4,10 +4,23 @@ import '../components/Event/EventList.css';
 import axios from 'axios';
 import { DateRangePicker } from 'react-date-range';
 import EventList from '../components/Event/EventList'
+import EventData from '../components/Event/EventData'
 
 export default function Events(props) {
   return (
     <div>
+      <table>
+        <caption>Results table</caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Venue</th>
+            <th scope="col">Location</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <EventData />
+      </table>
       <div className="header-box">
         <img className="header-photo" alt="header" />
         <p className="greeting text">Welcome to Festify!</p>
