@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import headerImg from "./images/banner.jpeg";
+import Home from './routes/Home'
 
 
 
@@ -69,6 +70,7 @@ export default function App() {
         <div className="App">
           <Navbar />
           <Routes>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
             <Route path="/events/:id" element={

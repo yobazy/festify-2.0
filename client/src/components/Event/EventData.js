@@ -31,8 +31,18 @@ export default function EventData(props) {
   });
 
   return (
+    <table className="center">
+    <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Venue</th>
+      <th scope="col">Location</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
     <tbody>
         {listEvents}
     </tbody>
+    </table>
   );
 }
