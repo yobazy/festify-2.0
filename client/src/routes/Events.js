@@ -19,7 +19,7 @@ export default function Events(props) {
             <th scope="col">Date</th>
           </tr>
         </thead>
-        <EventData />
+        <EventData events={props.state.events} setEvent={props.setEvent} />
       </table>
       <div className="header-box">
         <img className="header-photo" alt="header" />
