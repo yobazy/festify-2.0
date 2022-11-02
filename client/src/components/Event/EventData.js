@@ -22,7 +22,13 @@ export default function EventData(props) {
 
     return (
       <tr>
-        <th scope="row">{event.name}</th>
+        <th scope="row">
+            <Link
+                key={event.id}
+                onClick = {props.setEvent(event)}
+                to={`/events/${event.id}`}>                
+            {event.name}
+            </Link></th>
         <td>{venueName}</td>
         <td>{venueLocation}</td>
         <td>{event.date}</td>
