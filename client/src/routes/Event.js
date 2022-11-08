@@ -11,8 +11,12 @@ export default function Event(props) {
   let event = props.event
   let eventName = event.name
   let eventLocation = event.venue.location
+  let eventDate = event.date
+  let eventLink = event.link
+  let livestreamInd = event.livestreamInd
 
   let allArtists = props.artists
+  let artistCount = allArtists.length
 
   const params = useParams();
 
@@ -70,7 +74,7 @@ export default function Event(props) {
     <div>
       <div className="header-box">
         {/* <img className="header-photo" alt="header" /> */}
-        <div className="event-header">
+        {/* <div className="event-header">
           <>
             {events[0] && (
               <h1 className="event_header_name">{events[0].event_name}</h1>
@@ -79,17 +83,21 @@ export default function Event(props) {
           {events[0] && (
             <h2 className="event_header_date">{events[0].event_date}</h2>
           )}
-        </div>
+        </div> */}
       </div>
       <div className="">
         <div className="center border">
           <h1>{eventName}</h1>
           <h1>{eventLocation}</h1>
+          <h2>{eventDate}</h2>
+          <a>{eventLink}</a>
           {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
         </div>
       </div>
-      <h1>Artists</h1>
-      {artists}
+      <h1>Artists ({artistCount})</h1>
+      <div>
+        {artists}
+      </div>
     </div>
   );
 }
