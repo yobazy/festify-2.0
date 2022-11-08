@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
+import userIcon from '../images/placeholder-user.png'
 // import Banner2 from '../../../src/images/banner2.jpeg';
 // import './EventListItem.css';
 
@@ -63,11 +64,14 @@ export default function Event(props) {
 
   const artists = artistList.map((artist, i) => {
     return (
+      <div className="border">
+      <img src={userIcon} width="100px"/>
       <button 
       // onClick={showTopTracks} 
       className="list-name center" key={i}>
         {artist}
       </button>
+      </div>
     );
   });
 
