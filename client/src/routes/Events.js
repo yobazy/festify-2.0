@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import '../components/Event/EventList.css';
-import axios from 'axios';
-import { DateRangePicker } from 'react-date-range';
-import EventList from '../components/Event/EventList'
 import EventData from '../components/Event/EventData'
 
 export default function Events(props) {
@@ -19,7 +15,7 @@ export default function Events(props) {
           based on the event's lineup!
         </p>
       </div>
-      <div className="row">
+      <div className="row">a
             <p> Location : Alberta, CA</p>
             <p> Date Range : Default</p>
         </div>
