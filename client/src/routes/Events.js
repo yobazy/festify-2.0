@@ -15,7 +15,7 @@ export default function Events(props) {
           based on the event's lineup!
         </p>
       </div>
-      <div className="row">a
+      <div className="row">
             <p> Location : Alberta, CA</p>
             <p> Date Range : Default</p>
         </div>
