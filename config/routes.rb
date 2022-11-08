@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   get "/events", to: 'event#events'
   
-  get "/events/:id", to: 'event#event'
+  get "/event/:id", to: 'event#event'
   
   get "/artist", to: 'artist#artist'
 

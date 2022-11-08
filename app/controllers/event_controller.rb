@@ -17,12 +17,17 @@ class EventController < ApplicationController
 
     @event_info = JSON.parse(@response.body)
     render json: @event_info
+
+    # map response event info to database models
+    # for each item in object array
+      # add event id to events, add all event info to table
   end
 
   def event
     id = params[:id]
-    @event = Event.joins("join gigs on gigs.event_id = events.id").joins("join artists on gigs.artist_id = artists.id").where(events: {id: id}).select("artists.name as artist_name, events.name as event_name, events.date as event_date, artists.id as artist_id")
-    render json: @event
+    render json: id
+    # @event = Event.joins("join gigs on gigs.event_id = events.id").joins("join artists on gigs.artist_id = artists.id").where(events: {id: id}).select("artists.name as artist_name, events.name as event_name, events.date as event_date, artists.id as artist_id")
+    # render json: @event
   end
 
 end
