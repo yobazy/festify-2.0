@@ -16,16 +16,27 @@ class EventController < ApplicationController
     @response = RestClient::Request.execute(method: :get, url: url, headers: headers, verify_ssl: false)
 
     @event_info = JSON.parse(@response.body)
-    render json: @event_info
+    # puts @event_info["data"]
 
     # map response event info to database models
-    # for each item in object array
+    # for each event 
+    @event_info["data"].each { |event| 
       # add event id to events, add all event info to table
+      e = Event.create(edmtrain_event_id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
+    }
+    
+    render json: @event_info
+
   end
 
   def event
     id = params[:id]
     render json: id
+
+    # look up event name and information from events table
+
+    # lookup artists based on event id from artists table
+
     # @event = Event.joins("join gigs on gigs.event_id = events.id").joins("join artists on gigs.artist_id = artists.id").where(events: {id: id}).select("artists.name as artist_name, events.name as event_name, events.date as event_date, artists.id as artist_id")
     # render json: @event
   end
