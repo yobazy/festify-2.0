@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 // import Banner2 from '../../../src/images/banner2.jpeg';
 // import './EventListItem.css';
@@ -93,6 +94,7 @@ export default function Event(props) {
           {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
       </div>
       <div>
+        <EmbedPlayer src={null}/>
         <p>This is where the embedded player should be</p>
       </div>
       <div className="center">
