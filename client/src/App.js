@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import headerImg from "./images/banner.jpeg";
 import Home from './routes/Home'
+import Footer from './components/Footer';
 
 
 
@@ -81,11 +82,12 @@ export default function App() {
             <Route path="/" element={<Home />}></Route>
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
-            <Route path="/events/:id" element={
+            <Route path="/event/:id" element={
               <Event event={eventz} artists={artistz}/>
             }>
             </Route>
           </Routes>
+          <Footer/>
         </div>
       </BrowserRouter>
     </>
