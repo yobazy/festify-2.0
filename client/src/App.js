@@ -77,7 +77,7 @@ export default function App() {
       <BrowserRouter>
         <div className="App">
           <Navbar />
-          <img src={headerImg} className="banner"/>
+          <img src={headerImg} className="header-banner"/>
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>

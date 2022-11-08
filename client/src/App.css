@@ -11,7 +11,6 @@
   text-align: center;
   background-color: rgb(58, 27, 71);
   background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
-  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
 .App-logo {
@@ -45,7 +44,7 @@
   }
 }
 
-.header-photo {
+.header-banner {
   width: 100vw;
   opacity: 50%;
 }
@@ -119,8 +118,4 @@
   height: 2em;
   width: 5em;
   text-transform: uppercase;
-}
-
-.banner {
-  width:100%;
 }
