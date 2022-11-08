@@ -64,7 +64,7 @@ export default function Event(props) {
     return (
       <button 
       // onClick={showTopTracks} 
-      className="list-name" key={i}>
+      className="list-name center" key={i}>
         {artist}
       </button>
     );
@@ -85,18 +85,21 @@ export default function Event(props) {
           )}
         </div> */}
       </div>
-      <div className="">
-        <div className="center border">
+      <div className="center">
           <h1>{eventName}</h1>
           <h1>{eventLocation}</h1>
           <h2>{eventDate}</h2>
           <a>{eventLink}</a>
           {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
-        </div>
       </div>
-      <h1>Artists ({artistCount})</h1>
       <div>
-        {artists}
+        <p>This is where the embedded player should be</p>
+      </div>
+      <div className="center">
+        <h1 className="list-name">Artists ({artistCount})</h1>
+        <div className="center">
+          {artists}
+        </div>
       </div>
     </div>
   );
