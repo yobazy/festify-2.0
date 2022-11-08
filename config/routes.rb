@@ -23,6 +23,8 @@ Rails.application.routes.draw do
 
   get "/searchevents", to: 'event#searchEvents'
 
+  get "/authorize", to: 'spotify#authorize'
+
   get "/user", to: 'spotify#getUserID'
 
   post "/playlist", to: 'spotify#createPlaylist'
