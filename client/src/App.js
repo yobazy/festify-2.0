@@ -18,7 +18,8 @@ export default function App() {
   })
 
   const [query, setQuery] = useState('')
-  const [eventz, setEventz] = useState()
+  const [eventz, setEventz] = useState({})
+  const [artistz, setArtistz] = useState({})
 
   // api call to get events
   useEffect(() => {
@@ -38,10 +39,16 @@ export default function App() {
       )
   }, []);
 
-  const eventSetter = (event) => {
+  const setArtists = (artistList) => {
+    setArtistz(artistList)
+  }
+
+  const eventSetter = (event, artists) => {
+    setArtists(artists)
     setEventz(event)
     console.log('ezz', eventz)
   }
+
 
   const filterSearch = (allEvents, query) => {
     const search = allEvents.filter(function (event) {
@@ -69,12 +76,13 @@ export default function App() {
       <BrowserRouter>
         <div className="App">
           <Navbar />
+          <img src={headerImg} className="banner"/>
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
             <Route path="/events/:id" element={
-              <Event event={eventz}/>
+              <Event event={eventz} artists={artistz}/>
             }>
             </Route>
           </Routes>
