@@ -23,6 +23,15 @@ class EventController < ApplicationController
     @event_info["data"].each { |event| 
       # add event id to events, add all event info to table
       e = Event.create(edmtrain_event_id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
+
+        # for each artist for event, add to artist table and gig table
+        artList =  event["artistList"]
+        puts event["id"]
+        artList.each  { |artist| 
+          a = Artist.create(edmtrain_artist_id: artist["id"], name: artist["name"])
+          puts artist["id"]
+          g = Gig.create(artist_id: artist["id"], event_id: event["id"])
+      }
     }
     
     render json: @event_info
