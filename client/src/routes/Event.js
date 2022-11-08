@@ -6,30 +6,34 @@ import Artist from '../components/Artist/ArtistItem';
 // import './EventListItem.css';
 
 export default function Event(props) {
-  console.log('props', props.event)
+  
+  console.log('props', props)
   let event = props.event
   let eventName = event.name
   let eventLocation = event.venue.location
 
+  let allArtists = props.artists
+
   const params = useParams();
 
+  // state to store all events
   const [events, setEvents] = useState([]);
 
-  const [artist, setArtist] = useState("");
-
+  // state to store tracks
   const [tracks, setTracks] = useState([]);
 
-  const [artistInfo, setArtistInfo] = useState({});
+  // state to store individual artist information
+  const [artist, setArtist] = useState("");
 
-  useEffect(() => {
-    axios.get(`/events/${params.id}`).then((result) => setEvents(result.data));
-  }, [params.id]);
+  // state to store array of all artist data
+  const [artistsInfo, setArtistsInfo] = useState([]);
+
+  // call to contact db for information on event [UNUSED]
+    // useEffect(() => {
+    //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
+    // }, [params.id]);
 
   console.log('events results', events)
-
-  const artistList = events.map((event) => {
-    return event.artist_name;
-  });
 
   const showTopTracks = (e) => {
     setArtist(e.target.innerHTML);
@@ -43,14 +47,20 @@ export default function Event(props) {
           .post("/artistInfo", { data: e.target.innerHTML })
           .then((result) => {
             // console.log('result.data', result.data)
-            setArtistInfo(result.data);
+            setArtistsInfo(result.data);
           })
       );
   };
 
+  const artistList = allArtists.map((artist) => {
+    return artist.name;
+  });
+
   const artists = artistList.map((artist, i) => {
     return (
-      <button onClick={showTopTracks} className="list-name" key={i}>
+      <button 
+      // onClick={showTopTracks} 
+      className="list-name" key={i}>
         {artist}
       </button>
     );
@@ -59,7 +69,7 @@ export default function Event(props) {
   return (
     <div>
       <div className="header-box">
-        <img className="header-photo" alt="header" />
+        {/* <img className="header-photo" alt="header" /> */}
         <div className="event-header">
           <>
             {events[0] && (
@@ -72,28 +82,14 @@ export default function Event(props) {
         </div>
       </div>
       <div className="">
-        {/* <div className="artist-list-content">
-          <div className="artist-card" style={{ width: "18rem" }}>
-            <div className="artist-list">{artists}</div>
-          </div>
-        </div> */}
         <div className="center border">
           <h1>{eventName}</h1>
           <h1>{eventLocation}</h1>
-          <h2 className="click border center">
-            Event playlist below:
-            <a
-              id="here"
-              style={{ textDecoration: "none" }}
-              href="https://open.spotify.com/playlist/4OJzv9KUCxcQzjuiR7Klgl"
-            >
-              {" "}
-              here
-            </a>
-          </h2>
-          <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} />
+          {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
         </div>
       </div>
+      <h1>Artists</h1>
+      {artists}
     </div>
   );
 }

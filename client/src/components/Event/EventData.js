@@ -9,6 +9,7 @@ export default function EventData(props) {
   console.log("props", props.events);
 
   const listEvents = props.events.map((event) => {
+    console.log("event", event)
     let venueLocation = null;
     let venueName = null;
 
@@ -20,13 +21,19 @@ export default function EventData(props) {
       venueName = event.venue.name;
     }
 
+    const setEvent = () =>  {
+      console.log('set event called')
+      props.setEvent(event, event.artistList)
+    }
+
+
     return (
       <tr>
         <th scope="row">
             <Link
                 key={event.id}
-                onClick = {props.setEvent(event)}
-                to={`/events/${event.id}`}>                
+                onClick = {setEvent}
+                to={`/event/${event.id}`}>                
             {event.name}
             </Link></th>
         <td>{venueName}</td>

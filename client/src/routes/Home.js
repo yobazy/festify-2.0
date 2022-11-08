@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import '../components/Event/EventList.css'
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import DateRange from '../components/DateRangePicker'
+
 
 export default function Home(props) {
     return (
@@ -14,6 +18,7 @@ export default function Home(props) {
           </p>
         </div>
         <div className="row">
+          {/* <DateRange/> */}
             <p> Location : Alberta, CA</p>
             <p> Date Range : All</p>
         </div>

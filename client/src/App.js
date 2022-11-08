@@ -40,12 +40,12 @@ export default function App() {
       )
   }, []);
 
-  const setArtists = (artistList) => {
-    setArtistz(artistList)
-  }
-
   const eventSetter = (event, artists) => {
-    setArtists(artists)
+    console.log('event setter called')
+    console.log('event', event)
+    console.log('artists', artists)
+
+    setArtistz(artists)
     setEventz(event)
     console.log('ezz', eventz)
   }
