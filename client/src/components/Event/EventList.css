@@ -116,8 +116,9 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
 }
 
 table, th, td {
-  border: 1px solid;
-  background-color: white;
+  /* border: 1px solid; */
+  color: white;
+  background-color: purple;
   /* width: 100%; */
 }
 
@@ -125,7 +126,6 @@ table {
   table-layout: fixed;
   width: 90%;
   border-collapse: collapse;
-  /* border: 3px solid purple; */
   border-radius: 10%;
 }
 

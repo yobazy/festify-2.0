@@ -46,8 +46,8 @@ export default function EventData(props) {
 
   return (
     <table className="center">
-      <thead>
-        <tr>
+      <thead className="">
+        <tr className="">
           <th scope="col">Name</th>
           <th scope="col">Venue</th>
           <th scope="col">Location</th>
