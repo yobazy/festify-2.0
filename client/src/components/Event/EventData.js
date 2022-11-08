@@ -7,55 +7,54 @@ import { DateRangePicker } from "react-date-range";
 
 export default function EventData(props) {
   console.log("props", props.events);
+  const eventsList = [];
 
   const listEvents = props.events.map((event) => {
-    console.log("event", event)
-    let venueLocation = null;
-    let venueName = null;
+    if (!eventsList.includes(event.name)) {
+      eventsList.push(event.name);
+      console.log("event", event);
+      let venueLocation = null;
+      let venueName = null;
 
-    let id = event.id;
-    console.log("id", id);
+      let id = event.id;
+      console.log("id", id);
 
-    if (typeof event.venue !== "undefined") {
-      venueLocation = event.venue.location;
-      venueName = event.venue.name;
+      if (typeof event.venue !== "undefined") {
+        venueLocation = event.venue.location;
+        venueName = event.venue.name;
+      }
+
+      const setEvent = () => {
+        console.log("set event called");
+        props.setEvent(event, event.artistList);
+      };
+
+      return (
+        <tr>
+          <th scope="row">
+            <Link key={event.id} onClick={setEvent} to={`/event/${event.id}`}>
+              {event.name}
+            </Link>
+          </th>
+          <td>{venueName}</td>
+          <td>{venueLocation}</td>
+          <td>{event.date}</td>
+        </tr>
+      );
     }
-
-    const setEvent = () =>  {
-      console.log('set event called')
-      props.setEvent(event, event.artistList)
-    }
-
-
-    return (
-      <tr>
-        <th scope="row">
-            <Link
-                key={event.id}
-                onClick = {setEvent}
-                to={`/event/${event.id}`}>                
-            {event.name}
-            </Link></th>
-        <td>{venueName}</td>
-        <td>{venueLocation}</td>
-        <td>{event.date}</td>
-      </tr>
-    );
   });
 
   return (
     <table className="center">
-    <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Venue</th>
-      <th scope="col">Location</th>
-      <th scope="col">Date</th>
-    </tr>
-  </thead>
-    <tbody>
-        {listEvents}
-    </tbody>
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Venue</th>
+          <th scope="col">Location</th>
+          <th scope="col">Start Date</th>
+        </tr>
+      </thead>
+      <tbody>{listEvents}</tbody>
     </table>
   );
 }
