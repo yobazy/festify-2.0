@@ -25,10 +25,10 @@ export default function App() {
   // api call to get events
   useEffect(() => {
     // console.log('Event triggered')
-    axios.get('/events')
+    axios.get('/getEvents')
       .then((response) => {
-        // console.log("response.data", response.data)
-        const events = response.data.data
+        console.log("response.data", response.data)
+        const events = response.data
         setState({
           events: events,
           allEvents: events

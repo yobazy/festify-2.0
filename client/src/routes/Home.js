@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
 import '../components/Event/EventList.css'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import DateRange from '../components/DateRangePicker'
+// import DateRange from '../components/DateRangePicker'
 
 
 export default function Home(props) {
@@ -18,12 +18,13 @@ export default function Home(props) {
           </p>
         </div>
         <div className="row">
-          {/* <DateRange/> */}
-            <p> Location : Alberta, CA</p>
+            <p> Location : 
+              {/* <input type="dropdown"></input> */}
+              Alberta, CA</p>
             <p> Date Range : All</p>
         </div>
         <Link to="/events">
-            <button>Go</button></Link>
+            <button>Search for Events!</button></Link>
       </div>
     );
   }

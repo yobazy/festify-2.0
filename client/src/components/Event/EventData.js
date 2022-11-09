@@ -5,7 +5,9 @@ import "./EventList.css";
 import axios from "axios";
 import { DateRangePicker } from "react-date-range";
 
+
 export default function EventData(props) {
+
   console.log("props", props.events);
   const eventsList = [];
 
@@ -19,9 +21,9 @@ export default function EventData(props) {
       let id = event.id;
       console.log("id", id);
 
-      if (typeof event.venue !== "undefined") {
-        venueLocation = event.venue.location;
-        venueName = event.venue.name;
+      if (typeof event.location !== "undefined") {
+        venueLocation = event.location;
+        // venueName = event.venue.name;
       }
 
       const setEvent = () => {
@@ -32,7 +34,7 @@ export default function EventData(props) {
       return (
         <tr>
           <th scope="row">
-            <Link key={event.id} onClick={setEvent} to={`/event/${event.id}`}>
+            <Link key={event.id} onClick={setEvent} to={`/event/${event.edmtrain_event_id}`}>
               {event.name}
             </Link>
           </th>

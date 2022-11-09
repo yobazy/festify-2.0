@@ -8,6 +8,24 @@ import userIcon from '../images/placeholder-user.png'
 // import './EventListItem.css';
 
 export default function Event(props) {
+
+  // API call to get event details 
+    // useEffect(() => {
+    //   // console.log('Event triggered')
+    //   axios
+    //     .get("/getEvent")
+    //     .then((response) => {
+    //       console.log("response.data", response.data)
+    //       // const events = response.data.data;
+    //       // setState({
+    //       //   events: events,
+    //       //   allEvents: events,
+    //       // });
+    //     })
+    //     .catch((err) => {
+    //       console.log("err");
+    //     });
+    // }, []);
   
   console.log('props', props)
   let event = props.event
@@ -39,9 +57,11 @@ export default function Event(props) {
     //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
     // }, [params.id]);
 
+  // create event playlist
   console.log('events results', events)
 
   const showTopTracks = (e) => {
+    console.log('e.target.innerHTML')
     setArtist(e.target.innerHTML);
     axios
       .post("/tracks", { data: e.target.innerHTML })
@@ -62,6 +82,7 @@ export default function Event(props) {
     return artist.name;
   });
 
+  // return img and artist name for each artist in artistList
   const artists = artistList.map((artist, i) => {
     return (
       <div className="border">
