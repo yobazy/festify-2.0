@@ -9,6 +9,28 @@ class SpotifyController < ApplicationController
   @access_token = ENV["ACCESS_TOKEN"]
   @auth = {"Authorization": "Bearer #{@access_token}"}
 
+  # implicit authorization flow
+    # def authorize
+  #  puts @access_token
+  #  string_length = 16
+  #  state = '1234123412341234'
+
+  #  redirect_uri = 'http://localhost:8888/callback'
+  #  client_id = 'CLIENT_ID'
+  #  scope = 'user-read-private user-read-email';
+    # state = generateRandomString(16)
+    # localStorage.setItem(stateKey, state);
+
+  #  url = 'https://accounts.spotify.com/authorize'
+  #  url += '?response_type=token'
+  #  url += '&client_id=' + URI.extract(client_id);
+  #  url += '&scope=' + URI.extract(scope)
+  #  url += '&redirect_uri=' + URI.extract(redirect_uri)
+  #  url += '&state=' + URI.extract(state)
+
+  #  puts url
+  #end
+
   def getUserID
     access_token = ENV["ACCESS_TOKEN"]
     auth = {"Authorization": "Bearer #{access_token}"}
