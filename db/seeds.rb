@@ -6,23 +6,51 @@ require 'json'
 require 'rest-client'
 Dotenv.load
 
-def seed_events 
-  api_key = ENV["EDMTRAIN_API_KEY"]
+  # seed databases with events API call
+  def seedEvents 
+    api_key = ENV["EDMTRAIN_API_KEY"]
+    start_date = "2022-07-20"
+    end_date = "2023-07-25"
 
-  url = "https://edmtrain.com/api/events?events?startDate=2022-07-&endDate=2022-08-25&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
+    url = "https://edmtrain.com/api/events?events?startDate=#{start_date}&endDate=#{end_date}&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
+    
+    @response = RestClient::Request.execute(method: :get, url: url, headers: headers, verify_ssl: false)
 
-  @response = RestClient::Request.execute(method: :get, url: url, verify_ssl: false)
+    @event_info = JSON.parse(@response.body)
+    # puts @event_info["data"]
 
-  @events_info = JSON.parse(@response.body)
+    # map response event info to database models
+    # for each event from search
+    @event_info["data"].each { |event| 
+      # check if event exists in db 
+      # if event["id"] is NOT in Events table under edmtrain_event_id 
 
-  @events_info["data"].map do |event|
-    Event.create(id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
-    event["artistList"].map do |artist|
-      Artist.create(id: artist["id"], name: artist["name"])
-      Gig.create(event_id: event["id"], artist_id: artist["id"])
-    end
+      # add event id to events, add all event info to table
+      e = Event.create(edmtrain_event_id: event["id"], name: event["name"], date: event["date"], location: event["venue"]["location"])
+
+        # for each artist for event, add to artist table and gig table
+        artList =  event["artistList"]
+        puts event["id"]
+        artList.each  { |artist| 
+          # if edmtrain_artist_id does not exist in table
+          # create entry in artist table
+          a = Artist.create(edmtrain_artist_id: artist["id"], name: artist["name"])
+
+          # create gig table entry
+          puts 'artist_id' 
+          puts artist["id"]
+
+          puts 'event_id'
+          puts event["id"]
+
+          puts "creating gig table entry"
+          g = Gig.create(artist_id: artist["id"], event_id: event["id"])
+      }
+    }
+    
+    render json: @event_info
+
   end
-end
 
 seed_events()
 
