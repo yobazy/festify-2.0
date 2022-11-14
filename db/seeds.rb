@@ -4,6 +4,7 @@
 require 'dotenv'
 require 'json'
 require 'rest-client'
+
 Dotenv.load
 
   # seed databases with events API call
@@ -14,7 +15,7 @@ Dotenv.load
 
     url = "https://edmtrain.com/api/events?events?startDate=#{start_date}&endDate=#{end_date}&livestreamInd=false&locationIds=5&festivalInd=true&client=#{api_key}"
     
-    @response = RestClient::Request.execute(method: :get, url: url, headers: headers, verify_ssl: false)
+    @response = RestClient::Request.execute(method: :get, url: url, verify_ssl: false)
 
     @event_info = JSON.parse(@response.body)
     # puts @event_info["data"]
@@ -48,11 +49,9 @@ Dotenv.load
       }
     }
     
-    render json: @event_info
-
   end
 
-seed_events()
+seedEvents()
 
 # @event_artist_excision = Artist.find_by(id: 258)
 
