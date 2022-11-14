@@ -8,7 +8,7 @@ import { DateRangePicker } from "react-date-range";
 
 export default function EventData(props) {
 
-  console.log("props", props.events);
+  console.log("eventData props", props.events);
   const eventsList = [];
 
   const listEvents = props.events.map((event) => {

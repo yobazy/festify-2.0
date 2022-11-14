@@ -8,34 +8,41 @@ import userIcon from '../images/placeholder-user.png'
 // import './EventListItem.css';
 
 export default function Event(props) {
+  console.log('props', props)
+
+  // create state 
+  const [currEvent, setCurrEvent] = useState()
+  const [artistzzz, setArtistzzz] = useState([{}])
 
   // API call to get event details 
-    // useEffect(() => {
-    //   // console.log('Event triggered')
-    //   axios
-    //     .get("/getEvent")
-    //     .then((response) => {
-    //       console.log("response.data", response.data)
-    //       // const events = response.data.data;
-    //       // setState({
-    //       //   events: events,
-    //       //   allEvents: events,
-    //       // });
-    //     })
-    //     .catch((err) => {
-    //       console.log("err");
-    //     });
-    // }, []);
+    useEffect(() => {
+      // console.log('Event triggered')
+      axios
+        // .get("/getEvent")
+        .get("/getArtists")
+        .then((response) => {
+          console.log("response.data", response.data)
+          // const events = response.data.data;
+          setArtistzzz(response.data);
+        })
+        .catch((err) => {
+          console.log("err");
+        });
+    }, []);
+      // call to contact db for information on event [UNUSED]
+      // useEffect(() => {
+      //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
+      // }, [params.id]);
   
-  console.log('props', props)
   let event = props.event
   let eventName = event.name
-  let eventLocation = event.venue.location
+  let eventLocation = event.location
   let eventDate = event.date
   let eventLink = event.link
   let livestreamInd = event.livestreamInd
 
-  let allArtists = props.artists
+  
+  let allArtists = artistzzz
   let artistCount = allArtists.length
 
   const params = useParams();
@@ -52,13 +59,7 @@ export default function Event(props) {
   // state to store array of all artist data
   const [artistsInfo, setArtistsInfo] = useState([]);
 
-  // call to contact db for information on event [UNUSED]
-    // useEffect(() => {
-    //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
-    // }, [params.id]);
-
   // create event playlist
-  console.log('events results', events)
 
   const showTopTracks = (e) => {
     console.log('e.target.innerHTML')

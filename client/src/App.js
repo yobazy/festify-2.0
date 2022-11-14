@@ -18,7 +18,6 @@ export default function App() {
     allEvents: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
   })
 
-  const [query, setQuery] = useState('')
   const [eventz, setEventz] = useState({})
   const [artistz, setArtistz] = useState({})
 
@@ -51,26 +50,26 @@ export default function App() {
   }
 
 
-  const filterSearch = (allEvents, query) => {
-    const search = allEvents.filter(function (event) {
-      return event.name.includes(query)
-    })
-    return search;
-  }
+  // const filterSearch = (allEvents, query) => {
+  //   const search = allEvents.filter(function (event) {
+  //     return event.name.includes(query)
+  //   })
+  //   return search;
+  // }
 
-  const handleSearch = () => {
-    console.log('Search triggered')
-    console.log('all events', state.allEvents)
+  // const handleSearch = () => {
+  //   console.log('Search triggered')
+  //   console.log('all events', state.allEvents)
 
-    let allEvents = state.allEvents
-    let searchResults = filterSearch(state.allEvents, query)
-    setState({
-      events: searchResults,
-      allEvents: allEvents
-    });
-    console.log('events', state.events)
+  //   let allEvents = state.allEvents
+  //   let searchResults = filterSearch(state.allEvents, query)
+  //   setState({
+  //     events: searchResults,
+  //     allEvents: allEvents
+  //   });
+  //   console.log('events', state.events)
 
-  };
+  // };
 
   return (
     <>

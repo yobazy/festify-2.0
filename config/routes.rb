@@ -21,9 +21,11 @@ Rails.application.routes.draw do
 
   post "/artistInfo", to: 'spotify#getArtistInfo'
 
-  get "/getEvent", to: 'event#getEvent'
+  get "/event", to: 'event#getEvent'
 
   get "/getEvents", to: 'event#getEvents'
+
+  get "/getArtists", to: 'event#getArtists'
 
   get "/authorize", to: 'spotify#authorize'
 
