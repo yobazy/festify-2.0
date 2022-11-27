@@ -15,60 +15,12 @@ export default function Navbar(props) {
     setClick(false);
   };
 
-  const logOut = () =>  {
-    console.log('Logging out...')
-    props.switchLogin()
-    navigate("/")
-  }
-
-  function CheckUser(props) {
-    console.log("check user called");
-    
-    if (props.token) {
-      return (
-        <>
-          <li className="nav-item">
-            <Link to="/create" className="nav-links" onClick={closeMobileMenu}>
-              Create Ad
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/view" className="nav-links" onClick={closeMobileMenu}>
-              View Ad
-            </Link>
-          </li>
-          <li className="nav-item nav-log">
-            {/* <button onClick={props.logOut}>Log Out</button> */}
-            <button onClick={logOut} className="nav-links">Log Out</button>
-            {/* <Link to="/logout" onClick={props.switchLogin} className="nav-links">
-              Log Out
-            </Link> */}
-          </li>
-        </>
-      );
-    }
-    return (
-      <>
-        <li className="nav-item">
-          <Link to="/login" className="nav-links" onClick={closeMobileMenu}>
-            Log In
-          </Link>
-        </li>
-        {/* <li className="nav-item">
-          <Link href="/signup" className="nav-links" onClick={closeMobileMenu}>
-            Sign Up
-          </Link>
-        </li> */}
-      </>
-    );
-  }
-
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <div className="logo-name nav-items">
           <img src={logo} width={30} alt="logo"></img>
-          <a href="/events" className="nav-links name">
+          <a href="/" className="nav-links name">
             Festify
           </a>
           {/* <div className="menu-icon" onClick={handleClick}>
@@ -79,10 +31,10 @@ export default function Navbar(props) {
           <ul className={click ? "nav-menu-active nav-items" : "nav-menu nav-items"}>
             <li className="nav-item">
               <Link to="/" className="nav-links" onClick={closeMobileMenu}>
-                Home
+                Connect to Spotify
               </Link>
             </li>
-            <CheckUser className="nav-links" token={props.token} logOut={props.switchLogin}/>
+            {/* <CheckUser className="nav-links" token={props.token} logOut={props.switchLogin}/> */}
             {/* The following should show when not logged in */}
           </ul>
         </div>
