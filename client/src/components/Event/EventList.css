@@ -115,18 +115,20 @@ background-image: url("https://www.transparenttextures.com/patterns/stardust.png
   justify-content: center;
 }
 
-table, th, td {
+/* table, th, td { */
   /* border: 1px solid; */
-  color: white;
-  background-color: purple;
+  /* color: white; */
+  /* background-color: purple; */
   /* width: 100%; */
-}
+/* } */
 
 table {
+  border: 1px solid;
+
   table-layout: fixed;
   width: 90%;
   border-collapse: collapse;
-  border-radius: 10%;
+  border-radius: 20%;
 }
 
 thead th:nth-child(1) {
@@ -149,13 +151,20 @@ tbody tr:nth-child(even) {
   background-color: #e495e4;
 }
 
-tr:hover {
-  background-color: lightyellow;
+tbody:hover {
+  background-color: #e495e4;
+}
+
+th  {
+  background-color: rgb(132, 32, 132);
+  color: rgb(210, 220, 219);
 }
 
 th,
 td {
-  /* padding: 20px; */
+  padding: 10px;
+  color: rgb(210, 220, 219);
+
 }
 
 .center {
@@ -174,4 +183,8 @@ td {
 .body {
   background-color: #320d3ba0;
   min-height: 100vw;
+}
+
+.fest-name  {
+  text-decoration: none;
 }

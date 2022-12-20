@@ -33,11 +33,11 @@ export default function EventData(props) {
 
       return (
         <tr>
-          <th scope="row">
-            <Link key={event.id} onClick={setEvent} to={`/event/${event.edmtrain_event_id}`}>
+          <td scope="row">
+            <Link key={event.id} onClick={setEvent} to={`/event/${event.edmtrain_event_id}`} className='fest-name'>
               {event.name}
             </Link>
-          </th>
+          </td>
           <td>{venueName}</td>
           <td>{venueLocation}</td>
           <td>{event.date}</td>
