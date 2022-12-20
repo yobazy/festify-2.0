@@ -19,12 +19,17 @@ export default function Home(props) {
         </div>
         <div className="row">
             <p> Location : 
-              {/* <input type="dropdown"></input> */}
-              Alberta, CA</p>
-            <p> Date Range : All</p>
+              <input type="dropdown" placeholder="Alberta, CA"></input>
+            </p>
+            <h3> Date Range : 
+              <input type="month" id="start" name="date-range"
+              min="2022-10" value="2022-12" />
+            </h3>
+            <h3>
+            <Link to="/events">
+            <button>Search Events!</button></Link>
+            </h3>
         </div>
-        <Link to="/events">
-            <button>Search for Events!</button></Link>
       </div>
     );
   }
