@@ -175,3 +175,17 @@
   border-width: thick;
   border-color: rgb(95, 119, 138);
 }
+
+.artist-card {
+  background-color: rgb(149, 47, 141);
+  width: 30%;
+  border-radius: 10px;
+  margin:10px;
+}
+
+.artists-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}

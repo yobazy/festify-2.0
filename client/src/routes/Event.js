@@ -5,7 +5,7 @@ import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
 // import Banner2 from '../../../src/images/banner2.jpeg';
-// import './EventListItem.css';
+import '../Event.css';
 
 export default function Event(props) {
   console.log('props', props)
@@ -29,6 +29,7 @@ export default function Event(props) {
           console.log("err");
         });
     }, []);
+    
       // call to contact db for information on event [UNUSED]
       // useEffect(() => {
       //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
@@ -86,13 +87,13 @@ export default function Event(props) {
   // return img and artist name for each artist in artistList
   const artists = artistList.map((artist, i) => {
     return (
-      <div className="border">
-      <img src={userIcon} width="100px"/>
-      <button 
-      // onClick={showTopTracks} 
-      className="list-name center" key={i}>
-        {artist}
-      </button>
+      <div className="artist-card">
+        <img src={userIcon} width="100px"/>
+        <button 
+        // onClick={showTopTracks} 
+        className="list-name center" key={i}>
+          {artist}
+        </button>
       </div>
     );
   });
@@ -121,11 +122,10 @@ export default function Event(props) {
       </div>
       <div>
         <EmbedPlayer src={null}/>
-        <p>This is where the embedded player should be</p>
       </div>
       <div className="center">
         <h1 className="list-name">Artists ({artistCount})</h1>
-        <div className="center">
+        <div className="center artists-container">
           {artists}
         </div>
       </div>
