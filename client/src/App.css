@@ -8,26 +8,13 @@
   font-size: 1.5rem;
 }
 .App {
-  text-align: center;
   background-color: rgb(58, 27, 71);
-  background-image: url("https://www.transparenttextures.com/patterns/concrete-wall.png");
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
   pointer-events: none;
-}
-
-.App-header {
-  background-color: (35, 39, 47);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: rgb(119, 152, 179);
 }
 
 .App-link {
@@ -44,21 +31,42 @@
   }
 }
 
-.header-banner {
-  width: 100vw;
-  opacity: 50%;
-}
-
+/* //// header css //// */
 .header-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-.greeting {
+.header-img {
+  object-fit:cover;
+  width: 100vw;
+  height: 40vh;
+  opacity: 30%;
+  margin: auto;
+  filter: blur(2px);
+}
+
+.header-txt {
   color: rgb(197, 207, 216);
-  width: 90%;
+  position: absolute;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lrg  {
+  font-size: 24px;
+}
+
+.med  {
+  font-size: 15px;
 }
 
 .nav {
@@ -97,14 +105,14 @@
   justify-content: space-between;
 }
 
-#query {
+/* #query {
   width: 20vw;
   border-style: hidden;
   background-color: rgb(66, 47, 66);
   border-radius: 7px;
   color: white;
   height: 2em;
-}
+} */
 
 .disco {
   display: flex;
