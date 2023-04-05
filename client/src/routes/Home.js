@@ -4,6 +4,8 @@ import '../components/Event/EventList.css'
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 // import DateRange from '../components/DateRangePicker'
+import EventData from '../components/Event/EventData'
+
 
 
 export default function Home(props) {
@@ -22,6 +24,7 @@ export default function Home(props) {
             <button>Search Events!</button></Link>
             </h3>
         </div>
+        <EventData events={props.state.events} setEvent={props.setEvent} />
       </div>
     );
   }

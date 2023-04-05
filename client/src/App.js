@@ -56,7 +56,7 @@ export default function App() {
           <Navbar />
           <Header />
           <Routes>
-            <Route path="/" element={<Home />}></Route>
+            <Route path="/" element={<Home state={state}/>}></Route>
             <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
             } />
             <Route path="/event/:id" element={
