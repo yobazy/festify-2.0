@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import Card from 'react-bootstrap/Card';
-import "./EventList.css";
+import "./ListEvents.css";
 import axios from "axios";
 import { DateRangePicker } from "react-date-range";
 

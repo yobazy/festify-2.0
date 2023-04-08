@@ -22,22 +22,22 @@ export default function App() {
   const [artistz, setArtistz] = useState({})
 
   // api call to get events
-  // useEffect(() => {
-  //   // console.log('Event triggered')
-  //   axios.get('/getEvents')
-  //     .then((response) => {
-  //       console.log("response.data", response.data)
-  //       const events = response.data
-  //       setState({
-  //         events: events,
-  //         allEvents: events
-  //       });
-  //     })
-  //     .catch((err) =>  {
-  //       console.log('err')
-  //     }
-  //     )
-  // }, []);
+  useEffect(() => {
+    console.log('Event triggered')
+    axios.get('/getEvents')
+      .then((response) => {
+        console.log("response.data", response.data)
+        const events = response.data
+        setState({
+          events: events,
+          allEvents: events
+        });
+      })
+      .catch((err) =>  {
+        console.log('err')
+      }
+      )
+  }, []);
 
   const eventSetter = (event, artists) => {
     console.log('event setter called')
