@@ -3,16 +3,17 @@ import axios from 'axios';
 import './App.css';
 import Events from './routes/Events';
 import Event from './routes/Event';
-import { useState, useEffect } from "react";
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Home from './routes/Home'
 import Header from './components/Header';
 import Footer from './components/Footer';
+import events_data from './events.json'
 
 export default function App() {
-  const[events, setEvents] = ([])
+  const[events, setEvents] = ([events_data])
   const [event, setEvent] = ([])
+  // setEvents(events_data)
 
   // api call to get events
   // useEffect(() => {
@@ -31,15 +32,6 @@ export default function App() {
   //     }
   //     )
   // }, []);
-
-  fetch('./events.json')
-  .then(response => response.json())
-  .then(data => {
-    console.log(data); // The JSON data from the file is now a JavaScript object
-  })
-  .catch(error => {
-    console.error('Error fetching JSON data from file:', error);
-  });
 
   return (
     <>

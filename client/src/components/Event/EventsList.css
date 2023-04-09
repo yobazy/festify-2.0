@@ -1,183 +1,6 @@
-.event-card {
-  display: flex;
-  flex-direction: column;
-  align-self:auto;
-  width: 90%;
-  margin-left: 3rem;
-  margin-bottom: 0.2rem;
-  border: 2px dotted white;
-  border-radius: 5px;
-  border-color: rgb(119, 152, 179);
-  justify-content: space-between;
-background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-}
 
 .border {
   border: 3px solid white;
-}
-
-.events__header.text--light {
-  font-size: 3em;
-  color: rgb(197, 207, 216); 
-  /* margin-top: 1rem; */
-  margin-bottom: 1rem; 
-}
-
-.event-information {
-  display: flex;
-  flex-direction: column;
-  /* align-self: flex-start; */
-  width: 100%;
-
-}
-
-.event-name {
-  text-transform: uppercase;
-  font-size: 2.5em;
-  color: rgb(197, 207, 216);
-  /* margin-right: 2px; */
-  transition: margin 1s ease-in-out;
-  text-shadow: 0 1px 0 rgb(22, 19, 19),
-               0 3px 0 rgb(22, 19, 19),
-               0 4px 0 rgb(22, 19, 19),
-               0 5px 0 rgb(22, 19, 19),
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-}
-
-.event-name:hover {
-  text-shadow: 0 5px 0 rgb(22, 19, 19),
-               0 9px 0 rgb(22, 19, 19),
-               0 9px 0 rgb(22, 19, 19),
-               0 10px 0 rgb(22, 19, 19),
-               0 9px 6px rgba(0,0,0,.1),
-               0 0 8px rgba(0,0,0,.1),
-               0 5px 8px rgba(0,0,0,.3),
-               0 7px 9px rgba(0,0,0,.2),
-               0 9px 15px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 25px 25px rgba(0,0,0,.15);
-}
-
-.event-date {
-  color: rgb(116, 140, 160);
-}
-
-.event-location {
-  color: rgb(166, 180, 192);
-}
-
-.event-poster {
-  width: 250px;
-  /* margin-top: 1em;
-  margin-bottom: 1em;
-  border-radius: 10px;
-  margin-right: 5em; */
-}
-
-.events__list {
-  padding-bottom: 3em;
-  margin-bottom: 0;
-}
-
-.event-info {
-  /* display:flex;
-  flex-direction: column; */
-  justify-content: flex-start;
-  padding: 0;
-  margin: 0;
-}
-
-.events-filters  {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.events-filter  {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.event-text {
-  color: white;
-}
-
-.center {
-  align-content: center;
-  justify-content: center;
-}
-
-/* table, th, td { */
-  /* border: 1px solid; */
-  /* color: white; */
-  /* background-color: purple; */
-  /* width: 100%; */
-/* } */
-
-table {
-  border: 1px solid;
-
-  table-layout: fixed;
-  width: 90%;
-  border-collapse: collapse;
-  border-radius: 20%;
-}
-
-thead th:nth-child(1) {
-  width: 30%;
-}
-
-thead th:nth-child(2) {
-  width: 30%;
-}
-
-thead th:nth-child(3) {
-  width: 20%;
-}
-
-thead th:nth-child(4) {
-  width: 20%;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #e495e4;
-}
-
-tbody:hover {
-  background-color: #e495e4;
-}
-
-th  {
-  background-color: rgb(132, 32, 132);
-  color: rgb(210, 220, 219);
-}
-
-th,
-td {
-  padding: 10px;
-  color: rgb(210, 220, 219);
-
-}
-
-.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.row  {
-  display:flex;
-  flex-direction: row;
-  align-content: center;
-  justify-content: space-around;
-  color: white;
 }
 
 .body {
@@ -185,6 +8,85 @@ td {
   min-height: 100vw;
 }
 
-.fest-name  {
-  text-decoration: none;
+.events-container{
+  display: flex;
+  flex-direction: column;
+  border: 2px solid white;
+  align-items: center;
+}
+
+/* Event Card CSS */
+.event-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 90vw;
+  min-height: 100px;
+  max-height: 100px;
+  margin: 10px;
+  transition: margin 1s ease-in-out;
+  background-color: rgba(93, 7, 93, 0.515);
+
+}
+
+.event-card:hover {
+ background-color: pink;
+}
+
+.event-details{
+  display:flex;
+  max-height: 100px;
+}
+
+.event-image {
+  margin-left: 0;
+  width: 100%;
+  max-width: 150px;
+  height: inherit;
+  object-fit: cover;
+
+}
+
+.event-info {
+  /* padding: 16px; */
+  min-width: 35vw;
+  min-height: 150px;
+  padding: 10px;
+  background-color: rgb(86, 3, 103);
+}
+
+.event-name {
+  font-size: 1.2em;
+  color: rgb(197, 207, 216);
+  transition: margin 1s ease-in-out;
+}
+
+
+.event-location {
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.6em;
+}
+
+.event-date {
+  /* margin-right: 0 */
+  /* display: grid; */
+  /* flex-direction: column; */
+  height: 100%;
+  text-align: center;
+  background-color: purple;
+  padding: 5px;
+}
+
+.event-text {
+  font-size: 1em;
+}
+
+.event-artists {
+  padding-left: 5px; 
+  padding-top: 7px;
 }

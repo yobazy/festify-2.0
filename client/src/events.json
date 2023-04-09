@@ -4,20 +4,20 @@
     "name": "Shambhala",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artist_id": [1, 2, 3]
+    "artists": [1, 2, 3]
 },
 {
     "event_id": 2,
     "name": "Shambhala",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artist_id": [1, 2, 3]
+    "artists": [1, 2, 3]
 },
 {
     "event_id": 3,
     "name": "Shambhala",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artist_id": [1, 2, 3]
+    "artists": [1, 2, 3]
 }
 ]
