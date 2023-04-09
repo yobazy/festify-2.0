@@ -1,5 +1,5 @@
 import React from 'react';
-import '../components/Event/EventList.css';
+// import '../components/Event/EventList.css';
 import EventData from '../components/Event/EventsList'
 
 export default function Events(props) {

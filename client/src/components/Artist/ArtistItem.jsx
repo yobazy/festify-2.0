@@ -8,7 +8,7 @@ import TracklistItem from '../Tracks/TrackListItem';
 import '../../../src/Artist.css'
 import chasingPoster from '../../images/chasing-summer.jpeg';
 import EmbedContainer from "react-oembed-container";
-import '../Event/EventList.css';
+// import '../Event/EventList.css';
 
 
 export default function Artist(props) {

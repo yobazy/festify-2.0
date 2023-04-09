@@ -10,44 +10,36 @@ import Home from './routes/Home'
 import Header from './components/Header';
 import Footer from './components/Footer';
 
-
-
 export default function App() {
-  const [state, setState] = useState({
-    events: [],
-    allEvents: [{ name: 'shambs', date: 'asdasd', artistList: [{ name: 'clams casino' }] }]
-  })
-
-  const [eventz, setEventz] = useState({})
-  const [artistz, setArtistz] = useState({})
+  const[events, setEvents] = ([])
+  const [event, setEvent] = ([])
 
   // api call to get events
-  useEffect(() => {
-    console.log('Event triggered')
-    axios.get('/getEvents')
-      .then((response) => {
-        console.log("response.data", response.data)
-        const events = response.data
-        setState({
-          events: events,
-          allEvents: events
-        });
-      })
-      .catch((err) =>  {
-        console.log('err')
-      }
-      )
-  }, []);
+  // useEffect(() => {
+  //   console.log('Event triggered')
+  //   axios.get('/getEvents')
+  //     .then((response) => {
+  //       console.log("response.data", response.data)
+  //       const events = response.data
+  //       setState({
+  //         events: events,
+  //         allEvents: events
+  //       });
+  //     })
+  //     .catch((err) =>  {
+  //       console.log('err')
+  //     }
+  //     )
+  // }, []);
 
-  const eventSetter = (event, artists) => {
-    console.log('event setter called')
-    console.log('event', event)
-    console.log('artists', artists)
-
-    setArtistz(artists)
-    setEventz(event)
-    console.log('ezz', eventz)
-  }
+  fetch('./events.json')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data); // The JSON data from the file is now a JavaScript object
+  })
+  .catch(error => {
+    console.error('Error fetching JSON data from file:', error);
+  });
 
   return (
     <>
@@ -56,11 +48,11 @@ export default function App() {
           <Navbar />
           <Header />
           <Routes>
-            <Route path="/" element={<Home state={state}/>}></Route>
-            <Route path="/events" element={<Events state={state} setEvent={eventSetter}/>
+            <Route path="/" element={<Home events={events} setEvent={setEvent}/>}></Route>
+            <Route path="/events" element={<Events events={events} setEvent={setEvent}/>
             } />
             <Route path="/event/:id" element={
-              <Event event={eventz} artists={artistz}/>
+              <Event event={event}/>
             }>
             </Route>
           </Routes>
