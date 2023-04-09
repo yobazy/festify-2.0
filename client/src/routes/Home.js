@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 // import DateRange from '../components/DateRangePicker'
-import ListEvents from '../components/Event/EventsList'
+import EventsList from '../components/Event/EventsList'
 
 
 
 export default function Home( { events, setEvent }) {
+  console.log('events', events)
     return (
       <div className="body">
         <div className="row">
@@ -24,7 +25,7 @@ export default function Home( { events, setEvent }) {
             <button>Search Events!</button></Link>
             </h3>
         </div>
-        <ListEvents events={events} setEvent={setEvent} />
+        <EventsList events={events} setEvent={setEvent} limit={10}/>
       </div>
     );
   }

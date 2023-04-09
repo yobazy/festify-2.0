@@ -34,8 +34,12 @@
 }
 
 .event-card:hover {
- background-color: pink;
+ background-color: rgba(93, 7, 93, 0.515);
 }
+
+.event-card:hover .event-info {
+  background-color: rgba(86, 3, 103, 0.515);
+ }
 
 .event-details{
   display:flex;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, Component } from 'react';
 import axios from 'axios';
 import './App.css';
 import Events from './routes/Events';
@@ -11,27 +11,24 @@ import Footer from './components/Footer';
 import events_data from './events.json'
 
 export default function App() {
-  const[events, setEvents] = ([events_data])
-  const [event, setEvent] = ([])
-  // setEvents(events_data)
+  const[events, setEvents] = useState([events_data])
+  const [event, setEvent] = useState([])
 
   // api call to get events
-  // useEffect(() => {
-  //   console.log('Event triggered')
-  //   axios.get('/getEvents')
-  //     .then((response) => {
-  //       console.log("response.data", response.data)
-  //       const events = response.data
-  //       setState({
-  //         events: events,
-  //         allEvents: events
-  //       });
-  //     })
-  //     .catch((err) =>  {
-  //       console.log('err')
-  //     }
-  //     )
-  // }, []);
+  useEffect(() => {
+    console.log('Event triggered')
+    axios.get('/getEvents')
+      .then((response) => {
+        console.log("response.data", response.data)
+        const data = response.data
+        setEvents(data)
+        console.log('state-set')
+      })
+      .catch((err) =>  {
+        console.log('err', err)
+      }
+      )
+  }, []);
 
   return (
     <>

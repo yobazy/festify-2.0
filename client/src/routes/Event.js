@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom'
 import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
-// import Banner2 from '../../../src/images/banner2.jpeg';
 import '../Event.css';
 
 export default function Event(props) {
@@ -14,9 +13,8 @@ export default function Event(props) {
   const [currEvent, setCurrEvent] = useState()
   const [artistzzz, setArtistzzz] = useState([{}])
 
-  // API call to get event details 
+  // API call to get event details and artist details
     useEffect(() => {
-      // console.log('Event triggered')
       axios
         // .get("/getEvent")
         .get("/getArtists")
