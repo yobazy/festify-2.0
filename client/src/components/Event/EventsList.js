@@ -10,9 +10,7 @@ export default function EventsList( { events, setEvent, limit }) {
     console.log('event', event.id)
     const path = "/event/" + event.id
     return (
-      <Link to={path}>
         <EventCard event={event}/>
-      </Link>
     )
   })
 

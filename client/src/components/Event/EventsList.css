@@ -30,7 +30,11 @@
   margin: 10px;
   transition: margin 1s ease-in-out;
   background-color: rgba(93, 7, 93, 0.515);
+}
 
+.event-card-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .event-card:hover {
@@ -88,7 +92,6 @@
 
 .event-text {
   font-size: 1em;
-  text-decoration: none;
 }
 
 .event-artists {

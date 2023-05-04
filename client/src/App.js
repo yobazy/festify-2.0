@@ -9,11 +9,17 @@ import Home from './routes/Home'
 import Header from './components/Header';
 import Footer from './components/Footer';
 import events_data from './events.json'
+import artists_data from './artists.json'
+
 
 export default function App() {
+  // load dummy events data
   const events = events_data
+
+  // load dummy artist data
+  const artists = artists_data
+
   const [event, setEvent] = useState([])
-  console.log('text')
 
   // console.log('initalized events', events)
   // api call to get events, can uncomment once dummy data is not being used
