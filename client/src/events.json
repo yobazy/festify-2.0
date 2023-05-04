@@ -8,14 +8,14 @@
 },
 {
     "event_id": 2,
-    "name": "Shambhala",
+    "name": "Basscoast",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
     "artists": [1, 2, 3]
 },
 {
     "event_id": 3,
-    "name": "Shambhala",
+    "name": "Osheaga",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
     "artists": [1, 2, 3]

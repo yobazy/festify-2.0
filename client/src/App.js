@@ -11,24 +11,26 @@ import Footer from './components/Footer';
 import events_data from './events.json'
 
 export default function App() {
-  const[events, setEvents] = useState([events_data])
+  const events = events_data
   const [event, setEvent] = useState([])
+  console.log('text')
 
-  // api call to get events
-  useEffect(() => {
-    console.log('Event triggered')
-    axios.get('/getEvents')
-      .then((response) => {
-        console.log("response.data", response.data)
-        const data = response.data
-        setEvents(data)
-        console.log('state-set')
-      })
-      .catch((err) =>  {
-        console.log('err', err)
-      }
-      )
-  }, []);
+  // console.log('initalized events', events)
+  // api call to get events, can uncomment once dummy data is not being used
+  // useEffect(() => {
+  //   console.log('Event triggered')
+  //   axios.get('/getEvents')
+  //     .then((response) => {
+  //       console.log("response.data", response.data)
+  //       const data = response.data
+  //       setEvents(data)
+  //       console.log('state-set')
+  //     })
+  //     .catch((err) =>  {
+  //       console.log('err', err)
+  //     }
+  //     )
+  // }, []);
 
   return (
     <>

@@ -7,7 +7,7 @@ import EventCard from "./EventCard";
 export default function EventsList( { events, setEvent, limit }) {
   
   const listEvents = events.map((event) => {
-    console.log(event.id)
+    console.log('event', event.id)
     const path = "/event/" + event.id
     return (
       <Link to={path}>
