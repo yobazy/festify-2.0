@@ -4,7 +4,19 @@ import { Link } from "react-router-dom";
 import "./EventsList.css";
 import EventCard from "./EventCard";
 
-export default function EventsList( { events, setEvent, limit }) {
+export default function EventsList( { events, setEvent, limit, filterDate }) {
+  function formatDate(input) {
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+  
+    const [year, month] = input.split("-");
+    const monthName = monthNames[parseInt(month, 10) - 1];
+  
+    return `${monthName} ${year}`;
+  }
+
   const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // group events by month
@@ -21,11 +33,16 @@ export default function EventsList( { events, setEvent, limit }) {
   };
 
   const groupedEvents = groupEventsByMonth(sortedEvents);
-
+  console.log(groupedEvents)
+  const displayEvents = filterDate
+  ? {
+      [formatDate(filterDate)]: groupedEvents[formatDate(filterDate)],
+    }
+  : groupedEvents;
 
   return (
     <div className="events-container">
-      {Object.entries(groupedEvents).map(([month, monthEvents]) => (
+      {Object.entries(displayEvents).map(([month, monthEvents]) => (
         <div key={month}>
           <h2>{month}</h2>
           {monthEvents.map((event) => (

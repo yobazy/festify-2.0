@@ -30,8 +30,6 @@ const EventCard = ({ event }) => {
   const month = monthAbbreviations[monthIndex];
 
   // get artists for event
-  console.log("artists", event.artists);
-
   const getArtistNames = (artistIds) => {
     return artistsData
       .filter((artist) => artistIds.includes(artist.artist_id))
@@ -39,7 +37,6 @@ const EventCard = ({ event }) => {
   };
 
   let artistsArray = getArtistNames(event.artists);
-  console.log(artistsArray);
 
   const artists = () => {
       const slicedArr = artistsArray.slice(0, 3)
