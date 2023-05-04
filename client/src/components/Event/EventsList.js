@@ -5,8 +5,9 @@ import "./EventsList.css";
 import EventCard from "./EventCard";
 
 export default function EventsList( { events, setEvent, limit }) {
+  const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
   
-  const listEvents = events.map((event) => {
+  const listEvents = sortedEvents.map((event) => {
     console.log('event', event.id)
     const path = "/event/" + event.id
     return (
