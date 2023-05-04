@@ -2,7 +2,7 @@ import React from "react";
 import imageUrl from "../../images/banner3.jpeg";
 import "./EventsList.css";
 import { Link } from "react-router-dom";
-import artists_data from '../../artists.json'
+import artistsData from '../../artists.json'
 
 
 const EventCard = ({ event }) => {
@@ -30,7 +30,29 @@ const EventCard = ({ event }) => {
   const month = monthAbbreviations[monthIndex];
 
   // get artists for event
-  console.log('artists', event.artists)
+  console.log("artists", event.artists);
+
+  const getArtistNames = (artistIds) => {
+    return artistsData
+      .filter((artist) => artistIds.includes(artist.artist_id))
+      .map((artist) => artist.name);
+  };
+
+  let artistsArray = getArtistNames(event.artists);
+  console.log(artistsArray);
+
+  const artists = () => {
+      const slicedArr = artistsArray.slice(0, 3)
+      const artistDivs = slicedArr.map((artist, index) => <div key={index}>{artist}</div>);
+
+      if (artistsArray.length >= 4) {
+        artistDivs.push(<div key="more">...</div>);
+      }
+  
+      return artistDivs;
+  };
+
+  
 
   return (
     <div>
@@ -48,7 +70,7 @@ const EventCard = ({ event }) => {
                 </div>
               </div>
               <div className="event-artists">
-                <div className="event-text">{event.artists}</div>
+                <div className="event-text">{artists()}</div>
               </div>
             </div>
           </div>

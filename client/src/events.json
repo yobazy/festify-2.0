@@ -4,7 +4,7 @@
     "name": "Shambhala",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artists": [1, 2, 3],
+    "artists": [2, 3],
     "date": "07-22-23"
 },
 {
@@ -12,7 +12,7 @@
     "name": "Basscoast",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artists": [1, 2, 3],
+    "artists": [1, 2],
     "date": "07-14-23"
 },
 {
@@ -20,7 +20,7 @@
     "name": "Osheaga",
     "venue": "Salmo River Ranch",
     "location": "British Colombia",
-    "artists": [1, 2, 3],
+    "artists": [1, 2, 3, 4],
     "date": "08-04-23"
 }
 ]
