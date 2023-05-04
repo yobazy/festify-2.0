@@ -1,6 +1,6 @@
 import React from 'react';
 // import '../components/Event/EventList.css';
-import EventData from '../components/Event/EventsList'
+import EventList from '../components/Event/EventsList'
 
 export default function Events(props) {
   console.log('Events log', props)
@@ -19,7 +19,7 @@ export default function Events(props) {
             <p> Location : Alberta, CA</p>
             <p> Date Range : Default</p>
         </div>
-        <EventData events={props.state.events} setEvent={props.setEvent} />
+        <EventList events={props.state.events} />
     </div>
   );
 }

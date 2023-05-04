@@ -49,11 +49,9 @@ const EventCard = ({ event }) => {
       return artistDivs;
   };
 
-  
-
   return (
     <div>
-      <Link to={`/event/${event.id}`} className="event-card-link">
+      <Link to={`/event/${event.event_id}`} className="event-card-link">
         <div className="event-card">
           <div className="event-hover">
             <div className="event-details">

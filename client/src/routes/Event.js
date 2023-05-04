@@ -4,51 +4,44 @@ import { useParams } from 'react-router-dom'
 import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
-import '../Event.css';
+import './Event.css';
 
-export default function Event(props) {
-  console.log('props', props)
+export default function Event({ events, artists }) {
 
-  // create state 
-  const [currEvent, setCurrEvent] = useState()
-  const [artistzzz, setArtistzzz] = useState([{}])
+  // get id from url
+  const params = useParams();
+  const eventID = params['id']
+
+  console.log(events)
+  const event = events.find((event) => event.event_id == eventID);
+  console.log('event', event)
+
 
   // API call to get event details and artist details
-    useEffect(() => {
-      axios
-        // .get("/getEvent")
-        .get("/getArtists")
-        .then((response) => {
-          console.log("response.data", response.data)
-          // const events = response.data.data;
-          setArtistzzz(response.data);
-        })
-        .catch((err) => {
-          console.log("err");
-        });
-    }, []);
+    // useEffect(() => {
+    //   axios
+    //     // .get("/getEvent")
+    //     .get("/getArtists")
+    //     .then((response) => {
+    //       console.log("response.data", response.data)
+    //       // const events = response.data.data;
+    //       setArtistzzz(response.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log("err");
+    //     });
+    // }, []);
     
       // call to contact db for information on event [UNUSED]
       // useEffect(() => {
       //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
       // }, [params.id]);
   
-  let event = props.event
-  let eventName = event.name
-  let eventLocation = event.location
-  let eventDate = event.date
-  let eventLink = event.link
-  let livestreamInd = event.livestreamInd
+  // let eventLink = event.link
+  // let livestreamInd = event.livestreamInd
 
+  let artistCount = artists.length
   
-  let allArtists = artistzzz
-  let artistCount = allArtists.length
-
-  const params = useParams();
-
-  // state to store all events
-  const [events, setEvents] = useState([]);
-
   // state to store tracks
   const [tracks, setTracks] = useState([]);
 
@@ -78,12 +71,12 @@ export default function Event(props) {
       );
   };
 
-  const artistList = allArtists.map((artist) => {
+  const artistList = artists.map((artist) => {
     return artist.name;
   });
 
   // return img and artist name for each artist in artistList
-  const artists = artistList.map((artist, i) => {
+  const artistsCard = artistList.map((artist, i) => {
     return (
       <div className="artist-card">
         <img src={userIcon} width="100px"/>
@@ -111,20 +104,21 @@ export default function Event(props) {
           )}
         </div> */}
       </div>
-      <div className="center">
-          <h1>{eventName}</h1>
-          <h1>{eventLocation}</h1>
-          <h2>{eventDate}</h2>
-          <a>{eventLink}</a>
+      <div className="event-header">
+          <h1>{event.name}</h1>
+          <h2>{event.location}</h2>
+          <h2>{event.date}</h2>
+          {/* <a>{eventLink}</a> */}
           {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
       </div>
       <div>
         <EmbedPlayer src={null}/>
       </div>
       <div className="center">
-        <h1 className="list-name">Artists ({artistCount})</h1>
+        <h1 className="list-name">Acts</h1>
+        <p>{artistCount}</p>
         <div className="center artists-container">
-          {artists}
+          {artistsCard}
         </div>
       </div>
     </div>

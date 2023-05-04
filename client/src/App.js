@@ -19,8 +19,6 @@ export default function App() {
   // load dummy artist data
   const artists = artists_data
 
-  const [event, setEvent] = useState([])
-
   // console.log('initalized events', events)
   // api call to get events, can uncomment once dummy data is not being used
   // useEffect(() => {
@@ -45,11 +43,11 @@ export default function App() {
           <Navbar />
           <Header />
           <Routes>
-            <Route path="/" element={<Home events={events} setEvent={setEvent}/>}></Route>
-            <Route path="/events" element={<Events events={events} setEvent={setEvent}/>
+            <Route path="/" element={<Home events={events} />}></Route>
+            <Route path="/events" element={<Events events={events} />
             } />
             <Route path="/event/:id" element={
-              <Event event={event}/>
+              <Event events={events} artists={artists}/>
             }>
             </Route>
           </Routes>

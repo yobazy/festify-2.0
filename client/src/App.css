@@ -127,3 +127,13 @@
   width: 5em;
   text-transform: uppercase;
 }
+
+.filter-row {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+filter-item {
+}
