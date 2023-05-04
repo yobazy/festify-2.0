@@ -41,7 +41,6 @@ export default function App() {
       <BrowserRouter>
         <div className="App">
           <Navbar />
-          <Header />
           <Routes>
             <Route path="/" element={<Home events={events} />}></Route>
             <Route path="/events" element={<Events events={events} />

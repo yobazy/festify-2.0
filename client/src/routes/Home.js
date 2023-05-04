@@ -6,6 +6,8 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 // import DateRange from '../components/DateRangePicker'
 import EventsList from "../components/Event/EventsList";
 import '../App.css'
+import Header from '../components/Header';
+
 
 export default function Home({ events, setEvent }) {
   const [filterDate, setFilterDate] = useState("");
@@ -16,6 +18,7 @@ export default function Home({ events, setEvent }) {
 
   return (
     <div className="body">
+      <Header />
       <div className="filter-row">
         <div className="filter-item">
           <p> Location: </p>
