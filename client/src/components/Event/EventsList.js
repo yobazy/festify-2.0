@@ -6,18 +6,33 @@ import EventCard from "./EventCard";
 
 export default function EventsList( { events, setEvent, limit }) {
   const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
-  
-  const listEvents = sortedEvents.map((event) => {
-    console.log('event', event.id)
-    const path = "/event/" + event.id
-    return (
-        <EventCard event={event}/>
-    )
-  })
+
+  // group events by month
+  const groupEventsByMonth = (events) => {
+    return events.reduce((acc, event) => {
+      const date = new Date(event.date);
+      const month = date.toLocaleString("default", { month: "long", year: "numeric" });
+      if (!acc[month]) {
+        acc[month] = [];
+      }
+      acc[month].push(event);
+      return acc;
+    }, {});
+  };
+
+  const groupedEvents = groupEventsByMonth(sortedEvents);
+
 
   return (
     <div className="events-container">
-      {listEvents}
+      {Object.entries(groupedEvents).map(([month, monthEvents]) => (
+        <div key={month}>
+          <h2>{month}</h2>
+          {monthEvents.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 }
