@@ -63,10 +63,11 @@ const EventCard = ({ event }) => {
               <img className="event-image" src={imageUrl} alt={event.name} />
               <div className="event-info">
                 <div className="event-name text">{event.name}</div>
-                <div className="event-location event-text">{event.name}</div>
-
-                <div className="event-location event-text">
-                  {event.location}
+                <div className="event-info-box">
+                  <div className="event-location event-text">{event.venue}</div>
+                  <div className="event-location event-text">
+                    {event.location}
+                  </div>
                 </div>
               </div>
               <div className="event-artists">
