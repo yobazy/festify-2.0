@@ -31,9 +31,9 @@ http://localhost:3000/
 ## Screenshots
 Home page:
 ![Home page](https://github.com/youthbazzy/festify/blob/master/screenshots/home.png?raw=true)
-
+<!-- 
 Events page:
-![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true)
+![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true) -->
 
 ## Tech Stack 
 - React 
