@@ -30,14 +30,14 @@ http://localhost:3000/
 
 ## Screenshots
 Home page:
-![Home page](https://github.com/youthbazzy/festify/blob/master/screenshots/home.png?raw=true)
+![Home page](https://github.com/yobazy/festify/blob/master/screenshots/home.png?raw=true)
 <!-- 
 Events page:
 ![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true) -->
 
 ## Tech Stack 
 - React 
-- Ruby
+- Ruby on Rails
 - CSS/SCSS
 
 ## Dependencies
