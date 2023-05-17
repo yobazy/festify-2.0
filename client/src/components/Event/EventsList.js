@@ -43,7 +43,7 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
   return (
     <div className="events-container">
       {Object.entries(displayEvents).map(([month, monthEvents]) => (
-        <div key={month}>
+        <div key={month} style={{ color: 'white' }}>
           <h2>{month}</h2>
           {monthEvents.map((event) => (
             <EventCard key={event.id} event={event} />
