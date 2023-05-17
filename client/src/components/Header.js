@@ -11,11 +11,11 @@ export default function Header() {
     <div className="header-box">
       <img src={headerImg} className="header-img" alt="header" />
       <div className="header-txt">
-        <p className="lrg">Welcome to Festify!</p>
-        <p className="med">
+        <h1 className="">Welcome to Festify!</h1>
+        <h3 className="">
           Search for a event below. Festify will generate a Spotify playlist
           based on the event's lineup!
-        </p>
+        </h3>
       </div>
     </div>
   );
