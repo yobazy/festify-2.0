@@ -1,95 +1,62 @@
 .artist-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80vw;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+}
+
+.artist-name {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: rgb(197, 207, 216);
+  padding-left: 15px;
+}
+
+.list-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 2rem;
+  color: rgb(197, 207, 216);
+  margin-top: 1rem;
+}
+
+.list-name:hover {
+}
+
+.artist-list.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #352738;
+}
+
+.artist-list-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#artists-header {
+  display: flex;
+  justify-content: center;
+  color: rgb(197, 207, 216);
+  font-size: 2.5em;
+  margin-left: 0.3em;
+}
   
-  .artist-name {
-    font-size: 2rem;
-    /* margin-bottom: 0.4em; */
-    color: rgb(197, 207, 216);
-  }
-  
-  .list-name {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: none;
-    background: none;
-    text-transform: uppercase;
-    font-size: 2rem;
-    color: rgb(197, 207, 216);
-    margin-top: 1rem;
-  }
-  
-  .list-name:hover {
-  }
-  
-  .artist-card.card {
-    height: fit-content;
-    margin-left: 1rem;
-    border-width: thick;
-    border-radius: 7px;
-    border-color: rgb(95, 119, 138);
-  }
-  
-  .artist-list.card-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #352738;
-    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-  }
-  
-  .artist-list-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  #artists-header {
-    display: flex;
-    justify-content: center;
-    color: rgb(197, 207, 216);
-    font-size: 2.5em;
-    margin-left: 0.3em;
-  }
-  
-  .click {
-    text-transform: uppercase;
-    font-size: 2.5em;
-    color: rgb(197, 207, 216);
-    display: flex;
-    width: 70vw;
-    justify-content: start;
-    margin-left: 1.2em;
-    margin-bottom: 0;
-  }
-  
-  #here {
-    margin-left: 0.2em;
-    margin-right: 0.2em;
-    color: blueviolet;
-  }
-  
-  #poster2 {
-    width: 60.5vw;
-    border-radius: 10px;
-    border-style: solid;
-    border-width: thick;
-    border-color: rgb(95, 119, 138);
-  }
-  
-  .artist-card {
-    background-color: rgb(149, 47, 141);
-    width: 30%;
-    border-radius: 10px;
-    margin:10px;
-  }
-  
-  .artists-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
+.artist-card {
+  background-color: rgb(40, 12, 38);
+  width: 30%;
+  border-radius: 10px;
+  margin:10px;
+  align-items: center;
+  padding-left: 15px;
+}
+
+.artists-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}

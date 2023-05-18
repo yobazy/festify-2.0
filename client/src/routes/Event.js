@@ -75,11 +75,11 @@ export default function Event({ events, artists }) {
     return artist.name;
   });
 
-  // return img and artist name for each artist in artistList
+  // return artist card with img and name
   const artistsCard = artistList.map((artist, i) => {
     return (
       <div className="artist-card">
-        <img src={userIcon} width="100px"/>
+        <img src={userIcon} width="70px"/>
         <p className="artist-name center" key={i}>
           {artist}
         </p>
@@ -113,8 +113,10 @@ export default function Event({ events, artists }) {
         <EmbedPlayer src={null}/>
       </div>
       <div className="center">
-        <h1 className="list-name">Acts</h1>
-        <p>{artistCount}</p>
+        <div className="artists-section-header">
+        <h1 className="list-name">Music Artists</h1>
+        <p>Total Artists: {artistCount}</p>
+        </div>
         <div className="center artists-container">
           {artistsCard}
         </div>
