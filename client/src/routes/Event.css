@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'Gotham-Bold';
+  src: local('Gotham-Bold'), url(../fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham-Thin';
+  src: local('Gotham-Thin'), url(../fonts/Spotify-Font/Gotham-Thin.otf) format('opentype');
+}
+
+.text-bold {
+  font-family: Gotham-Bold;
+  font-size: 1.5rem;
+}
+
 .artist-info {
   display: flex;
   flex-direction: column;
@@ -6,30 +21,22 @@
 }
 
 .artist-name {
-  font-size: 2rem;
+  font-family: Gotham-Bold;
+  font-size: 1.5rem;
   text-transform: uppercase;
   color: rgb(197, 207, 216);
-  padding-left: 15px;
+  padding-left: 25px;
 }
 
 .list-name {
   display: flex;
+  font-family: Gotham-Bold;
   flex-direction: column;
   align-items: center;
   text-transform: uppercase;
   font-size: 2rem;
   color: rgb(197, 207, 216);
   margin-top: 1rem;
-}
-
-.list-name:hover {
-}
-
-.artist-list.card-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #352738;
 }
 
 .artist-list-content {
@@ -47,7 +54,7 @@
   
 .artist-card {
   background-color: rgb(40, 12, 38);
-  width: 30%;
+  width: 47%;
   border-radius: 10px;
   margin:10px;
   align-items: center;
@@ -59,4 +66,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+.event-header {
+  font-family: Gotham-Bold;
 }
