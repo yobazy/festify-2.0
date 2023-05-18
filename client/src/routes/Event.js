@@ -41,35 +41,6 @@ export default function Event({ events, artists }) {
   // let livestreamInd = event.livestreamInd
 
   let artistCount = artists.length
-  
-  // state to store tracks
-  const [tracks, setTracks] = useState([]);
-
-  // state to store individual artist information
-  const [artist, setArtist] = useState("");
-
-  // state to store array of all artist data
-  const [artistsInfo, setArtistsInfo] = useState([]);
-
-  // create event playlist
-
-  const showTopTracks = (e) => {
-    console.log('e.target.innerHTML')
-    setArtist(e.target.innerHTML);
-    axios
-      .post("/tracks", { data: e.target.innerHTML })
-      .then((result) => {
-        setTracks(result.data.tracks);
-      })
-      .then(
-        axios
-          .post("/artistInfo", { data: e.target.innerHTML })
-          .then((result) => {
-            // console.log('result.data', result.data)
-            setArtistsInfo(result.data);
-          })
-      );
-  };
 
   const artistList = artists.map((artist) => {
     return artist.name;
@@ -103,23 +74,21 @@ export default function Event({ events, artists }) {
         </div> */}
       </div>
       <div className="event-header white">
-          <h1>{event.name}</h1>
-          <h2>{event.location}</h2>
-          <h2>{event.date}</h2>
-          {/* <a>{eventLink}</a> */}
-          {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
+        <h1>{event.name}</h1>
+        <h2>{event.location}</h2>
+        <h2>{event.date}</h2>
+        {/* <a>{eventLink}</a> */}
+        {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
       </div>
       <div>
-        <EmbedPlayer src={null}/>
+        <EmbedPlayer src={null} />
       </div>
       <div className="center">
         <div className="artists-section-header">
-        <h1 className="list-name">Music Artists</h1>
-        <p>Total Artists: {artistCount}</p>
+          <h1 className="list-name border">LINEUP</h1>
+          <p className="border">Total Artists: {artistCount}</p>
         </div>
-        <div className="center artists-container">
-          {artistsCard}
-        </div>
+        <div className="center artists-container ">{artistsCard}</div>
       </div>
     </div>
   );

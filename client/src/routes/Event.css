@@ -29,10 +29,7 @@
 }
 
 .list-name {
-  display: flex;
   font-family: Gotham-Bold;
-  flex-direction: column;
-  align-items: center;
   text-transform: uppercase;
   font-size: 2rem;
   color: rgb(197, 207, 216);
@@ -70,4 +67,15 @@
 
 .event-header {
   font-family: Gotham-Bold;
+}
+
+.artists-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.border {
+  border: 2px dotted white;
 }
