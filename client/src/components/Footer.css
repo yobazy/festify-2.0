@@ -2,6 +2,20 @@
     color: white;
 }
 
-.pad {
+.padding {
     padding: 10px;
 }
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Gotham-Light;
+    font-size: 1rem;
+}
+
+@font-face {
+    font-family: 'Gotham-Light';
+    src: local('Gotham-Light'), url(../fonts/Spotify-Font/Gotham-Light.otf) format('opentype');
+  }
