@@ -12,9 +12,12 @@ export default function Event({ events, artists }) {
   const params = useParams();
   const eventID = params['id']
 
-  console.log(events)
   const event = events.find((event) => event.event_id == eventID);
-  console.log('event', event)
+
+  //filter artists by artistID
+  // const eventArtistsArr = event.artists
+
+  let filteredArtists = artists.filter(artist => event.artists.includes(artist.artist_id));
 
 
   // API call to get event details and artist details
@@ -40,9 +43,9 @@ export default function Event({ events, artists }) {
   // let eventLink = event.link
   // let livestreamInd = event.livestreamInd
 
-  let artistCount = artists.length
+  let artistCount = filteredArtists.length
 
-  const artistList = artists.map((artist) => {
+  const artistList = filteredArtists.map((artist) => {
     return artist.name;
   });
 
@@ -73,7 +76,7 @@ export default function Event({ events, artists }) {
           )}
         </div> */}
       </div>
-      <div className="event-header white">
+      <div className="event-header white border">
         <h1>{event.name}</h1>
         <h2>{event.location}</h2>
         <h2>{event.date}</h2>

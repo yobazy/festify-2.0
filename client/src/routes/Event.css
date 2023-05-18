@@ -79,3 +79,7 @@
 .border {
   border: 2px dotted white;
 }
+
+.event-header {
+  padding-left: 50px;
+}
