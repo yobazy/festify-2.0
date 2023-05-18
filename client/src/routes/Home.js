@@ -7,6 +7,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import EventsList from "../components/Event/EventsList";
 import '../App.css'
 import Header from '../components/Header';
+import Select from 'react-select'
 
 
 export default function Home({ events, setEvent }) {

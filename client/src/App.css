@@ -3,10 +3,21 @@
   src: local('Gotham-Bold'), url(./fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
 }
 
-.text {
+@font-face {
+  font-family: 'Gotham-Thin';
+  src: local('Gotham-Thin'), url(./fonts/Spotify-Font/Gotham-Thin.otf) format('opentype');
+}
+
+.text-bold {
   font-family: Gotham-Bold;
   font-size: 1.5rem;
 }
+
+.text-thin {
+  font-family: Gotham-Thin;
+  font-size: 1.5rem;
+}
+
 .App {
   background-color: rgb(58, 27, 71);
 }
@@ -19,16 +30,6 @@
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* //// header css //// */
@@ -135,5 +136,16 @@
   padding: 10px;
 }
 
-filter-item {
+.white {
+  color: white;
+}
+
+/* Artist Card CSS */
+
+.artist-card {
+  display: flex;
+}
+
+.artist-name {
+
 }

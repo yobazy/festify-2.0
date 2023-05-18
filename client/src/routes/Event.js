@@ -80,11 +80,9 @@ export default function Event({ events, artists }) {
     return (
       <div className="artist-card">
         <img src={userIcon} width="100px"/>
-        <button 
-        // onClick={showTopTracks} 
-        className="list-name center" key={i}>
+        <p className="artist-name center" key={i}>
           {artist}
-        </button>
+        </p>
       </div>
     );
   });
@@ -104,7 +102,7 @@ export default function Event({ events, artists }) {
           )}
         </div> */}
       </div>
-      <div className="event-header">
+      <div className="event-header white">
           <h1>{event.name}</h1>
           <h2>{event.location}</h2>
           <h2>{event.date}</h2>

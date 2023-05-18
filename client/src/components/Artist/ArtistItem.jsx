@@ -1,14 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import '../../../src/Event.css'
 import Tracklist from '../Tracks/Tracklist';
 import TracklistItem from '../Tracks/TrackListItem';
 // import artistLink from '../../../src/images/spot-link4.jpeg';
 import '../../../src/Artist.css'
 import chasingPoster from '../../images/chasing-summer.jpeg';
 import EmbedContainer from "react-oembed-container";
-// import '../Event/EventList.css';
 
 
 export default function Artist(props) {
