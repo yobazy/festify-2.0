@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Component } from 'react';
-import axios from 'axios';
 import './App.css';
 import Events from './routes/Events';
 import Event from './routes/Event';
@@ -10,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import events_data from './events.json'
 import artists_data from './artists.json'
+import { supabase } from "./client"
 
 
 export default function App() {
@@ -20,21 +20,20 @@ export default function App() {
   const artists = artists_data
 
   // console.log('initalized events', events)
-  // api call to get events, can uncomment once dummy data is not being used
-  // useEffect(() => {
-  //   console.log('Event triggered')
-  //   axios.get('/getEvents')
-  //     .then((response) => {
-  //       console.log("response.data", response.data)
-  //       const data = response.data
-  //       setEvents(data)
-  //       console.log('state-set')
-  //     })
-  //     .catch((err) =>  {
-  //       console.log('err', err)
-  //     }
-  //     )
-  // }, []);
+  const [eventsTwo, setEvents] = useState([])
+
+  useEffect(() => {
+    fetchEvents()
+  }, [])
+
+  async function fetchEvents() {
+    const { data, error } = await supabase
+      .from('events')
+      .select();
+    if (error) console.error("Error fetching events:", error);
+    setEvents(data);
+    console.log("DATA", data);
+  }
 
   return (
     <>
