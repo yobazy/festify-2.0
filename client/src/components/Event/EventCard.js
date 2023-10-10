@@ -6,7 +6,7 @@ import artistsData from '../../artists.json'
 
 
 const EventCard = ({ event }) => {
-  const dateObject = new Date(event.date);
+  const dateObject = new Date(event.event_date);
 
   const year = dateObject.getFullYear();
   const monthIndex = dateObject.getMonth(); // getMonth() returns a zero-based index (0-11)
@@ -29,14 +29,9 @@ const EventCard = ({ event }) => {
 
   const month = monthAbbreviations[monthIndex];
 
-  // get artists for event
-  const getArtistNames = (artistIds) => {
-    return artistsData
-      .filter((artist) => artistIds.includes(artist.artist_id))
-      .map((artist) => artist.name);
-  };
+  const getArtistNames = event => event.artists.map(artist => artist.artist_name);
 
-  let artistsArray = getArtistNames(event.artists);
+  const artistsArray = getArtistNames(event)
 
   const artists = () => {
       const slicedArr = artistsArray.slice(0, 3)
@@ -55,13 +50,13 @@ const EventCard = ({ event }) => {
         <div className="event-card">
           <div className="event-hover">
             <div className="event-details">
-              <img className="event-image" src={imageUrl} alt={event.name} />
+              <img className="event-image" src={imageUrl} alt={event.event_name} />
               <div className="event-info">
-                <div className="event-name text-bold">{event.name}</div>
+                <div className="event-name text-bold">{event.event_name}</div>
                 <div className="event-info-box">
-                  <div className="event-location event-text">{event.venue}</div>
+                  <div className="event-location event-text">{event.event_venue}</div>
                   <div className="event-location event-text">
-                    {event.location}
+                    {event.event_location}
                   </div>
                 </div>
               </div>

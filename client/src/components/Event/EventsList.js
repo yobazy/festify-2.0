@@ -17,12 +17,12 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
     return `${monthName} ${year}`;
   }
 
-  const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedEvents = [...events].sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 
   // group events by month
   const groupEventsByMonth = (events) => {
     return events.reduce((acc, event) => {
-      const date = new Date(event.date);
+      const date = new Date(event.event_date);
       const month = date.toLocaleString("default", { month: "long", year: "numeric" });
       if (!acc[month]) {
         acc[month] = [];
@@ -33,7 +33,7 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
   };
 
   const groupedEvents = groupEventsByMonth(sortedEvents);
-  console.log(groupedEvents)
+
   const displayEvents = filterDate
   ? {
       [formatDate(filterDate)]: groupedEvents[formatDate(filterDate)],
@@ -46,7 +46,7 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
         <div key={month} style={{ color: 'white' }}>
           <h2>{month}</h2>
           {monthEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <EventCard key={event.event_id} event={event} />
           ))}
         </div>
       ))}

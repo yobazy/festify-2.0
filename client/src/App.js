@@ -14,13 +14,13 @@ import { supabase } from "./client"
 
 export default function App() {
   // load dummy events data
-  const events = events_data
+  // const events = events_data
 
   // load dummy artist data
   const artists = artists_data
 
   // console.log('initalized events', events)
-  const [event2s, setEvents] = useState([])
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     fetchEvents()
