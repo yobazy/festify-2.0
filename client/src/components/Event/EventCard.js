@@ -2,8 +2,6 @@ import React from "react";
 import imageUrl from "../../images/banner3.jpeg";
 import "./EventsList.css";
 import { Link } from "react-router-dom";
-import artistsData from '../../artists.json'
-
 
 const EventCard = ({ event }) => {
   const dateObject = new Date(event.event_date);
