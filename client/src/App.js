@@ -20,7 +20,7 @@ export default function App() {
   const artists = artists_data
 
   // console.log('initalized events', events)
-  const [eventsTwo, setEvents] = useState([])
+  const [event2s, setEvents] = useState([])
 
   useEffect(() => {
     fetchEvents()
@@ -29,7 +29,10 @@ export default function App() {
   async function fetchEvents() {
     const { data, error } = await supabase
       .from('events')
-      .select();
+      .select(`
+        *, 
+        artists ( * )
+      `)
     if (error) console.error("Error fetching events:", error);
     setEvents(data);
     console.log("DATA", data);
