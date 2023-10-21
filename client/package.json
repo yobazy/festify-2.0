@@ -9,6 +9,7 @@
     "caniuse-lite": "^1.0.30001476",
     "date-fns": "^2.29.3",
     "moment": "^2.29.4",
+    "node-fetch": "^3.3.2",
     "react": "^17.0.0",
     "react-bootstrap": "^2.7.0",
     "react-date-range": "^1.4.0",
@@ -22,7 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-db": "node ./scripts/build_db.mjs",
+    "update-db": "node ./scripts/update_db.mjs"
   },
   "eslintConfig": {
     "extends": "react-app"
