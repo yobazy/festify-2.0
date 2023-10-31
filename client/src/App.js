@@ -1,20 +1,16 @@
-import React, { useEffect, useState, Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Events from './routes/Events';
 import Event from './routes/Event';
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Home from './routes/Home'
-import Header from './components/Header';
 import Footer from './components/Footer';
-import events_data from './events.json'
 import artists_data from './artists.json'
 import { supabase } from "./client"
 
 
 export default function App() {
-  // load dummy events data
-  // const events = events_data
 
   // load dummy artist data
   const artists = artists_data
