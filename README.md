@@ -1,6 +1,6 @@
 # Festify
 ## IMPORTANT
-This is an rebuild/updgrade of a project completed in my Web Dev bootcamp. That version can be viewed [here](https://github.com/youthbazzy/festify). Festify 2.0 is completely rewritten and redesigned since that version.
+This is an rebuild/updgrade of a project started in my Web Dev bootcamp. That version can be viewed [here](https://github.com/youthbazzy/festify). Festify 2.0 has been rewritten and redesigned since that version.
 
 ## Overview
 Festify is a festival companion react app that allows users to view and save playlists which are generated based on each days festival events.
