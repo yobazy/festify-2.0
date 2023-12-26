@@ -32,8 +32,8 @@ Events page:
 ![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true) -->
 
 ## Tech Stack 
-- React 
-- Ruby on Rails
+- React
+- Supabase 
 - CSS/SCSS
 
 ## Dependencies
