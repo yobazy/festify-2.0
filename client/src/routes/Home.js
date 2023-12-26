@@ -10,7 +10,7 @@ import Header from '../components/Header';
 import Select from 'react-select'
 
 
-export default function Home({ events, setEvent }) {
+export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
 
   const handleDateChange = (e) => {
@@ -38,7 +38,15 @@ export default function Home({ events, setEvent }) {
         </div>
         <div className="filter-item">
           <p> Search: </p>
-          <input type="dropdown" placeholder="Search an event"></input>
+          <input 
+            type="search" 
+            name="search-form"
+            id="search-form"
+            className="search-input"
+            placeholder="Search an event"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
       </div>
       <EventsList

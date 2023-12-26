@@ -17,13 +17,16 @@ export default function App() {
 
   // console.log('initalized events', events)
   const [events, setEvents] = useState([])
+  const [showEvents, setShowEvents] = useState([])
+
   const [isLoaded, setIsLoaded] = useState(false)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    fetchEvents()
-  }, [])
+  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
+
+  // fetch events from supabase api
   async function fetchEvents() {
     const { data, error } = await supabase
       .from('events')
@@ -31,10 +34,29 @@ export default function App() {
         *, 
         artists ( * )
       `)
-    if (error) console.error("Error fetching events:", error); // add error case
+    if (error) {
+      // setEvents(null)
+      // return <>error.message</>
+      console.log('error')
+    } else if (!isLoaded) {
+      // return <>loading...</>
+      console.log('loading')
+    }; // add error case
     setEvents(data);
+    setShowEvents(data)
     console.log("DATA", data);
   }
+
+  useEffect(() => {
+    fetchEvents()
+  }, [])
+
+  useEffect(() => {
+    setSearchQuery(query)
+    // filter events by search query
+    let filtered = events.filter(event => event.event_name.toLowerCase().includes(query.toLowerCase()));
+    setShowEvents(filtered)
+  }, [query]) // if add clickSearch button, change this 
 
   return (
     <>
@@ -42,8 +64,8 @@ export default function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home events={events} />}></Route>
-            <Route path="/events" element={<Events events={events} />
+            <Route path="/" element={<Home events={showEvents} query={query} setQuery={setQuery}/>}></Route>
+            <Route path="/events" element={<Events events={showEvents} />
             } />
             <Route path="/event/:id" element={
               <Event events={events} artists={artists}/>
