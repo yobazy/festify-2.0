@@ -21,6 +21,8 @@ export default function Home({ events, setEvent, query, setQuery }) {
     <div className="body">
       <Header />
       <div className="filter-row">
+      <p> [Club]/[Festival] </p>
+
         <div className="filter-item">
           <p> Search: </p>
           <input 
