@@ -17,6 +17,8 @@ export default function App() {
 
   // console.log('initalized events', events)
   const [events, setEvents] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchEvents()
@@ -29,7 +31,7 @@ export default function App() {
         *, 
         artists ( * )
       `)
-    if (error) console.error("Error fetching events:", error);
+    if (error) console.error("Error fetching events:", error); // add error case
     setEvents(data);
     console.log("DATA", data);
   }
