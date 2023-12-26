@@ -22,21 +22,6 @@ export default function Home({ events, setEvent, query, setQuery }) {
       <Header />
       <div className="filter-row">
         <div className="filter-item">
-          <p> Location: </p>
-          <input type="dropdown" placeholder="Alberta, CA"></input>
-        </div>
-        <div className="filter-item">
-          <p> Month-Year: </p>
-          <input
-            type="month"
-            id="start"
-            name="date-range"
-            min="2023-01"
-            value={filterDate}
-            onChange={handleDateChange}
-          />
-        </div>
-        <div className="filter-item">
           <p> Search: </p>
           <input 
             type="search" 
