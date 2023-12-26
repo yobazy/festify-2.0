@@ -23,6 +23,8 @@ export default function App() {
   const [error, setError] = useState(null)
 
   const [query, setQuery] = useState("");
+  const searchParams = ["event_name","event_location", "event_venue"];
+  // const [searchParams, setSearchParams] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
 
 
@@ -54,7 +56,11 @@ export default function App() {
   useEffect(() => {
     setSearchQuery(query)
     // filter events by search query
-    let filtered = events.filter(event => event.event_name.toLowerCase().includes(query.toLowerCase()));
+    const filtered = events.filter((event) => {
+      return searchParams.some((newItem) => {
+        return event[newItem].toString().toLowerCase().indexOf(query.toLowerCase()) > -1;
+      });
+    });
     setShowEvents(filtered)
   }, [query]) // if add clickSearch button, change this 
 
