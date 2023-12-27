@@ -52,10 +52,7 @@ const EventCard = ({ event }) => {
               <div className="event-info">
                 <div className="event-name text-bold">{event.event_name}</div>
                 <div className="event-info-box">
-                  <div className="event-location event-text">{event.event_venue}</div>
-                  <div className="event-location event-text">
-                    {event.event_location}
-                  </div>
+                  <div className="event-location event-text">{event.event_venue} - {event.event_location}</div>
                 </div>
               </div>
               <div className="event-artists">
