@@ -62,6 +62,26 @@
   transform: translate(-50%, -50%);
 }
 
+.rotating-word {
+  display: inline-block;
+  animation: fadeMove 3s ease-in-out infinite;
+}
+
+@keyframes fadeMove {
+  0% {
+    opacity: 0;
+    /* transform: translateY(-10px); */
+  }
+  50% {
+    opacity: 1;
+    /* transform: translateY(-20px);  */
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
 .lrg  {
   font-size: 24px;
 }
