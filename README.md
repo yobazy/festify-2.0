@@ -1,24 +1,27 @@
 # Festify
 ## IMPORTANT
-This is an rebuild/updgrade of a project started in my Web Dev bootcamp. That version can be viewed [here](https://github.com/youthbazzy/festify). Festify 2.0 has been rewritten and redesigned since that version.
+This is an rebuild/updgrade of a project started in my Web Dev bootcamp. That version can be viewed [here](https://github.com/yobazy/festify). Festify 2.0 has been rewritten and redesigned since that version.
 
 ## Overview
 Festify is a festival companion react app that allows users to view and save playlists which are generated based on each days festival events.
 
 ## Setup
 
-Install dependencies with `npm install`, `gem install`
+Install dependencies with `npm install`
 
 Create .env file in root folder, input information in such as how was done in .env example.
 
-### Database Setup
-Run `npm build-db` in client folder. This script will do the inital build of the database.
-// NOT_IMPLEMENTED Run `npm update-db` in client folder. This script will update the database.
-// NOT_IMPLEMENTED RUN 'npm delete-db'
+### Database Scripts
+#### Required:
+Run `npm build-db` in client folder. This script will do the initial build of the database.
+
+#### Maintenance:
+Run `npm update-db` in client folder. This script will update the database.
+Run `npm clear-db` in client folder. This script will clear the contents of the database.
 
 
 ## Running the App 
-Run `npm start` in client folder.
+Run `npm start` in src folder.
 
 ## URLs
 The app can be viewed at the following URL once setup:
@@ -34,7 +37,7 @@ Events page:
 ## Tech Stack 
 - React
 - Supabase 
-- CSS/SCSS
+- Tailwind CSS
 
 ## Dependencies
 To be added. 
