@@ -38,6 +38,7 @@
   ],
   "proxy": "http://localhost:3001",
   "devDependencies": {
-    "eslint-config-react-app": "^7.0.1"
+    "eslint-config-react-app": "^7.0.1",
+    "tailwindcss": "^3.4.1"
   }
 }

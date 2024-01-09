@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Gotham-Bold';
   src: local('Gotham-Bold'), url(./fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
