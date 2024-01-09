@@ -67,13 +67,10 @@ function transformArtistData(artist) {
     };
 }
 
-
 // Update events in Supabase
 async function updateSupabase(events) {
-        console.log('updating supabase db...')
+        console.log('populating supabase db...')
         for (let event of events) {
-
-
             const transformEvent = transformEventData(event)
             const venue = event.venue
             const transformVenue = transformVenueData(venue)
@@ -123,7 +120,7 @@ async function updateSupabase(events) {
                 console.error('Error upserting venue in Supabase:', venueError);
             }
         }
-        console.log('update db complete.')
+        console.log('build db complete.')
 }
 
 // Main function
