@@ -16,9 +16,7 @@ export default function Events(props) {
         </p>
       </div>
       <div className="row">
-            <p> Location : Alberta, CA</p>
-            <p> Date Range : Default</p>
-        </div>
+      </div>
         <EventList events={props.state.events} />
     </div>
   );

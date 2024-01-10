@@ -7,8 +7,6 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import EventsList from "../components/Event/EventsList";
 import '../App.css'
 import Header from '../components/Header';
-import Select from 'react-select'
-
 
 export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
@@ -21,19 +19,27 @@ export default function Home({ events, setEvent, query, setQuery }) {
     <div className="body">
       <Header />
       <div className="filter-row">
-      <p> [Club]/[Festival] </p>
-
-        <div className="filter-item">
-          <p> Search: </p>
-          <input 
-            type="search" 
-            name="search-form"
-            id="search-form"
-            className="search-input"
-            placeholder="Search an event"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+        <div className="filter-items">
+          <form>
+            {/* <label for="default-search" class="search-label">Search</label> */}
+            <div class="search-container">
+              <div class="search-icon-container">
+                <svg class="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
+              </div>
+              <input 
+                type="search" 
+                id="default-search" 
+                class="search-input" 
+                placeholder="Search events, locations..." 
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                required
+              />
+                {/* <button type="submit" class="search-button">Search</button> */}
+            </div>
+          </form>
         </div>
       </div>
       <EventsList

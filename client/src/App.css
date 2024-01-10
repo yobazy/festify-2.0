@@ -156,6 +156,11 @@
   padding: 10px;
 }
 
+.filter-items {
+  display: flex;
+  flex-direction: column;
+}
+
 .white {
   color: white;
 }
@@ -168,4 +173,58 @@
 
 .artist-name {
 
+}
+
+/* Search Bar CSS */
+.search-label {
+  margin-bottom: 0.5rem; /* mb-2 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: medium; /* font-medium */
+  color: #1a202c; /* text-gray-900 */
+  display: none; /* sr-only */
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-icon-container {
+  position: absolute;
+  inset: 0;
+  start: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 0.75rem; 
+  pointer-events: none;
+}
+
+.search-icon {
+  width: 1rem; /* w-4 */
+  height: 1rem; /* h-4 */
+  color: #6b7280; /* text-gray-500 */
+}
+
+.search-input {
+  display: block;
+  width: 100%;
+  padding: 1rem 2.5rem 1rem 2.5rem; /* p-4 ps-10 */
+  font-size: 0.875rem; /* text-sm */
+  color: #1a202c; /* text-gray-900 */
+  border: 1px solid #d1d5db; /* border border-gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: #f9fafb; /* bg-gray-50 */
+  /* Add focus styles as needed */
+}
+
+/* UNUSED */
+.search-button {
+  position: absolute;
+  end: 0.625rem; /* end-2.5 */
+  bottom: 0.625rem; /* bottom-2.5 */
+  background-color: #1d4ed8; /* bg-blue-700 */
+  color: white;
+  font-weight: medium;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem; /* px-4 py-2 */
 }
