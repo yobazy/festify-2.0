@@ -22,12 +22,12 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  width: 100%;
-  min-width: 90vw;
+  width: 90%;
+  min-width: 70vw;
   max-width: 90vw;
   min-height: 100px;
   max-height: 100px;
-  margin: 10px;
+  margin: 12px;
   transition: margin 1s ease-in-out;
   background-color: rgba(93, 7, 93, 0.515);
 }
