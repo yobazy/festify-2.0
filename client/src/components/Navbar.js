@@ -31,6 +31,16 @@ export default function Navbar(props) {
           <ul className={click ? "nav-menu-active nav-items" : "nav-menu nav-items"}>
             <li className="nav-item">
               <Link to="/" className="nav-links" onClick={closeMobileMenu}>
+                Events
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
+                Artists (coming soon)
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
                 Connect to Spotify
               </Link>
             </li>
