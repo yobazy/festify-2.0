@@ -1,0 +1,197 @@
+@font-face {
+  font-family: 'Gotham-Bold';
+
+  src: local('Gotham-Bold'), url(./fonts/Spotify-Font/Gotham-Bold.otf) format('opentype');
+}
+
+@font-face {
+  font-family: 'Gotham-Thin';
+
+  src: local('Gotham-Thin'), url(./fonts/Spotify-Font/Gotham-Thin.otf) format('opentype');
+}
+
+.text-bold {
+  font-family: Gotham-Bold;
+  font-size: 1.5rem;
+}
+
+.text-thin {
+  font-family: Gotham-Thin;
+  font-size: 1.5rem;
+}
+
+.App {
+  background-color: rgb(58, 27, 71);
+}
+
+.App-logo {
+  -webkit-animation: App-logo-spin infinite 20s linear;
+          animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* //// header css //// */
+
+.header-box {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header-img {
+  object-fit:cover;
+  width: 100vw;
+  height: 40vh;
+  opacity: 30%;
+  margin: auto;
+  -webkit-filter: blur(2px);
+          filter: blur(2px);
+}
+
+.header-txt {
+  color: rgb(197, 207, 216);
+  position: absolute;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.rotating-word {
+  display: inline-block;
+  -webkit-animation: fadeMove 3s ease-in-out infinite;
+          animation: fadeMove 3s ease-in-out infinite;
+}
+
+@-webkit-keyframes fadeMove {
+  0% {
+    opacity: 0;
+    /* transform: translateY(-10px); */
+  }
+
+  50% {
+    opacity: 1;
+    /* transform: translateY(-20px);  */
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@keyframes fadeMove {
+  0% {
+    opacity: 0;
+    /* transform: translateY(-10px); */
+  }
+
+  50% {
+    opacity: 1;
+    /* transform: translateY(-20px);  */
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+.lrg  {
+  font-size: 24px;
+}
+
+.med  {
+  font-size: 15px;
+}
+
+.nav {
+  position: fixed;
+  width: 100vw;
+  height: 4em;
+}
+
+.brand.navbar-brand {
+  font-size: 2em;
+}
+
+.home {
+  font-size: 1.5em;
+  margin-right: 0.75em;
+  margin-left: 0.75em;
+}
+
+.user {
+  font-size: 1.5em;
+}
+
+.nav-container {
+  display: flex;
+  /* justify-items: ; */
+  align-items: baseline;
+  width: 100vw;
+  align-self: baseline;
+  max-width: 100vw;
+}
+
+.me-auto {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+}
+
+/* #query {
+  width: 20vw;
+  border-style: hidden;
+  background-color: rgb(66, 47, 66);
+  border-radius: 7px;
+  color: white;
+  height: 2em;
+} */
+
+.disco {
+  display: flex;
+}
+
+#search {
+  background-color: rgb(128, 109, 128);
+  border-radius: 7px;
+  color: white;
+  border-style: hidden;
+  height: 2em;
+  width: 5em;
+  text-transform: uppercase;
+}
+
+.filter-row {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.white {
+  color: white;
+}
+
+/* Artist Card CSS */
+
+.artist-card {
+  display: flex;
+}
+
+.artist-name {
+}
