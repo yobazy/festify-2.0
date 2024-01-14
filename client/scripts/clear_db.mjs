@@ -9,7 +9,7 @@ const SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_KEY
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function clearTable(tableName) {
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from(tableName)
         .delete()
         .not('created_at', 'is', null); // This will match all records where 'created_at' is not null
