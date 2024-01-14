@@ -16,8 +16,8 @@ console.log(EDMTRAIN_KEY)
 // Fetch events from Edmtrain
 async function fetchEdmtrainEvents() {
 
-    const start_date = "2023-10-29"
-    const end_date = "2024-10-27"
+    const start_date = "2024-01-01"
+    const end_date = "2024-03-27"
 
     const url = `https://edmtrain.com/api/events?events?startDate=${start_date}&endDate=${end_date}&livestreamInd=false&festivalInd=true&client=${EDMTRAIN_KEY}`
 
@@ -69,6 +69,8 @@ function transformArtistData(artist) {
 
 // Update events in Supabase
 async function updateSupabase(events) {
+        const startTime = Date.now(); // Capture start time
+
         console.log('populating supabase db...')
         for (let event of events) {
             const transformEvent = transformEventData(event)
@@ -120,7 +122,20 @@ async function updateSupabase(events) {
                 console.error('Error upserting venue in Supabase:', venueError);
             }
         }
-        console.log('build db complete.')
+
+        const endTime = Date.now(); // Capture end time
+        const durationInSeconds = (endTime - startTime) / 1000; // Convert milliseconds to seconds
+    
+        let completeMessage = `Build DB completed in ${durationInSeconds} seconds`;
+    
+        // If duration is more than 60 seconds, format in minutes and seconds
+        if (durationInSeconds > 60) {
+            const minutes = Math.floor(durationInSeconds / 60);
+            const seconds = Math.round(durationInSeconds % 60);
+            completeMessage = `Build DB completed in ${minutes} minutes and ${seconds} seconds`;
+        }
+
+        console.log(completeMessage)
 }
 
 // Main function
