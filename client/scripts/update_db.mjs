@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const { createClient } = require('@supabase/supabase-js');
+import fetch from 'node-fetch';
+import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
 const SUPABASE_URL = 'https://zdbroencbancathizkro.supabase.co'
