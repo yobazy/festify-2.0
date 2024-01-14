@@ -72,6 +72,7 @@ async function updateSupabase(events) {
         const startTime = Date.now(); // Capture start time
 
         console.log('populating supabase db...')
+        
         for (let event of events) {
             const transformEvent = transformEventData(event)
             const venue = event.venue
