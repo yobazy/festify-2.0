@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { config } from 'dotenv';
 
-config(); // Load environment variables from .env file if you have one
+config(); // Load environment variables from .env file
 
 // Initialize Supabase client
 const SUPABASE_URL = 'https://zdbroencbancathizkro.supabase.co'
@@ -12,7 +12,8 @@ async function clearTable(tableName) {
     const { data, error } = await supabase
         .from(tableName)
         .delete()
-        .match({}); // This will match all records
+        .not('created_at', 'is', null); // This will match all records where 'created_at' is not null
+
 
     if (error) {
         console.error(`Error clearing table ${tableName}:`, error);
