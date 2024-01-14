@@ -67,7 +67,7 @@ function transformArtistData(artist) {
     };
 }
 
-// Update events in Supabase
+// Add events, artists, venues, gigs in Supabase
 async function updateSupabase(events) {
         const startTime = Date.now(); // Capture start time
 
