@@ -25,7 +25,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-db": "node ./scripts/build_db.mjs",
-    "update-db": "node ./scripts/update_db.mjs"
+    "update-db": "node ./scripts/update_db.mjs",
+    "clear-db": "node ./scripts/clear_db.mjs"
   },
   "eslintConfig": {
     "extends": "react-app"
