@@ -77,35 +77,6 @@ async function updateSupabase(events) {
             const venue = event.venue
             const transformVenue = transformVenueData(venue)
 
-            const artists = event.artistList
-            for (let artist of artists) {
-
-                console.log(artist)
-
-                const gig = {
-                    artist_id: artist.id,
-                    event_id: event.id,
-                }
-
-                console.log(gig)
-
-               // Upsert gigs data
-                const { artistData, artistError } = await supabase
-                    .from('artists')
-                    .upsert(transformArtistData(artist));
-                if (artistError) {
-                    console.error('Error upserting artist in Supabase:', artistError);
-                }
-
-                const { gigData, gigError } = await supabase
-                    .from('gigs')
-                    .upsert(gig);
-                if (gigError) {
-                console.error('Error upserting gig in Supabase:', gigError);
-            }
-            }
-
-
             // Upsert event data
             const { eventData, eventError } = await supabase
                 .from('events')
@@ -113,8 +84,33 @@ async function updateSupabase(events) {
             if (eventError) {
                 console.error('Error upserting event in Supabase:', eventError);
             }
+
+            const artists = event.artistList
+            for (let artist of artists) {
+
+                const gig = {
+                    artist_id: artist.id,
+                    event_id: event.id,
+                }
+
+               // Upsert artists data
+                const { artistData, artistError } = await supabase
+                    .from('artists')
+                    .upsert(transformArtistData(artist));
+                if (artistError) {
+                    console.error('Error upserting artist in Supabase:', artistError);
+                }
+
+                // Upsert gigs data
+                const { gigData, gigError } = await supabase
+                    .from('gigs')
+                    .upsert(gig);
+                if (gigError) {
+                console.error('Error upserting gig in Supabase:', gigError);
+            }
+            }
     
-            // Upsert event data
+            // Upsert venue data
             const { venueData, venueError } = await supabase
                 .from('venues')
                 .upsert(transformVenue);
@@ -132,7 +128,7 @@ async function updateSupabase(events) {
         if (durationInSeconds > 60) {
             const minutes = Math.floor(durationInSeconds / 60);
             const seconds = Math.round(durationInSeconds % 60);
-            completeMessage = `Build DB completed in ${minutes} minutes and ${seconds} seconds`;
+            completeMessage = `Build DB completed in ${minutes}m${seconds}s`;
         }
 
         console.log(completeMessage)
