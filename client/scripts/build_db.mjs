@@ -72,14 +72,14 @@ async function updateSupabase(events) {
         const startTime = Date.now(); // Capture start time
 
         console.log('populating supabase db...')
-        
+
         for (let event of events) {
             const transformEvent = transformEventData(event)
             const venue = event.venue
             const transformVenue = transformVenueData(venue)
 
             // Upsert event data
-            const { eventData, eventError } = await supabase
+            const { error: eventError } = await supabase
                 .from('events')
                 .upsert(transformEvent);
             if (eventError) {
@@ -95,7 +95,7 @@ async function updateSupabase(events) {
                 }
 
                // Upsert artists data
-                const { artistData, artistError } = await supabase
+                const { error: artistError } = await supabase
                     .from('artists')
                     .upsert(transformArtistData(artist));
                 if (artistError) {
@@ -103,7 +103,7 @@ async function updateSupabase(events) {
                 }
 
                 // Upsert gigs data
-                const { gigData, gigError } = await supabase
+                const { error: gigError } = await supabase
                     .from('gigs')
                     .upsert(gig);
                 if (gigError) {
@@ -112,7 +112,7 @@ async function updateSupabase(events) {
             }
     
             // Upsert venue data
-            const { venueData, venueError } = await supabase
+            const { error: venueError } = await supabase
                 .from('venues')
                 .upsert(transformVenue);
             if (venueError) {
