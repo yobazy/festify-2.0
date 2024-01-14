@@ -1,47 +1,40 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
+import { getEventById, getEventInfo } from '../utils/api'
 import './Event.css';
 
 export default function Event({ events, artists }) {
 
-  // get id from url
+  // get event id from url parameter
   const params = useParams();
   const eventID = params['id']
 
   const event = events.find((event) => event.event_id == eventID);
 
+// get event information from db
+  const eventInfo = getEventById(eventID);
+
+  console.log("EVENT", eventInfo);
+
+
+
+
+
+
+
+
+
+
+
+
+
   //filter artists by artistID
   // const eventArtistsArr = event.artists
 
   let filteredArtists = artists.filter(artist => event.artists.includes(artist.artist_id));
-
-
-  // API call to get event details and artist details
-    // useEffect(() => {
-    //   axios
-    //     // .get("/getEvent")
-    //     .get("/getArtists")
-    //     .then((response) => {
-    //       console.log("response.data", response.data)
-    //       // const events = response.data.data;
-    //       setArtistzzz(response.data);
-    //     })
-    //     .catch((err) => {
-    //       console.log("err");
-    //     });
-    // }, []);
-    
-      // call to contact db for information on event [UNUSED]
-      // useEffect(() => {
-      //   axios.get(`/event/${params.id}`).then((result) => console.log(result.data));
-      // }, [params.id]);
-  
-  // let eventLink = event.link
-  // let livestreamInd = event.livestreamInd
 
   let artistCount = filteredArtists.length
 
