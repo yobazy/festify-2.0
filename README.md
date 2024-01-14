@@ -1,12 +1,19 @@
-# Festify
-## IMPORTANT
-This is an rebuild/updgrade of a project started in my Web Dev bootcamp. That version can be viewed [here](https://github.com/yobazy/festify). Festify 2.0 has been rewritten and redesigned since that version.
+<div align="center">
 
-## Overview
+# Festify
+[Getting started](#getting-started) •
+[Screenshots](#screenshots) •
+[Technical](#technical-information) 
+
 Festify is a festival companion react app that allows users to view and save playlists which are generated based on each days festival events.
 
-## Setup
+</div>
 
+## Note
+This is an rebuild/updgrade of a project started in my Web Dev bootcamp. That version can be viewed [here](https://github.com/yobazy/festify). Festify 2.0 has been rewritten and redesigned since that version.
+
+## Getting Started
+### Setup
 Install dependencies with `npm install`
 
 Create .env file in root folder, input information in such as how was done in .env example.
@@ -19,11 +26,10 @@ Run `npm build-db` in client folder. This script will do the initial build of th
 Run `npm update-db` in client folder. This script will update the database.
 Run `npm clear-db` in client folder. This script will clear the contents of the database.
 
-
-## Running the App 
+### Running the App 
 Run `npm start` in src folder.
 
-## URLs
+### URLs
 The app can be viewed at the following URL once setup:
 http://localhost:3000/
 
@@ -34,13 +40,14 @@ Home page:
 Events page:
 ![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true) -->
 
-## Tech Stack 
+## Technical Information
+### Tech Stack 
 - React
 - Supabase 
 - Tailwind CSS
 
-## Dependencies
+### Dependencies
 To be added. 
 
-## Dev Dependencies 
+### Dev Dependencies 
 To be added.
