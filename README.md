@@ -20,11 +20,11 @@ Create .env file in root folder, input information in such as how was done in .e
 
 ### Database Scripts
 #### Required:
-Run `npm build-db` in client folder. This script will do the initial build of the database.
+Run `npm run build-db` in client folder. This script will do the initial build of the database.
 
 #### Maintenance:
-Run `npm update-db` in client folder. This script will update the database.
-Run `npm clear-db` in client folder. This script will clear the contents of the database.
+Run `npm run update-db` in client folder. This script will update the database.
+Run `npm run clear-db` in client folder. This script will clear the contents of the database.
 
 ### Running the App 
 Run `npm start` in src folder.
