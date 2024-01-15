@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import EmbedPlayer from '../components/EmbedPlayer';
 import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
-import { getEventById, getEventInfo } from '../utils/api'
+import { getEventById, getArtistsForEvent } from '../utils/api'
 import './Event.css';
 
 export default function Event() {
@@ -14,6 +14,9 @@ export default function Event() {
 
   // const event = events.find((event) => event.event_id == eventID);
   const [eventInfo, setEventInfo] = useState(null);
+  const [artists, setArtists] = useState([]);
+  const [artistCount, setArtistCount] = useState(null);
+  const [isLoadingArtists, setIsLoadingArtists] = useState(true);
 
 
   // get event information from db
@@ -31,32 +34,36 @@ export default function Event() {
     fetchEvent();
   }, [eventID]); // The effect will run again if eventID changes
 
+  useEffect(() => {
+    setIsLoadingArtists(true);
+    getArtistsForEvent(eventID)
+      .then(fetchedArtists => {
+        setArtists(fetchedArtists);
+        console.log(fetchedArtists)
+        setIsLoadingArtists(false);
+      })
+      .catch(error => {
+        console.error("Error fetching artists for event:", error);
+        setIsLoadingArtists(false); // Finish loading even if there is an error
 
+      });
+  }, [eventID]);
 
-
-
-  //filter artists by artistID
-  // const eventArtistsArr = event.artists
-
-  // let filteredArtists = artists.filter(artist => event.artists.includes(artist.artist_id));
-
-  // let artistCount = filteredArtists.length
-
-  // const artistList = filteredArtists.map((artist) => {
-  //   return artist.name;
-  // });
+  useEffect(() => {
+    setArtistCount(artists.length)
+  }, [artists])
 
   // return artist card with img and name
-  // const artistsCard = artistList.map((artist, i) => {
-  //   return (
-  //     <div className="artist-card">
-  //       <img src={userIcon} width="70px"/>
-  //       <p className="artist-name center" key={i}>
-  //         {artist}
-  //       </p>
-  //     </div>
-  //   );
-  // });
+  const artistsCard = artists.map((artist, i) => {
+    return (
+      <div className="artist-card">
+        <img src={userIcon} width="70px"/>
+        <p className="artist-name center" key={i}>
+          {artist.artist_name}
+        </p>
+      </div>
+    );
+  });
 
   return (
     <div>
@@ -87,14 +94,22 @@ export default function Event() {
         )}
       </div>
       <div>
-        <EmbedPlayer src={null} />
+        {/* <EmbedPlayer src={null} /> */}
       </div>
       <div className="center">
         <div className="artists-section-header">
           <h1 className="list-name border">LINEUP</h1>
-          {/* <p className="border">Total Artists: {artistCount}</p> */}
+          { isLoadingArtists ? (
+            <p className="border">Total Artists: Loading...</p>
+            ) : (
+            <p className="border">Total Artists: {artistCount}</p>
+            )}
         </div>
-        {/* <div className="center artists-container ">{artistsCard}</div> */}
+        { isLoadingArtists ? (
+          <div className="center artists-container">Loading...</div>
+          ) : (
+          <div className="center artists-container ">{artistsCard}</div>
+          )}
       </div>
     </div>
   );
