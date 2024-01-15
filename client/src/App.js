@@ -74,7 +74,7 @@ export default function App() {
             <Route path="/events" element={<Events events={showEvents} />
             } />
             <Route path="/event/:id" element={
-              <Event events={events} artists={artists}/>
+              <Event/>
             }>
             </Route>
           </Routes>
