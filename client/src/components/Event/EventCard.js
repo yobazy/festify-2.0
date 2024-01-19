@@ -1,5 +1,5 @@
 import React from "react";
-import imageUrl from "../../images/banner3.jpeg";
+// import imageUrl from "../../images/banner3.jpeg";
 import "./EventsList.css";
 import { Link } from "react-router-dom";
 
@@ -48,7 +48,7 @@ const EventCard = ({ event }) => {
         <div className="event-card">
           <div className="event-hover">
             <div className="event-details">
-              <img className="event-image" src={imageUrl} alt={event.event_name} />
+              <img className="event-image" src={event.img_url} alt={event.event_name} />
               <div className="event-info">
                 <div className="event-name text-bold">{event.event_name}</div>
                 <div className="event-info-box">
