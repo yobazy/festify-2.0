@@ -47,7 +47,7 @@ async function getAccessToken() {
 // search query for playlist image
 async function searchPlaylists(eventName, accessToken) {
 
-  console.log("searching playlists...")
+  console.log("Searching playlists for event:", eventName);
 
   const url = `https://api.spotify.com/v1/search?q=${eventName}&type=playlist&limit=5`;
 
@@ -66,6 +66,7 @@ async function searchPlaylists(eventName, accessToken) {
     const data = await response.json();
     console.log('data', data);
 
+    // TODO if there is more than one image, dont pass the image url
     if (data.playlists.items.length > 0 && data.playlists.items[0].images.length > 0) {
       const imageUrl = data.playlists.items[0].images[0].url;
       console.log(imageUrl);
@@ -105,14 +106,53 @@ async function updateEventImage(eventId, imgUrl) {
   }
 }
 
+// updates event image URL in Supabase with Spotify playlist image
+async function updateEventImgUrl(accessToken, event) {
+  const eventName = event.event_name; // Ensure this is a string and unique for each event
+  const eventId = event.event_id;
+
+  console.log("Updating image URL for event:", eventName, "Event ID:", eventId);
+
+  let imgUrl = null;
+
+  if (accessToken) {
+    if(event.alt_img) {
+      imgUrl = "alt_img";
+    } else {
+      imgUrl = await searchPlaylists(eventName, accessToken);
+    }
+    if (imgUrl) {
+      await updateEventImage(eventId, imgUrl); // Assuming eventId is a number
+    } else {
+      console.log(`Failed to get image URL for event: ${eventName}`);
+    }
+  } else {
+    console.log("Failed to get access token");
+  }
+}
+
 async function test() {
   const accessToken = await getAccessToken();
   if (accessToken) {
-    const imgUrl = await searchPlaylists("Zamna", accessToken);
-    if (imgUrl) {
-      await updateEventImage('306035', imgUrl);
-    } else {
-      console.log("Failed to get image URL");
+    try {
+      // Fetch events where img_url is NULL
+      const { data: events, error } = await supabase
+        .from('events')
+        .select('*')
+        .is('img_url', null); // OR ALT_IMG BOOL IS TRUE
+
+      if (error) {
+        console.error('Error fetching events:', error);
+        return;
+      }
+
+      // Iterate over the events and update the image URL
+      for (const event of events) {
+        console.log("Processing event:", event.event_name, "Event ID:", event.event_id);
+        await updateEventImgUrl(accessToken, event);
+      }
+    } catch (error) {
+      console.error('Error in processing events:', error);
     }
   } else {
     console.log("Failed to get access token");
