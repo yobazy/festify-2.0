@@ -26,6 +26,7 @@
     "eject": "react-scripts eject",
     "build-db": "node ./scripts/build_db.mjs",
     "add-imgs-db": "node ./scripts/add_spotify_imgs.mjs",
+    "add-alt-imgs-db": "node ./scripts/add_google_imgs.mjs",
     "clear-db": "node ./scripts/clear_db.mjs"
   },
   "eslintConfig": {
