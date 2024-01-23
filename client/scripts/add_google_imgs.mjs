@@ -41,7 +41,6 @@ async function searchGoogleImages(eventName) {
 
     const data = await response.json();
     return data.items[0].link;
-    console.log('data', data.items[0]);
 
   } catch (error) {
     console.error('Error in searchPlaylists:', error);
@@ -76,7 +75,8 @@ async function main() {
   const { data: events, error } = await supabase
     .from('events')
     .select('*')
-    .is('use_alt', true);
+    .is('use_alt', true)
+    .is('alt_img', null);
 
   if (error) {
     console.error('Error fetching events:', error);
