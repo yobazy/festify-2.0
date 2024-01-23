@@ -42,13 +42,22 @@ const EventCard = ({ event }) => {
       return artistDivs;
   };
 
+  let eventImage = ""
+
+  if (event.use_alt === true) {
+    eventImage = event.alt_img
+  } else {
+    eventImage = event.img_url
+  }
+
+
   return (
     <div>
       <Link to={`/event/${event.event_id}`} className="event-card-link">
         <div className="event-card">
           <div className="event-hover">
             <div className="event-details">
-              <img className="event-image" src={event.img_url} alt={event.event_name} />
+              <img className="event-image" src={eventImage} alt={event.event_name} />
               <div className="event-info">
                 <div className="event-name text-bold">{event.event_name}</div>
                 <div className="event-info-box">
