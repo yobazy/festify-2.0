@@ -21,10 +21,8 @@ console.log(supabaseAnonKey);
 async function searchGoogleImages(eventName) {
 
   // move to secrets
-  // const key = process.env.GOOGLE_API_KEY
-  // const cx = process.env.GOOGLE_CX
-  const key = "AIzaSyARCU0aR-swXfRu60XZOAl9lL3BOta5aI8"
-  const cx = "e2af6a00afcca451b"
+  const key = process.env.GOOGLE_API_KEY
+  const cx = process.env.GOOGLE_CX
 
   console.log("searching google for images...")
 
