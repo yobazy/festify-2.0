@@ -1,5 +1,6 @@
-// if data.alt_img == TRUE
-// update alt_img column based on google search result
+// TO DO
+
+// Decide which img url to use
 
 import { config } from 'dotenv';
 import fetch from 'node-fetch';
@@ -15,12 +16,9 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 console.log(supabaseUrl);
 console.log(supabaseAnonKey);
 
-
-
 // Function to look up event on google and return image URL
 async function searchGoogleImages(eventName) {
 
-  // move to secrets
   const key = process.env.GOOGLE_API_KEY
   const cx = process.env.GOOGLE_CX
 
@@ -64,11 +62,13 @@ async function updateEventImage(eventId, imgUrl) {
       return;
     }
 
-    console.log('Event image updated:', JSON.stringify(data, null, 2));
+    console.log('Event image updated');
   } catch (error) {
     console.error('Error in updateEventImage:', error);
   }
 }
+
+
 
 async function main() {
   // Fetch events where use_alt is TRUE
@@ -83,10 +83,12 @@ async function main() {
     return;
   }
 
-  // Iterate over the events and update the image URL
+  console.log(events)
+
   for (const event of events) {
     console.log("Processing event:", event.event_name, "Event ID:", event.event_id);
     const imgUrl = await searchGoogleImages(event.event_name);
+    console.log('imgUrl:', imgUrl)
     await updateEventImage(event.event_id, imgUrl);
   }
 }
