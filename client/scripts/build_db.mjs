@@ -16,8 +16,9 @@ console.log(EDMTRAIN_KEY)
 // Fetch events from Edmtrain
 async function fetchEdmtrainEvents() {
 
-    const start_date = "2024-01-01"
-    const end_date = "2024-03-27"
+    const start_date = "2024-02-01"
+    const end_date = "2024-02-01"
+    // const end_date = "2024-02-01"
 
     const url = `https://edmtrain.com/api/events?events?startDate=${start_date}&endDate=${end_date}&livestreamInd=false&festivalInd=true&client=${EDMTRAIN_KEY}`
 
@@ -43,6 +44,7 @@ function transformEventData(event) {
         // link: event.link,
         event_name: event.name,
         event_date: event.date,
+        event_end_date: event.end_date,
         event_location: event.venue.location,
         event_venue: event.venue.name
         // venue_name: event.venue ? event.venue.name : null,  // Assuming venue object has a name property
@@ -67,13 +69,38 @@ function transformArtistData(artist) {
     };
 }
 
+// Merge events with the same name and update their end_date
+function mergeEventsAndUpdateEndDate(events) {
+
+    const eventMap = new Map();
+
+    events.forEach(event => {
+        const eventName = event.name; // or event.event_name, depending on your data structure
+        if (eventMap.has(eventName)) {
+            const existingEvent = eventMap.get(eventName);
+            // Assuming date format is correct and comparable
+            if (!existingEvent.end_date || new Date(event.date) > new Date(existingEvent.end_date)) {
+                existingEvent.end_date = event.date;
+            }
+        } else {
+            eventMap.set(eventName, { ...event, end_date: event.date });
+        }
+    });
+
+    console.log('return', Array.from(eventMap.values()))
+    return Array.from(eventMap.values());
+}
+
 // Add events, artists, venues, gigs in Supabase
 async function updateSupabase(events) {
         const startTime = Date.now(); // Capture start time
 
         console.log('populating supabase db...')
 
-        for (let event of events) {
+        const mergedEvents = mergeEventsAndUpdateEndDate(events);
+
+        for (let event of mergedEvents) {
+
             const transformEvent = transformEventData(event)
             const venue = event.venue
             const transformVenue = transformVenueData(venue)
