@@ -17,7 +17,7 @@ console.log(supabaseUrl);
 console.log(supabaseAnonKey);
 
 // Function to look up event on google and return image URL
-async function searchGoogleImages(eventName) {
+async function searchGoogleImages(event) {
 
   // TO DO - move outside of function
   // import google custom search api key and cx
@@ -26,7 +26,14 @@ async function searchGoogleImages(eventName) {
 
   console.log("searching google for images...")
 
-  const url = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${cx}&q=${eventName}&searchType=image`;
+  const eventName = event.event_name
+  const eventLocation = event.event_location
+
+  const eventQuery = eventName + " " + eventLocation
+
+  console.log(event)
+
+  const url = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${cx}&q=${eventQuery}&searchType=image`;
 
   try {
     const response = await fetch(url, {
@@ -90,7 +97,7 @@ async function main() {
   // For each event in events, search google for images and update event in supabase
   for (const event of events) {
     console.log("Processing event:", event.event_name, "Event ID:", event.event_id);
-    const imgUrl = await searchGoogleImages(event.event_name);
+    const imgUrl = await searchGoogleImages(event);
     console.log('imgUrl:', imgUrl)
     await updateEventImage(event.event_id, imgUrl);
   }
