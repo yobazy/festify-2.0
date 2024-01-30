@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
-import "./Navbar.css";
 import logo from "../images/icon.png";
 import headerImg from "../images/banner.png";
-import '../App.css';
+// import '../App.css';
+import '../output.css';
 
+const scrollDown = () => {
+    // Calculate the viewport height
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    // Scroll down by one viewport height
+    window.scrollBy({
+      top: viewportHeight, // 100% of the viewport height
+      left: 0,
+      behavior: 'smooth' // Smooth scrolling
+    });
+}
 
 export default function Header() {
   const headerWords = ["festivals", "playlists", "artists"];
@@ -22,13 +32,12 @@ export default function Header() {
     <div className="header-box">
       <img src={headerImg} className="header-img" alt="header" />
       <div className="header-txt">
-        <h1 className="">
+        <p className="header-title">
           Discover <span className="rotating-word">{headerWords[currentWordIndex]}</span>
-        </h1>
-        <h3 className="">
-          Search for a event below. Festify will generate a Spotify playlist
-          based on the event's lineup!
-        </h3>
+        </p>
+        <button onClick={scrollDown} className="">
+          Browse events
+        </button>
       </div>
     </div>
   );

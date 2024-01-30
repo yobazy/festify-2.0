@@ -17,8 +17,7 @@ console.log(EDMTRAIN_KEY)
 async function fetchEdmtrainEvents() {
 
     const start_date = "2024-02-01"
-    const end_date = "2024-02-01"
-    // const end_date = "2024-02-01"
+    const end_date = "2024-03-01"
 
     const url = `https://edmtrain.com/api/events?events?startDate=${start_date}&endDate=${end_date}&livestreamInd=false&festivalInd=true&client=${EDMTRAIN_KEY}`
 
@@ -41,12 +40,16 @@ async function fetchEdmtrainEvents() {
 function transformEventData(event) {
     return {
         event_id: event.id,
-        // link: event.link,
+        edmtrain_link: event.link,
         event_name: event.name,
         event_date: event.date,
         event_end_date: event.end_date,
         event_location: event.venue.location,
-        event_venue: event.venue.name
+        event_venue: event.venue.name,
+        festivalInd: event.festivalInd,
+        livestreamInd: event.livestreamInd,
+        electronicGenreInd: event.electronicGenreInd,
+
         // venue_name: event.venue ? event.venue.name : null,  // Assuming venue object has a name property
         // artists: event.artistList ? event.artistList.join(', ') : null  // Assuming artistList is an array of artist names
     };
