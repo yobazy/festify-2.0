@@ -21,12 +21,11 @@ export default function Header() {
     <div className="header-box">
       <img src={headerImg} className="header-img" alt="header" />
       <div className="header-txt">
-        <h1 className="">
+        <p className="text-lg">
           Discover <span className="rotating-word">{headerWords[currentWordIndex]}</span>
-        </h1>
+        </p>
         <h3 className="">
-          Search for a event below. Festify will generate a Spotify playlist
-          based on the event's lineup!
+          BUTTON Let's go! BUTTON
         </h3>
       </div>
     </div>
