@@ -17,7 +17,7 @@ console.log(EDMTRAIN_KEY)
 async function fetchEdmtrainEvents() {
 
     const start_date = "2024-02-01"
-    const end_date = "2024-02-05"
+    const end_date = "2024-03-01"
 
     const url = `https://edmtrain.com/api/events?events?startDate=${start_date}&endDate=${end_date}&livestreamInd=false&festivalInd=true&client=${EDMTRAIN_KEY}`
 
