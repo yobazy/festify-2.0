@@ -144,11 +144,6 @@
   transform: translate(-50%, -50%);
 }
 
-.text-lg {
-  font-size: 1.125rem; /* 18px */
-  line-height: 1.75rem; /* 28px */
-}
-
 .rotating-word {
   display: inline-block;
   animation: fadeMove 3s ease-in-out infinite;
@@ -171,8 +166,8 @@
   }
 }
 
-.lrg {
-  font-size: 24px;
+.header-title {
+  font-size: 5rem;
 }
 
 .med {

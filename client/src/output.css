@@ -729,7 +729,7 @@ body {
 .header-img {
   object-fit: cover;
   width: 100vw;
-  height: 40vh;
+  height: 90vh;
   opacity: 30%;
   margin: auto;
   -webkit-filter: blur(2px);
