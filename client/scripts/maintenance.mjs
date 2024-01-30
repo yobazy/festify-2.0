@@ -2,8 +2,8 @@
 
 // run build db script
 
-// run image script if no img link is present
+// run spotify image script
 
-// run spotify update script
+
 
 
