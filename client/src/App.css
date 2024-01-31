@@ -97,7 +97,7 @@
 
 .text-thin {
   font-family: Gotham-Thin;
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
 }
 
 .App {
@@ -137,7 +137,6 @@
   position: absolute;
   color: #ffffff;
   font-weight: bold;
-  text-align: center;
   width: 100%;
   top: 50%;
   left: 50%;

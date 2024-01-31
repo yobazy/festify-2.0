@@ -5,15 +5,15 @@ import headerImg from "../images/banner.png";
 import '../output.css';
 
 const scrollDown = () => {
-    // Calculate the viewport height
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  // Calculate the viewport height
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
-    // Scroll down by one viewport height
-    window.scrollBy({
-      top: viewportHeight, // 100% of the viewport height
-      left: 0,
-      behavior: 'smooth' // Smooth scrolling
-    });
+  // Scroll down by one viewport height
+  window.scrollBy({
+    top: viewportHeight, // 100% of the viewport height
+    left: 0,
+    behavior: 'smooth' // Smooth scrolling
+  });
 }
 
 export default function Header() {
@@ -31,13 +31,17 @@ export default function Header() {
   return (
     <div className="header-box">
       <img src={headerImg} className="header-img" alt="header" />
-      <div className="header-txt">
-        <p className="header-title">
-          Discover <span className="rotating-word">{headerWords[currentWordIndex]}</span>
-        </p>
-        <button onClick={scrollDown} className="">
+      <div className="text-white absolute inset-0 text-bold pt-48">
+        <div className="grid grid-cols-4 header-title">
+          <div></div>
+          <p className="text-right">Discover</p>
+          <span className="ps-4 rotating-word">{headerWords[currentWordIndex]}</span>
+        </div>
+        <div className="text-center">
+        <button className="p-2 border-2 text-center rounded-md" onClick={scrollDown} >
           Browse events
         </button>
+        </div>
       </div>
     </div>
   );
