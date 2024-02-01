@@ -33,12 +33,11 @@ export default function Header() {
       <img src={headerImg} className="header-img" alt="header" />
       <div className="text-white absolute inset-0 text-bold pt-48">
         <div className="grid grid-cols-4 header-title">
-          <div></div>
           <p className="text-right">Discover</p>
           <span className="ps-4 rotating-word">{headerWords[currentWordIndex]}</span>
         </div>
         <div className="text-center">
-        <button className="p-2 border-2 text-center rounded-md" onClick={scrollDown} >
+        <button className="p-2 border-1 text-white bg-purple-800 hover:bg-purple-700 text-center rounded-md transition-colors duration-150 ease-in-out" onClick={scrollDown} >
           Browse events
         </button>
         </div>
