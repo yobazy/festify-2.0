@@ -5,6 +5,7 @@ import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
 import { getEventById, getArtistsForEvent } from '../utils/api'
 import './Event.css';
+// import ../output.css;
 
 export default function Event() {
 
@@ -57,13 +58,27 @@ export default function Event() {
   const artistsCard = artists.map((artist, i) => {
     return (
       <div className="artist-card">
-        <img src={userIcon} width="70px"/>
+        <img src={userIcon} width="70px" alt={artist.artist_name}/>
         <p className="artist-name center" key={i}>
           {artist.artist_name}
         </p>
       </div>
     );
   });
+
+  // format date from 2022-02-02 to February, 2, 2022
+  function formatDate(dateString) {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${month}, ${day}, ${year}`;
+}
+
+const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
 
   return (
     <div>
@@ -80,14 +95,24 @@ export default function Event() {
           )}
         </div> */}
       </div>
-      <div className="event-header white border">
+      <div>
         {eventInfo ? (
           <>
-        <h1>{eventInfo.event_name}</h1>
-        <h2>{eventInfo.event_location}</h2>
-        <h2>{eventInfo.event_date}</h2>
+        <section id="event-info" className="white border">
+        <h1 className="text-6xl">{eventInfo.event_name}</h1>
+        <h2 className="text-3xl">{eventInfo.event_venue}</h2>
+        <h2 className="text-3xl">{eventInfo.event_location}</h2>
+        <h2 className="text-3xl">{formattedDate}</h2>
         {/* <a>{eventLink}</a> */}
         {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
+        </section>
+        <section id="spotify-playlists">
+        <h2 className="text-3xl">{eventInfo.event_venue}</h2>
+        <h2 className="text-3xl">{eventInfo.event_location}</h2>
+        <h2 className="text-3xl">{formattedDate}</h2>
+        {/* <a>{eventLink}</a> */}
+        {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
+        </section>
         </>
         ) : (
           <h1></h1>
