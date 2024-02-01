@@ -65,8 +65,8 @@
   justify-content: space-around;
 }
 
-.event-header {
-  font-family: Gotham-Bold;
+.event-header-text {
+  font-family: Gotham-Thin;
 }
 
 .artists-section-header {
@@ -82,4 +82,38 @@
 
 .event-header {
   padding-left: 50px;
+}
+
+@keyframes easeInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.easeIn {
+  animation-name: easeInFromLeft;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  opacity: 0; /* Initially hide the element */
+}
+
+.easeIn-1 {
+  animation-delay: 0.3s;
+}
+
+.easeIn-2 {
+  animation-delay: 0.6s;
+}
+
+.easeIn-3 {
+  animation-delay: 0.9s;
+}
+
+.easeIn-4 {
+  animation-delay: 1.2s;
 }

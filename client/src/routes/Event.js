@@ -95,21 +95,18 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
           )}
         </div> */}
       </div>
-      <div>
+      <div className='white'>
         {eventInfo ? (
           <>
-        <section id="event-info" className="white border">
-        <h1 className="text-6xl">{eventInfo.event_name}</h1>
-        <h2 className="text-3xl">{eventInfo.event_venue}</h2>
-        <h2 className="text-3xl">{eventInfo.event_location}</h2>
-        <h2 className="text-3xl">{formattedDate}</h2>
-        {/* <a>{eventLink}</a> */}
-        {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
-        </section>
+            <section id="event-info" className="border event-header-text">
+              <h1 className="text-6xl easeIn easeIn-1">{eventInfo.event_name}</h1>
+              <h2 className="text-3xl easeIn easeIn-2">{eventInfo.event_venue}</h2>
+              <h2 className="text-3xl easeIn easeIn-3">{eventInfo.event_location}</h2>
+              <h2 className="text-3xl easeIn easeIn-4">{formattedDate}</h2>
+            </section>
         <section id="spotify-playlists">
-        <h2 className="text-3xl">{eventInfo.event_venue}</h2>
-        <h2 className="text-3xl">{eventInfo.event_location}</h2>
-        <h2 className="text-3xl">{formattedDate}</h2>
+        <h2 className="text-3xl">Available spotify playlists:</h2>
+        <h2 className="text-3xl">Generate a playlist for me!</h2>
         {/* <a>{eventLink}</a> */}
         {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
         </section>
