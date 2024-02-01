@@ -68,7 +68,7 @@ async function updateArtistImage(artistId, artistInfo) {
 // search query for playlist image
 async function searchSpotifyArtist(artistName, accessToken) {
 
-  console.log("Searching playlists for event:", artistName);
+  console.log("Searching artists for artist:", artistName);
 
   const url = `https://api.spotify.com/v1/search?q=${artistName}&type=artist&limit=5`;
 
@@ -85,7 +85,7 @@ async function searchSpotifyArtist(artistName, accessToken) {
     }
 
     const data = await response.json();
-    console.log('data', data);
+    console.log('data', data.artists.items[0]);
 
     const imageUrl = data.artists.items[0].images[0].url;
     const genres = data.artists.items[0].genres;
@@ -102,50 +102,18 @@ async function searchSpotifyArtist(artistName, accessToken) {
     return artistInfo;
 
   } catch (error) {
-    console.error('Error in searchPlaylists:', error);
+    console.error('Error in searchSpotifyArtist:', error);
     return null;
   }
 }
 
-async function updateArtistImgUrl(accessToken, event) {
-  const eventName = event.event_name; // Ensure this is a string and unique for each event
-  const eventId = event.event_id;
-
-  console.log("Updating image URL for event:", eventName, "Event ID:", eventId);
-
-  let imgUrl = null;
-
-  if (accessToken) {
-    if (event.alt_img) {
-      imgUrl = "alt_img";
-    } else {
-      imgUrl = await searchSpotifyArtist(eventName, accessToken);
-    }
-    if (imgUrl) {
-      await updateArtistImage(eventId, imgUrl); // Assuming eventId is a number
-    } else {
-      console.log(`Failed to get image URL for event: ${eventName}`);
-    }
-  } else {
-    console.log("Failed to get access token");
-  }
-}
-
 async function main() {
-  // get access token for spotify
-
-  // for each event
-
-  // spotfiy search for artist
-
-  // update supabase img_url with artist image
-
   const accessToken = await getAccessToken();
   if (accessToken) {
     try {
       // Fetch events where img_url is NULL
-      const { data: events, error } = await supabase
-        .from('events')
+      const { data: artists, error } = await supabase
+        .from('artists')
         .select('*')
         .is('img_url', null);
 
@@ -155,10 +123,12 @@ async function main() {
       }
 
       // Iterate over the events and update the image URL
-      for (const event of events) {
-        console.log("Processing event:", event.event_name, "Event ID:", event.event_id);
-        await updateArtistImgUrl(accessToken, event);
+      for (const artist of artists) {
+        const artistInfo = await searchSpotifyArtist(artist.artist_name, accessToken)
+        console.log("Processing event:", artist.artist_name, "Artist ID:", artist.artist_id);
+        await updateArtistImage(artist.artist_id, artistInfo);
       }
+
     } catch (error) {
       console.error('Error in processing events:', error);
     }
@@ -167,13 +137,4 @@ async function main() {
   }
 }
 
-
-async function test() {
-  const artist = "LP Giobbi"
-  const artistId = "8543"
-  const accessToken = await getAccessToken();
-  const artistInfo = await searchSpotifyArtist(artist, accessToken)
-  updateArtistImage(artistId, artistInfo)
-}
-
-test();
+main();
