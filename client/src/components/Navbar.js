@@ -34,11 +34,11 @@ export default function Navbar(props) {
                 Events
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to="/" className="nav-links" onClick={closeMobileMenu}>
                 Artists (coming soon)
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link to="/" className="nav-links" onClick={closeMobileMenu}>
                 Connect to Spotify
