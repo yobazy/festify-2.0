@@ -64,9 +64,6 @@ const EventCard = ({ event }) => {
                   <div className="event-location event-text">{event.event_venue} - {event.event_location}</div>
                 </div>
               </div>
-              <div className="event-artists">
-                <div className="event-text">{artists()}</div>
-              </div>
             </div>
           </div>
           <div className="event-date">
