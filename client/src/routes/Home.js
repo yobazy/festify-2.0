@@ -18,8 +18,8 @@ export default function Home({ events, setEvent, query, setQuery }) {
   return (
     <div className="body">
       <Header />
-      <div className="filter-row">
-        <div className="filter-items">
+      <div className="flex flex-row justify-around p-2 py-4">
+        <div className="flex flex-col">
           <form>
             {/* <label for="default-search" class="search-label">Search</label> */}
             <div class="search-container">
