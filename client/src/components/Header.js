@@ -29,8 +29,8 @@ export default function Header() {
   return (
     <div className="header-box">
       <img src={headerImg} className="header-img" alt="header" />
-      <div className="text-white absolute inset-0 text-bold pt-48">
-        <div className="grid grid-cols-4 header-title">
+      <div className="text-white absolute inset-0 text-bold pt-48 align-center ">
+        <div className="flex justify-center flex-wrap header-title">
           <p className="text-right">Discover</p>
           <span className="ps-4 rotating-word">{headerWords[currentWordIndex]}</span>
         </div>
