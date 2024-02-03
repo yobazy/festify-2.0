@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "../images/icon.png";
 import headerImg from "../images/banner.png";
-// import '../App.css';
 import '../output.css';
 
 const scrollDown = () => {
