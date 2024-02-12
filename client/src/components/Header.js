@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import headerImg from "../images/banner.png";
+import headerVideo from "../videos/header-video.mp4";
 import '../output.css';
 
 const scrollDown = () => {
@@ -28,14 +29,18 @@ export default function Header() {
 
   return (
     <div className="header-box">
-      <img src={headerImg} className="header-img" alt="header" />
+      {/* <img src={headerImg} className="header-img" alt="header" /> */}
+      <video autoPlay loop muted playsInline className="inset-0 w-full h-[90vh] object-cover opacity-40 mx-auto blur-sm">
+        <source src={headerVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <div className="text-white absolute inset-0 text-bold pt-48 align-center ">
         <div className="grid grid-cols-2 flex-wrap header-title">
           <p className="text-right">Discover</p>
           <span className="ps-4 rotating-word">{headerWords[currentWordIndex]}</span>
         </div>
         <div className="text-center">
-        <button className="p-2 border-1 text-white bg-purple-800 hover:bg-purple-700 text-center rounded-md transition-colors duration-150 ease-in-out" onClick={scrollDown} >
+        <button className="p-2 text-white bg-purple-800 hover:bg-purple-700 text-center rounded-md transition-colors duration-150 ease-in-out" onClick={scrollDown} >
           Browse events
         </button>
         </div>
