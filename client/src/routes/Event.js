@@ -99,21 +99,31 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
       <div className='white'>
         {eventInfo ? (
           <>
-            <section id="event-info" className="border event-header-text">
-              <h1 className="text-6xl easeIn easeIn-1">{eventInfo.event_name}</h1>
-              <h2 className="text-3xl easeIn easeIn-2">{eventInfo.event_venue}</h2>
-              <h2 className="text-3xl easeIn easeIn-3">{eventInfo.event_location}</h2>
-              <h2 className="text-3xl easeIn easeIn-4">{formattedDate}</h2>
+            <section id="event-header" className="flex flex-row justify-between">
+              <div className='event-header-text px-10 align-middle'>
+                <h1 className="text-6xl easeIn easeIn-1">{eventInfo.event_name}</h1>
+                <h2 className="text-3xl easeIn easeIn-2">{eventInfo.event_venue}</h2>
+                <h2 className="text-3xl easeIn easeIn-3">{eventInfo.event_location}</h2>
+                <h2 className="text-3xl easeIn easeIn-4">{formattedDate}</h2>
+              </div>
+              <div>
+                <img src={eventInfo.img_url} alt="event" className='max-h-72 px-20'/>
+              </div>
             </section>
         <section id="spotify-playlists">
-        <h2 className="text-3xl">Available spotify playlists:</h2>
-        <h2 className="text-3xl">Generate a playlist for me!</h2>
+          <div className="border flex flex-col justify-center">
+            <h2 className="text-3xl">View spotify playlists:</h2>
+            <div>
+              <p>This is where the playlists will go...</p>
+            </div>
+            <h2 className="text-3xl">Generate a playlist for me!</h2>
+          </div>
         {/* <a>{eventLink}</a> */}
         {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
         </section>
         </>
         ) : (
-          <h1></h1>
+          <h1>LOADING DATA</h1>
         )}
       </div>
       <div>
