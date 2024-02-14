@@ -12,7 +12,7 @@ export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const eventsPerPage = 3;
+  const eventsPerPage = 2;
   const totalPages = Math.ceil(events.length / eventsPerPage);
 
 
