@@ -1,10 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import Card from 'react-bootstrap/Card';
 import "./EventsList.css";
 import EventCard from "./EventCard";
 
-export default function EventsList( { events, setEvent, limit, filterDate }) {
+export default function EventsList( { events, setEvent, limit, filterDate, currentPage, setCurrentPage, totalPages }) {
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+  pageNumbers.push(i);
+}
+
   function formatDate(input) {
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
@@ -19,6 +24,10 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
 
   const sortedEvents = [...events].sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 
+  const startIndex = (currentPage - 1) * limit;
+  const endIndex = startIndex + limit;
+  const currentEvents = sortedEvents.slice(startIndex, endIndex);
+
   // group events by month
   const groupEventsByMonth = (events) => {
     return events.reduce((acc, event) => {
@@ -32,7 +41,7 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
     }, {});
   };
 
-  const groupedEvents = groupEventsByMonth(sortedEvents);
+  const groupedEvents = groupEventsByMonth(currentEvents);
 
   const displayEvents = filterDate
   ? {
@@ -41,6 +50,7 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
   : groupedEvents;
 
   return (
+    <>
     <div className="events-container">
       {Object.entries(displayEvents).map(([month, monthEvents]) => (
         <div key={month} style={{ color: 'white' }}>
@@ -51,5 +61,44 @@ export default function EventsList( { events, setEvent, limit, filterDate }) {
         </div>
       ))}
     </div>
+    <div className="flex items-center justify-center space-x-1 my-4">
+  <button 
+    onClick={() => setCurrentPage(1)} 
+    disabled={currentPage === 1}
+    className="px-3 py-1 rounded-md text-white bg-purple-500 hover:bg-purple-700 disabled:bg-purple-300"
+  >
+    First
+  </button>
+
+  {pageNumbers
+  .filter(number => (number >= currentPage - 2 && number <= currentPage + 2))
+  .map(number => (
+    <button 
+      key={number} 
+      onClick={() => setCurrentPage(number)}
+      className={`px-3 py-1 mx-1 rounded-md text-white ${currentPage === number ? 'bg-purple-700' : 'bg-purple-500 hover:bg-purple-600'}`}
+      aria-label={`Go to page ${number}`}
+    >
+      {number}
+    </button>
+))}
+
+  <button 
+    onClick={() => setCurrentPage(currentPage + 1)} 
+    disabled={currentPage === totalPages}
+    className="px-3 py-1 rounded-md text-white bg-purple-500 hover:bg-purple-700 disabled:bg-purple-300"
+  >
+    Next
+  </button>
+  <button 
+    onClick={() => setCurrentPage(totalPages)} 
+    disabled={currentPage === totalPages}
+    className="px-3 py-1 rounded-md text-white bg-purple-500 hover:bg-purple-700 disabled:bg-purple-300"
+  >
+    Last
+  </button>
+</div>
+
+    </>
   );
 }

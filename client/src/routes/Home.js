@@ -10,6 +10,11 @@ import Header from '../components/Header';
 
 export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const eventsPerPage = 3;
+  const totalPages = Math.ceil(events.length / eventsPerPage);
+
 
   const handleDateChange = (e) => {
     setFilterDate(e.target.value);
@@ -46,8 +51,10 @@ export default function Home({ events, setEvent, query, setQuery }) {
         events={events}
         setEvent={setEvent}
         filterDate={filterDate}
-        limit={10}
-      />
+        limit={eventsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}      />
     </div>
   );
 }
