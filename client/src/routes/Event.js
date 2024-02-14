@@ -5,6 +5,9 @@ import Artist from '../components/Artist/ArtistItem';
 import userIcon from '../images/placeholder-user.png'
 import { getEventById, getArtistsForEvent } from '../utils/api'
 import './Event.css';
+import axios from 'axios';
+import { getSpotifyToken, searchPlaylists } from '../utils/api';
+
 // import ../output.css;
 
 export default function Event() {
@@ -18,7 +21,8 @@ export default function Event() {
   const [artists, setArtists] = useState([]);
   const [artistCount, setArtistCount] = useState(null);
   const [isLoadingArtists, setIsLoadingArtists] = useState(true);
-
+  const [accessToken, setAccessToken] = useState('');
+  const [playlists, setPlaylists] = useState([]);
 
   // get event information from db
   useEffect(() => {
@@ -78,6 +82,29 @@ export default function Event() {
 
     return `${month}, ${day}, ${year}`;
 }
+
+useEffect(() => {
+  const fetchSpotifyToken = async () => {
+    const token = await getSpotifyToken();
+    setAccessToken(token);
+  };
+
+  fetchSpotifyToken();
+}, []);
+
+useEffect(() => {
+  if (eventInfo && eventInfo.event_name && accessToken) {
+    searchPlaylists(eventInfo.event_name, accessToken)
+      .then(playlists => {
+        setPlaylists(playlists);
+        // Handle the playlists as needed
+        console.log(playlists)
+      })
+      .catch(error => {
+        console.error("Error searching playlists:", error);
+      });
+  }
+}, [eventInfo, accessToken]);
 
 const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
 
