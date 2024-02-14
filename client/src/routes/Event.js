@@ -106,6 +106,26 @@ useEffect(() => {
   }
 }, [eventInfo, accessToken]);
 
+const playlistList = (playlists) => {
+  return playlists.map((playlist, i) => (
+    <div key={i}>
+      {/* <p>{playlist.name}</p> */}
+      {/* <p><a href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer">Spotify Link</a></p> */}
+      {playlist.images[0] && (
+        <a href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="block">
+        <div className="relative w-44 h-44 mx-auto rounded overflow-hidden">
+        <img src={playlist.images[0].url} alt={`${playlist.name} Playlist`} className="w-full h-full object-fit" />
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100">
+            <p className="text-white text-center text-xl">{playlist.name}</p>
+          </div>
+      </div>
+      </a>
+    )}
+    </div>
+    
+  ))
+}
+
 const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
 
   return (
@@ -138,10 +158,14 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
               </div>
             </section>
         <section id="spotify-playlists">
-          <div className="border flex flex-col justify-center">
+          <div className="flex flex-col justify-center">
             <h2 className="text-3xl">View spotify playlists:</h2>
-            <div>
-              <p>This is where the playlists will go...</p>
+            <div className="flex flex-row justify-center items-center gap-10 p-10">
+              {playlistList(playlists)}
+            </div>
+            <div className="flex flex-row justify-center">
+              <p>prev</p>
+              <p>next</p>
             </div>
             <h2 className="text-3xl">Generate a playlist for me!</h2>
           </div>
@@ -158,11 +182,11 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
       </div>
       <div className="center">
         <div className="artists-section-header">
-          <h1 className="list-name border">LINEUP</h1>
+          <h1 className="list-name">LINEUP</h1>
           { isLoadingArtists ? (
-            <p className="border">Total Artists: Loading...</p>
+            <p className="">Total Artists: Loading...</p>
             ) : (
-            <p className="border">Total Artists: {artistCount}</p>
+            <p className="">Total Artists: {artistCount}</p>
             )}
         </div>
         { isLoadingArtists ? (
