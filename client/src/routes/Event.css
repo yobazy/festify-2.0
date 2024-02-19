@@ -28,12 +28,29 @@
   padding-left: 25px;
 }
 
-.list-name {
+.font-gotham {
   font-family: Gotham-Bold;
-  text-transform: uppercase;
-  font-size: 2rem;
+}
+
+.font-custom-style {
+
   color: rgb(197, 207, 216);
   margin-top: 1rem;
+}
+
+.button {
+  background-color: #a41db9;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+
 }
 
 .artist-list-content {

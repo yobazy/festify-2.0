@@ -159,15 +159,15 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
             </section>
         <section id="spotify-playlists">
           <div className="flex flex-col justify-center">
-            <h2 className="text-3xl">View spotify playlists:</h2>
+            <h2 className="text-3xl px-10 font-gotham font-custom-style">View spotify playlists:</h2>
             <div className="flex flex-row justify-center items-center gap-10 p-10">
               {playlistList(playlists)}
             </div>
             <div className="flex flex-row justify-center">
-              <p>prev</p>
-              <p>next</p>
+              <button className="button">prev</button>
+              <button className="button">next</button>
             </div>
-            <h2 className="text-3xl">Generate a playlist for me!</h2>
+            <h2 className="text-3xl px-10 font-gotham font-custom-style">Generate a playlist for me!</h2>
           </div>
         {/* <a>{eventLink}</a> */}
         {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
@@ -182,7 +182,7 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
       </div>
       <div className="center">
         <div className="artists-section-header">
-          <h1 className="list-name">LINEUP</h1>
+          <h1 className="font-gotham font-custom-style text-3xl">LINEUP</h1>
           { isLoadingArtists ? (
             <p className="">Total Artists: Loading...</p>
             ) : (
