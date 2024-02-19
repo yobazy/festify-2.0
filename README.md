@@ -36,9 +36,12 @@ http://localhost:3000/
 ## Screenshots
 Home page:
 ![Home page](https://github.com/yobazy/festify-2.0/blob/master/screenshots/home.png?raw=true)
-<!-- 
+
 Events page:
-![Events page](https://github.com/youthbazzy/festify/blob/master/screenshots/event.png?raw=true) -->
+![Events page](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/events.png?raw=true)
+
+<!-- Event page:
+![Event page](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/event.png?raw=true) -->
 
 ## Technical Information
 ### Tech Stack 
