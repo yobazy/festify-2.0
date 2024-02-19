@@ -49,8 +49,10 @@ Events page:
 - Supabase 
 - Tailwind CSS
 
-### Dependencies
+<!-- ### Dependencies
 To be added. 
 
 ### Dev Dependencies 
 To be added.
+
+-->
