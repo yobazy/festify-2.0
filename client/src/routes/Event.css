@@ -82,8 +82,12 @@
   justify-content: space-around;
 }
 
+.bg-dark {
+  background-color: rgb(40, 12, 38);;
+}
+
 .event-header-text {
-  font-family: Gotham-Thin;
+  font-family: Gotham-Bold;
 }
 
 .artists-section-header {

@@ -130,31 +130,18 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
 
   return (
     <div>
-      <div className="header-box">
-        {/* <img className="header-photo" alt="header" /> */}
-        {/* <div className="event-header">
-          <>
-            {events[0] && (
-              <h1 className="event_header_name">{events[0].event_name}</h1>
-            )}
-          </>
-          {events[0] && (
-            <h2 className="event_header_date">{events[0].event_date}</h2>
-          )}
-        </div> */}
-      </div>
       <div className='white'>
         {eventInfo ? (
           <>
-            <section id="event-header" className="flex flex-row justify-between">
-              <div className='event-header-text px-10 align-middle'>
+            <section id="event-header" className="flex flex-row justify-between p-10 bg-dark">
+              <div className='event-header-text font-custom-style px-10 align-middle'>
                 <h1 className="text-6xl easeIn easeIn-1">{eventInfo.event_name}</h1>
                 <h2 className="text-3xl easeIn easeIn-2">{eventInfo.event_venue}</h2>
                 <h2 className="text-3xl easeIn easeIn-3">{eventInfo.event_location}</h2>
                 <h2 className="text-3xl easeIn easeIn-4">{formattedDate}</h2>
               </div>
               <div>
-                <img src={eventInfo.img_url} alt="event" className='max-h-72 px-20'/>
+                <img src={eventInfo.img_url} alt="event" className='max-h-72 px-20 easeIn'/>
               </div>
             </section>
         <section id="spotify-playlists">
