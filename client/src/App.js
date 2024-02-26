@@ -15,7 +15,7 @@ import { supabase } from "./client"
 export default function App() {
   // console.log('initalized events', events)
   const [events, setEvents] = useState([])
-  const [artists, setArtists] = useState(null)
+  const [artists, setArtists] = useState([])
   const [showEvents, setShowEvents] = useState([])
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -98,7 +98,7 @@ export default function App() {
             }>
             </Route>
             <Route path="/artists" element={
-              <Artists artists/>
+              <Artists artists={artists}/>
             }>
             </Route>
             <Route path="/artist/:id" element={
