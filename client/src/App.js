@@ -70,9 +70,8 @@ export default function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home events={showEvents} query={query} setQuery={setQuery}/>}></Route>
-            <Route path="/events" element={<Events events={showEvents} />
-            } />
+            <Route path="/" element={<Home events={showEvents} query={query} setQuery={setQuery}/>}/>
+            <Route path="/events" element={<Events events={showEvents} query={query} setQuery={setQuery}/>}/>
             <Route path="/event/:id" element={
               <Event/>
             }>
