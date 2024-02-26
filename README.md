@@ -40,8 +40,11 @@ Home page:
 Events page:
 ![Events page](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/events.png?raw=true)
 
-<!-- Event page:
-![Event page](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/event.png?raw=true) -->
+Event page:
+![Event page 1](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/event-1.PNG?raw=true) 
+![Event page 2](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/event-2.PNG?raw=true) 
+![Event page 3](https://github.com/youthbazzy/festify-2.0/blob/master/screenshots/event-3.PNG?raw=true) 
+
 
 ## Technical Information
 ### Tech Stack 
