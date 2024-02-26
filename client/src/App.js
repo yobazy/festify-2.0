@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Events from './routes/Events';
 import Event from './routes/Event';
+import Artists from './routes/Artists';
 import Artist from './routes/Artist';
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
@@ -78,9 +79,13 @@ export default function App() {
             }>
             </Route>
             <Route path="/artists" element={
+              <Artists/>
+            }>
+            </Route>
+            <Route path="/artist/:id" element={
               <Artist/>
             }>
-              </Route>
+            </Route>
           </Routes>
           <Footer/>
         </div>
