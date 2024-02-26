@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Events from './routes/Events';
 import Event from './routes/Event';
+import Artist from './routes/Artist';
 import Navbar from './components/Navbar';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Home from './routes/Home'
@@ -76,6 +77,10 @@ export default function App() {
               <Event/>
             }>
             </Route>
+            <Route path="/artists" element={
+              <Artist/>
+            }>
+              </Route>
           </Routes>
           <Footer/>
         </div>
