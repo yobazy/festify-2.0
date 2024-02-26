@@ -13,12 +13,9 @@ import { supabase } from "./client"
 
 
 export default function App() {
-
-  // load dummy artist data
-  const artists = artists_data
-
   // console.log('initalized events', events)
   const [events, setEvents] = useState([])
+  const [artists, setArtists] = useState(null)
   const [showEvents, setShowEvents] = useState([])
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -55,6 +52,28 @@ export default function App() {
     fetchEvents()
   }, [])
 
+  async function fetchArtists() {
+    const { data: artists, error: artistsError } = await supabase // fix var names
+      .from('artists')
+      .select(`*`)
+    if (artistsError) {
+      // setEvents(null)
+      // return <>error.message</>
+      console.log('error')
+    } else if (!isLoaded) {
+      // return <>loading...</>
+      console.log('loading')
+    }; // add error case
+    setArtists(artists);
+    // setShowEvents(data)
+    console.log("ARTISTS", artists);
+  }
+
+
+  useEffect(() => {
+    fetchArtists()
+  }, [])
+
   useEffect(() => {
     setSearchQuery(query)
     // filter events by search query
@@ -79,7 +98,7 @@ export default function App() {
             }>
             </Route>
             <Route path="/artists" element={
-              <Artists/>
+              <Artists artists/>
             }>
             </Route>
             <Route path="/artist/:id" element={

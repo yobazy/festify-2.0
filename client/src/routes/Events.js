@@ -6,7 +6,6 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 // import DateRange from '../components/DateRangePicker'
 import EventsList from "../components/Event/EventsList";
 import '../App.css'
-import Header from '../components/Header';
 
 export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
