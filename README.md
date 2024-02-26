@@ -49,6 +49,7 @@ Event page:
 ## Technical Information
 ### Tech Stack 
 - React
+- Express
 - Supabase 
 - Tailwind CSS
 
