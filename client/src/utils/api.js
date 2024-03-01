@@ -5,9 +5,6 @@ const SUPABASE_URL = 'https://zdbroencbancathizkro.supabase.co'
 const SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_KEY 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
-
 export async function getEventById(eventId) {
   let { data, error } = await supabase
       .from('events')
@@ -61,12 +58,8 @@ export async function getSpotifyToken() {
     const response = await fetch('http://localhost:8080/spotifytoken');
     console.log('response data', response)
     if (response.ok) {
-      console.log('looking for token')
       const body = await response.json();
       const token = body.access_token;
-      console.log("token recieved");
-      console.log("🚀 ~ getSpotifyToken ~ token:", token)
-
       return token;
     } else {
       throw new Error(`Error fetching localhost spotify token: ${response.statusText}`);
@@ -82,7 +75,7 @@ export async function searchPlaylists(eventName, accessToken) {
 
   const urlEncodedEventName = encodeURIComponent(eventName);
 
-  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=5`;
+  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=20`;
 
   try {
     const response = await fetch(url, {
