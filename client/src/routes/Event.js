@@ -180,7 +180,7 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
       </div>
       <div className="center">
         <div className="artists-section-header">
-          <h1 className="font-gotham font-custom-style text-3xl">LINEUP</h1>
+          <h1 className="font-gotham font-custom-style text-3xl py-4">LINEUP</h1>
           {/* { isLoadingArtists ? (
             <p className="">Total Artists: Loading...</p>
             ) : (
