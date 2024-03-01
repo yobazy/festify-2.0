@@ -21,6 +21,7 @@ export default function Event() {
   const [artists, setArtists] = useState([]);
   const [artistCount, setArtistCount] = useState(null);
   const [isLoadingArtists, setIsLoadingArtists] = useState(true);
+  const [isLoadingPlayslists, setIsLoadingPlaylists] = useState(true);
   const [accessToken, setAccessToken] = useState('');
   const [playlists, setPlaylists] = useState([]);
 
@@ -145,16 +146,26 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
               </div>
             </section>
         <section id="spotify-playlists">
-          <div className="flex flex-col justify-center">
-            <h2 className="text-3xl px-10 font-gotham font-custom-style">View spotify playlists:</h2>
-            <div className="flex flex-row justify-center items-center gap-10 p-10">
-              {playlistList(playlists)}
-            </div>
-            <div className="flex flex-row justify-center">
-              <button className="button">prev</button>
-              <button className="button">next</button>
-            </div>
-            <h2 className="text-3xl px-10 font-gotham font-custom-style">Generate a playlist for me!</h2>
+          <div className="flex flex-col">
+                <h2 className="text-3xl px-10 font-gotham font-custom-style py-4 ">View spotify playlists:</h2>
+                { isLoadingPlayslists ? (
+                    <div className="bg-dark min-h-48 content-center justify-center items-center flex flex-row justify-center items-center gap-10 p-10">
+                      {/* <div className="flex flex-row justify-center items-center gap-10 p-10 border"> */}
+                        Loading...
+                      {/* </div> */}
+                    </div>
+                  ) : (
+                <div className="border-2 bg-dark">
+                  <div className="flex flex-row justify-center items-center gap-10 p-10">
+                    {playlistList(playlists)}
+                  </div>
+                  <div className="flex flex-row justify-center">
+                    <button className="button">prev</button>
+                    <button className="button">next</button>
+                  </div>
+                </div>
+                  )}
+            {/* <h2 className="text-3xl px-10 font-gotham font-custom-style">Generate a playlist for me!</h2> */}
           </div>
         {/* <a>{eventLink}</a> */}
         {/* <Artist className="center" tracks={tracks} artist={artist} artistInfo={artistInfo} /> */}
@@ -170,14 +181,14 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
       <div className="center">
         <div className="artists-section-header">
           <h1 className="font-gotham font-custom-style text-3xl">LINEUP</h1>
-          { isLoadingArtists ? (
+          {/* { isLoadingArtists ? (
             <p className="">Total Artists: Loading...</p>
             ) : (
             <p className="">Total Artists: {artistCount}</p>
-            )}
+            )} */}
         </div>
         { isLoadingArtists ? (
-          <div className="center artists-container">Loading...</div>
+          <div className="center artists-container white">Loading...</div>
           ) : (
           <div className="center artists-container ">{artistsCard}</div>
           )}
