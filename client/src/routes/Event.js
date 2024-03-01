@@ -97,6 +97,7 @@ useEffect(() => {
   if (eventInfo && eventInfo.event_name && accessToken) {
     searchPlaylists(eventInfo.event_name, accessToken)
       .then(playlists => {
+        setIsLoadingPlaylists(false);
         setPlaylists(playlists);
         // Handle the playlists as needed
         console.log(playlists)

@@ -55,42 +55,30 @@ export async function getArtistsForEvent(eventId) {
   return artists;
 }
 
+// move to endpoint
 export async function getSpotifyToken() {
+  try {
+    const response = await fetch('http://localhost:8080/spotifytoken');
+    console.log('response data', response)
+    if (response.ok) {
+      console.log('looking for token')
+      const body = await response.json();
+      const token = body.access_token;
+      console.log("token recieved");
+      console.log("🚀 ~ getSpotifyToken ~ token:", token)
 
-    console.log(client_id, client_secret)
-  
-    console.log("getting access token...")
-    const authOptions = {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        grant_type: 'client_credentials'
-      })
-    };
-  
-    try {
-      const response = await fetch('https://accounts.spotify.com/api/token', authOptions);
-
-      if (response.ok) {
-        const body = await response.json();
-        const token = body.access_token;
-        console.log("token recieved");
-        return token;
-      } else {
-        throw new Error(`Error fetching token: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Error in getAccessToken:', error);
+      return token;
+    } else {
+      throw new Error(`Error fetching localhost spotify token: ${response.statusText}`);
     }
+  } catch (error) {
+    console.error('Error in getAccessToken:', error);
   }
+}
 
 export async function searchPlaylists(eventName, accessToken) {
 
   console.log("Searching playlists for event:", eventName);
-  console.log('access token:', accessToken)
 
   const urlEncodedEventName = encodeURIComponent(eventName);
 
@@ -109,7 +97,7 @@ export async function searchPlaylists(eventName, accessToken) {
     }
 
     const data = await response.json();
-    console.log('data', data);
+    console.log('playlist data', data);
 
     // TODO if there is more than one image, dont pass the image url
     if (data.playlists) {
