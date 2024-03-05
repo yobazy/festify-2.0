@@ -137,3 +137,18 @@
 .easeIn-4 {
   animation-delay: 1.2s;
 }
+
+.playlist-container {
+  transition: transform 0.5s ease-in-out;
+}
+
+.playlist-animate-enter {
+  transform: translateX(0%);
+  opacity: 1;
+  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.playlist-animate-exit {
+  transform: translateX(-100%);
+  opacity: 0;
+}

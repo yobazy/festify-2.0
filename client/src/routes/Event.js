@@ -7,6 +7,8 @@ import { getEventById, getArtistsForEvent } from '../utils/api'
 import './Event.css';
 import axios from 'axios';
 import { getSpotifyToken, searchPlaylists } from '../utils/api';
+import { useTransition, animated } from 'react-spring';
+
 
 // import ../output.css;
 
@@ -24,6 +26,8 @@ export default function Event() {
   const [isLoadingPlayslists, setIsLoadingPlaylists] = useState(true);
   const [accessToken, setAccessToken] = useState('');
   const [playlists, setPlaylists] = useState([]);
+  const [animationClass, setAnimationClass] = useState('playlist-animate-enter');
+
 
   // get event information from db
   useEffect(() => {
@@ -113,12 +117,28 @@ export default function Event() {
   const playlistsPerPage = 3; // Adjust this number as needed
 
   const handlePrevClick = () => {
-    setCurrentPage((prevPage) => Math.max(0, prevPage - 1));
+    setAnimationClass('playlist-animate-exit');
+    setTimeout(() => {
+      setCurrentPage((prevPage) => Math.max(0, prevPage - 1));
+      setAnimationClass('playlist-animate-enter');
+    }, 500);
   };
   
   const handleNextClick = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(playlists.length / playlistsPerPage) - 1));
+    setAnimationClass('playlist-animate-exit');
+    setTimeout(() => {
+      setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(playlists.length / playlistsPerPage) - 1));
+      setAnimationClass('playlist-animate-enter');
+    }, 500); // This timeout should match the duration of your CSS transition
   };
+
+  const currentPagePlaylists = playlists.slice(currentPage * playlistsPerPage, (currentPage + 1) * playlistsPerPage);
+  const transitions = useTransition(currentPagePlaylists, {
+    keys: playlist => playlist.id, // Ensure each playlist has a unique 'id' for this to work
+    from: { opacity: 0, transform: 'translate3d(100%,0,0)' },
+    enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
+    leave: { opacity: 0, transform: 'translate3d(-100%,0,0)' },
+  });
 
   const playlistList = (playlists) => {
     console.log(playlists)
@@ -128,28 +148,46 @@ export default function Event() {
     const currPlaylists = playlists.slice(startIndex, endIndex);
 
 
-    return currPlaylists.map((playlist, i) => (
-      <>
-        <div key={i}>
-          {/* <p>{playlist.name}</p> */}
-          {/* <p><a href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer">Spotify Link</a></p> */}
-          {playlist.images[0] && (
-            <a href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="block">
-              <div className="relative w-44 h-44 mx-auto rounded overflow-hidden">
-                <img src={playlist.images[0].url} alt={`${playlist.name} Playlist`} className="w-full h-full object-fit" />
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100">
-                  <p className="text-white text-center text-xl">{playlist.name}</p>
-                  {/* <p className="text-white text-center text-xl">{playlist.Date}</p> */}
-                </div>
-              </div>
-            </a>
-          )}
+return (
+  <div className="flex flex-row flex-wrap justify-center items-center gap-10 p-10">
+  {transitions((style, item, t, index) => (
+    <animated.div style={style} key={item.id}>
+      <a href={item.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="block">
+        <div className="relative w-44 h-44 mx-auto rounded overflow-hidden">
+          <img src={item.images[0]?.url} alt={`${item.name} Playlist`} className="w-full h-full object-fit" />
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100">
+            <p className="text-white text-center text-xl">{item.name}</p>
+          </div>
         </div>
-      </>
-    ))
+      </a>
+    </animated.div>
+  ))}
+</div>
+)
+    // return currPlaylists.map((playlist, i) => (
+    //   <>
+    //     <div key={i}>
+    //       {/* {playlist.images[0] && ( */}
+    //       {transitions((style, item) => (
+    //         <animated.div style={style} key={item.id}>
+    //           <a href={playlist.external_urls.spotify} target="_blank" rel="noopener noreferrer" className="block">
+    //             <div className="relative w-44 h-44 mx-auto rounded overflow-hidden">
+    //               <img src={playlist.images[0].url} alt={`${playlist.name} Playlist`} className="w-full h-full object-fit" />
+    //               <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100">
+    //                 <p className="text-white text-center text-xl">{playlist.name}</p>
+    //                 {/* <p className="text-white text-center text-xl">{playlist.Date}</p> */}
+    //               </div>
+    //             </div>
+    //           </a>
+    //         </animated.div>
+    //       ))}
+    //     </div>
+    //   </>
+    // ))
   }
 
   const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
+
 
   return (
     <div>
@@ -178,7 +216,7 @@ export default function Event() {
                   </div>
                 ) : (
                   <div className="bg-dark p-5">
-                    <div className="flex flex-row flex-wrap justify-center items-center gap-10 p-10">
+                    <div className={`flex flex-row flex-wrap justify-center items-center gap-10 p-10 ${animationClass}`}>
                       {playlistList(playlists)}
                     </div>
                     <div className="flex flex-row justify-center">

@@ -73,7 +73,14 @@ export async function searchPlaylists(eventName, accessToken) {
 
   console.log("Searching playlists for event:", eventName);
 
+  // if eventName does not have "festival" in it, add "festival" to the search query
+  if (!eventName.includes("festival") && !eventName.includes("Festival")) {
+    eventName += " festival";
+  }
+
   const urlEncodedEventName = encodeURIComponent(eventName);
+  console.log("🚀 ~ searchPlaylists ~ urlEncodedEventName:", urlEncodedEventName)
+  
   const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=15`;
 
   try {
