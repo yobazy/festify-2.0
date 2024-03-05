@@ -157,7 +157,7 @@ const formattedDate = eventInfo ? formatDate(eventInfo.event_date) : null;
                     </div>
                   ) : (
                 <div className="bg-dark p-5">
-                  <div className="flex flex-row justify-center items-center gap-10 p-10">
+                  <div className="flex flex-row flex-wrap justify-center items-center gap-10 p-10">
                     {playlistList(playlists)}
                   </div>
                   <div className="flex flex-row justify-center">

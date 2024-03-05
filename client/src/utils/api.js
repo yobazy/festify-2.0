@@ -74,8 +74,7 @@ export async function searchPlaylists(eventName, accessToken) {
   console.log("Searching playlists for event:", eventName);
 
   const urlEncodedEventName = encodeURIComponent(eventName);
-
-  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=20`;
+  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=10`;
 
   try {
     const response = await fetch(url, {

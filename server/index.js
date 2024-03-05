@@ -37,15 +37,12 @@ app.get('/spotifytoken', async (req, res) => {
 
   try {
     // Make the POST request to Spotify's API
-    console.log('trying to get response')
     const response = await fetch('https://accounts.spotify.com/api/token', authOptions);
-    console.log('got response')
     // Parse the JSON response body to get the access token
+    
     const data = await response.json();
-    console.log(data); // Log the response data to debug
-
-
     res.status(200).json({ access_token: data.access_token });
+    
   } catch (error) {
     console.error('Error fetching Spotify token:', error);
     // Provide more detailed error information for debugging
