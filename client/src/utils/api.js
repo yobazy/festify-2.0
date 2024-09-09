@@ -5,9 +5,6 @@ const SUPABASE_URL = 'https://zdbroencbancathizkro.supabase.co'
 const SUPABASE_ANON_KEY = process.env.REACT_APP_SUPABASE_KEY 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const client_id = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const client_secret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
-
 export async function getEventById(eventId) {
   let { data, error } = await supabase
       .from('events')
@@ -55,46 +52,36 @@ export async function getArtistsForEvent(eventId) {
   return artists;
 }
 
+// move to endpoint
 export async function getSpotifyToken() {
-
-    console.log(client_id, client_secret)
-  
-    console.log("getting access token...")
-    const authOptions = {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({
-        grant_type: 'client_credentials'
-      })
-    };
-  
-    try {
-      const response = await fetch('https://accounts.spotify.com/api/token', authOptions);
-
-      if (response.ok) {
-        const body = await response.json();
-        const token = body.access_token;
-        console.log("token recieved");
-        return token;
-      } else {
-        throw new Error(`Error fetching token: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Error in getAccessToken:', error);
+  try {
+    const response = await fetch('http://localhost:8080/spotifytoken');
+    console.log('response data', response)
+    if (response.ok) {
+      const body = await response.json();
+      const token = body.access_token;
+      return token;
+    } else {
+      throw new Error(`Error fetching localhost spotify token: ${response.statusText}`);
     }
+  } catch (error) {
+    console.error('Error in getAccessToken:', error);
   }
+}
 
 export async function searchPlaylists(eventName, accessToken) {
 
   console.log("Searching playlists for event:", eventName);
-  console.log('access token:', accessToken)
+
+  // if eventName does not have "festival" in it, add "festival" to the search query
+  if (!eventName.includes("festival") && !eventName.includes("Festival")) {
+    eventName += " festival";
+  }
 
   const urlEncodedEventName = encodeURIComponent(eventName);
-
-  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=5`;
+  console.log("🚀 ~ searchPlaylists ~ urlEncodedEventName:", urlEncodedEventName)
+  
+  const url = `https://api.spotify.com/v1/search?q=${urlEncodedEventName}&type=playlist&limit=15`;
 
   try {
     const response = await fetch(url, {
@@ -109,7 +96,7 @@ export async function searchPlaylists(eventName, accessToken) {
     }
 
     const data = await response.json();
-    console.log('data', data);
+    console.log('playlist data', data);
 
     // TODO if there is more than one image, dont pass the image url
     if (data.playlists) {

@@ -75,7 +75,7 @@ export default function EventsList({ events, setEvent, limit, filterDate, curren
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center space-x-1 my-4">
+      <div className="flex items-center justify-center space-x-1 my-4 pb-5">
         <button
           onClick={() => setCurrentPage(1)}
           disabled={currentPage === 1}
