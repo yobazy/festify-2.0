@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import '../components/Event/EventList.css'
 import "react-date-range/dist/styles.css"; // main style file
@@ -11,12 +11,20 @@ import Header from '../components/Header';
 export default function Home({ events, setEvent, query, setQuery }) {
   const [filterDate, setFilterDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [pagesCount, setPagesCount] = useState(1)
+
+  console.log(events)
 
   const eventsPerPage = 5;
-  let totalPages = 1;
-  if (events.length) {
-    totalPages = Math.ceil(events.length / eventsPerPage);
-  }
+
+  useEffect(() => {
+    // Properly check for null or undefined and for non-empty array
+    if (events && events.length > 0) {
+      setPagesCount(Math.ceil(events.length / eventsPerPage));
+    } else {
+      setPagesCount(1); // Default value when there are no events
+    }
+  }, [events]);
 
   const handleDateChange = (e) => {
     setFilterDate(e.target.value);
@@ -56,7 +64,7 @@ export default function Home({ events, setEvent, query, setQuery }) {
         limit={eventsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalPages={totalPages}      />
+        totalPages={pagesCount}      />
     </div>
   );
 }

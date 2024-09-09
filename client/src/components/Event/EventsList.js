@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./EventsList.css";
 import EventCard from "./EventCard";
 
-export default function EventsList({ events, setEvent, limit, filterDate, currentPage, setCurrentPage, totalPages }) {
+export default function EventsList({ events = [], setEvent, limit, filterDate, currentPage, setCurrentPage, totalPages }) {
 
   const getPageRange = (currentPage, totalPages) => {
     let start = currentPage - 2;
@@ -23,7 +23,6 @@ export default function EventsList({ events, setEvent, limit, filterDate, curren
   };
   const pageNumbers = getPageRange(currentPage, totalPages);
 
-
   function formatDate(input) {
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
@@ -36,7 +35,8 @@ export default function EventsList({ events, setEvent, limit, filterDate, curren
     return `${monthName} ${year}`;
   }
 
-  const sortedEvents = [...events].sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
+  // Check if events is null or undefined and provide fallback
+  const sortedEvents = [...(events || [])].sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 
   const startIndex = (currentPage - 1) * limit;
   const endIndex = startIndex + limit;
@@ -63,15 +63,36 @@ export default function EventsList({ events, setEvent, limit, filterDate, curren
     }
     : groupedEvents;
 
+  // If events is empty or undefined, show the error message
+  if (!events || events.length === 0) {
+    return   <div>
+      <div className="event-card">
+        <div className="event-hover">
+          <div className="event-details">
+            <div className="event-info">
+              <div className="event-name text-bold">something went wrong...</div>
+              <div className="event-info-box">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  }
+
   return (
     <>
       <div className="events-container">
         {Object.entries(displayEvents).map(([month, monthEvents]) => (
           <div key={month} style={{ color: 'white' }}>
             <h2 className="text-2xl font-medium">{month}</h2>
-            {monthEvents.map((event) => (
-              <EventCard key={event.event_id} event={event} />
-            ))}
+            {monthEvents?.length > 0 ? (
+              monthEvents.map((event) => (
+                <EventCard key={event.event_id} event={event} />
+              ))
+            ) : (
+              <p>No events available for this month.</p>
+            )}
           </div>
         ))}
       </div>
@@ -109,7 +130,6 @@ export default function EventsList({ events, setEvent, limit, filterDate, curren
           Last
         </button>
       </div>
-
     </>
   );
 }
