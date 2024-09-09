@@ -13,8 +13,10 @@ export default function Home({ events, setEvent, query, setQuery }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const eventsPerPage = 5;
-  const totalPages = Math.ceil(events.length / eventsPerPage);
-
+  let totalPages = 1;
+  if (events.length) {
+    totalPages = Math.ceil(events.length / eventsPerPage);
+  }
 
   const handleDateChange = (e) => {
     setFilterDate(e.target.value);
@@ -27,16 +29,16 @@ export default function Home({ events, setEvent, query, setQuery }) {
         <div className="flex flex-col">
           <form>
             {/* <label for="default-search" class="search-label">Search</label> */}
-            <div class="search-container">
-              <div class="search-icon-container">
-                <svg class="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            <div className="search-container">
+              <div className="search-icon-container">
+                <svg className="search-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                 </svg>
               </div>
               <input 
                 type="search" 
                 id="default-search" 
-                class="search-input" 
+                className="search-input" 
                 placeholder="Search events, locations..." 
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
