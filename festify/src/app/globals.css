@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* ── Font Faces ── */
+@font-face {
+  font-family: "Gotham-Bold";
+  src: url("/fonts/Gotham-Bold.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gotham-Light";
+  src: url("/fonts/Gotham-Light.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gotham-Thin";
+  src: url("/fonts/Gotham-Thin.otf") format("opentype");
+  font-display: swap;
+}
+
+/* ── Design Tokens ── */
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-border: var(--border-color);
+
+  --font-brand: "Gotham-Bold", sans-serif;
+  --font-brand-light: "Gotham-Light", sans-serif;
+  --font-brand-thin: "Gotham-Thin", sans-serif;
+
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.25rem;
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-rotate-word: rotate-word 3s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes rotate-word {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    80% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(156, 29, 185, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(156, 29, 185, 0.6);
+    }
+  }
+}
+
+/* ── CSS Variables ── */
+:root {
+  --background: #0d0a12;
+  --background-secondary: #150f1e;
+  --foreground: #e2dce8;
+
+  --primary: #9c1db9;
+  --primary-foreground: #ffffff;
+
+  --accent: #00d4aa;
+  --accent-foreground: #ffffff;
+
+  --muted: #1e1728;
+  --muted-foreground: #8b7fa0;
+
+  --card: #161122;
+  --card-foreground: #e2dce8;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 16px;
+}
+
+/* ── Base Styles ── */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-brand-light), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* ── Glass Utilities ── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* ── Gradient Utilities ── */
+.gradient-purple {
+  background: linear-gradient(135deg, #9c1db9, #d946ef);
+}
+
+.gradient-overlay {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(13, 10, 18, 0.6) 50%,
+    var(--background) 100%
+  );
+}
+
+.gradient-overlay-strong {
+  background: linear-gradient(
+    180deg,
+    rgba(13, 10, 18, 0.3) 0%,
+    rgba(13, 10, 18, 0.8) 60%,
+    var(--background) 100%
+  );
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(156, 29, 185, 0.4);
+  color: white;
+}
