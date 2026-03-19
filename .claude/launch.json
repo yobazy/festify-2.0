@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Festify (Next.js)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "festify", "run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "API Server (Express)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server/index.js"],
+      "port": 8080
+    }
+  ]
+}
