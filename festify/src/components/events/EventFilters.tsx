@@ -35,7 +35,7 @@ export function EventFilters({
   totalResults,
 }: EventFiltersProps) {
   return (
-    <div className="glass p-4 mb-8 space-y-3">
+    <div className="border border-white/[0.06] bg-[#0a0a0a] p-4 mb-8 space-y-3">
       {/* Top row: search + result count */}
       <div className="flex flex-col sm:flex-row items-center gap-3">
         <SearchInput
@@ -44,24 +44,24 @@ export function EventFilters({
           placeholder="Search events, venues, locations..."
           className="flex-1"
         />
-        <span className="text-sm text-muted-foreground whitespace-nowrap">
-          {totalResults} event{totalResults !== 1 ? "s" : ""}
+        <span className="eyebrow text-white/25 whitespace-nowrap">
+          {totalResults}&nbsp;{totalResults !== 1 ? "Events" : "Event"}
         </span>
       </div>
 
       {/* Bottom row: date chips + location */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Date range chips */}
+      <div className="flex flex-wrap items-center gap-2">
+        {/* Date range chips — stark, square */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {DATE_CHIPS.map((chip) => (
             <button
               key={chip.value}
               onClick={() => onDateRangeChange(chip.value)}
               className={cn(
-                "px-3 py-1 rounded-full text-xs font-medium transition-all duration-200",
+                "px-3 py-1 eyebrow transition-all duration-150",
                 dateRange === chip.value
-                  ? "gradient-purple text-white"
-                  : "bg-white/5 border border-white/10 text-muted-foreground hover:text-white hover:border-white/20"
+                  ? "bg-neon text-black"
+                  : "border border-white/10 text-white/30 hover:text-white hover:border-white/25"
               )}
             >
               {chip.label}
@@ -71,30 +71,30 @@ export function EventFilters({
 
         {/* Location dropdown */}
         {uniqueLocations.length > 0 && (
-          <div className="relative flex items-center gap-1.5 ml-auto">
-            <MapPin size={14} className="text-muted-foreground shrink-0" />
+          <div className="relative flex items-center gap-2 ml-auto">
+            <MapPin size={12} className="text-white/25 shrink-0" />
             <div className="relative">
               <select
                 value={location}
                 onChange={(e) => onLocationChange(e.target.value)}
                 className={cn(
-                  "appearance-none pr-6 pl-2 py-1 rounded-lg text-xs",
-                  "bg-white/5 border border-white/10",
-                  "text-muted-foreground focus:outline-none focus:border-primary/50",
-                  "transition-colors cursor-pointer hover:border-white/20",
-                  location && "text-white border-primary/30"
+                  "appearance-none pr-5 pl-1 py-1",
+                  "bg-transparent border-b border-white/10",
+                  "eyebrow text-white/30 focus:outline-none",
+                  "transition-colors cursor-pointer hover:border-white/25",
+                  location && "text-white border-neon"
                 )}
               >
                 <option value="">All Locations</option>
                 {uniqueLocations.map((loc) => (
-                  <option key={loc} value={loc} className="bg-card text-white">
+                  <option key={loc} value={loc} className="bg-[#0a0a0a] text-white">
                     {loc}
                   </option>
                 ))}
               </select>
               <Filter
-                size={10}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                size={9}
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"
               />
             </div>
           </div>

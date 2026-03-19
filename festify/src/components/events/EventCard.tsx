@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
@@ -26,65 +25,56 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
       <Link href={`/events/${event.event_id}`}>
         <div
           className={cn(
-            "group relative overflow-hidden rounded-2xl h-72",
-            "bg-card border border-white/5",
-            "hover:border-primary/30 transition-all duration-300",
-            "hover:shadow-lg hover:shadow-primary/10"
+            "group relative overflow-hidden h-72",
+            "bg-[#0f0f0f] border border-white/[0.06]",
+            "hover:border-white/20 transition-all duration-300",
+            "card-glow"
           )}
         >
-          {/* Background Image */}
+          {/* Background Image — more prominent */}
           <Image
             src={imageUrl}
             alt={event.event_name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover opacity-35 group-hover:opacity-45 group-hover:scale-105 transition-all duration-500"
+            className="object-cover opacity-55 group-hover:opacity-70 group-hover:scale-103 transition-all duration-700"
           />
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+          {/* Gradient — weighted to bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
-          {/* Date Badge */}
-          <div className="absolute top-3 right-3 glass px-3 py-1 text-xs font-medium text-white flex items-center gap-1.5">
-            <Calendar size={12} />
-            {formatDate(event.event_date)}
-            {event.event_end_date && (
-              <span className="text-muted-foreground">
-                {" "}
-                - {formatDate(event.event_end_date)}
+          {/* Neon top-edge accent line on hover */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-neon opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+          {/* Top bar — date + festival tag */}
+          <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-3 pt-3">
+            {event.festivalInd ? (
+              <span className="eyebrow px-2 py-1 bg-neon text-black">
+                "Festival"
               </span>
+            ) : (
+              <span />
             )}
+            <span className="eyebrow text-white/40">
+              {formatDateShort(event.event_date)}
+              {event.event_end_date && ` — ${formatDateShort(event.event_end_date)}`}
+            </span>
           </div>
 
-          {/* Festival Badge */}
-          {event.festivalInd && (
-            <div className="absolute top-3 left-3 bg-primary/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white">
-              Festival
-            </div>
-          )}
+          {/* Content — editorial layout */}
+          <div className="absolute bottom-0 left-0 right-0 p-4">
+            {/* Thin rule above content */}
+            <div className="w-8 h-px bg-white/20 mb-3" />
 
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-5">
-            <h3 className="font-brand text-xl text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
+            <h3 className="font-brand text-base text-white mb-1.5 group-hover:text-neon transition-colors duration-200 line-clamp-2 leading-snug">
               {event.event_name}
             </h3>
 
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin size={14} className="shrink-0" />
-                <span className="truncate">
-                  {event.event_venue}
-                  {event.event_location && `, ${event.event_location}`}
-                </span>
-              </div>
-
-              {event.artists && event.artists.length > 0 && (
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Users size={14} className="shrink-0" />
-                  <span>{event.artists.length} artists</span>
-                </div>
-              )}
-            </div>
+            <p className="eyebrow text-white/35 truncate">
+              {event.event_venue
+                ? `${event.event_venue} · ${event.event_location}`
+                : event.event_location}
+            </p>
           </div>
         </div>
       </Link>
@@ -92,10 +82,10 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
   );
 }
 
-function formatDate(dateStr: string): string {
+function formatDateShort(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-  });
+  }).toUpperCase();
 }

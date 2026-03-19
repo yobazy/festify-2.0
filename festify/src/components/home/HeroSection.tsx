@@ -27,46 +27,69 @@ export function HeroSection() {
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[150px]" />
 
       {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center justify-center gap-4 mb-8"
+        >
+          <div className="h-px w-12 bg-white/15" />
+          <span className="eyebrow text-white/40">Electronic Music Platform</span>
+          <div className="h-px w-12 bg-white/15" />
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
         >
-          <h1 className="font-brand text-5xl sm:text-6xl lg:text-8xl text-white mb-4 tracking-tight">
-            Discover
+          <h1 className="font-brand text-6xl sm:text-7xl lg:text-9xl text-white mb-4 tracking-tight leading-none">
+            &ldquo;Discover&rdquo;
           </h1>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="mb-8"
+          transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+          className="mb-10"
         >
           <RotatingWords
             words={["festivals", "playlists", "artists", "events"]}
           />
         </motion.div>
 
+        {/* Rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="section-rule max-w-xs mx-auto mb-8"
+        />
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
+          className="text-sm text-[#5a5a5a] mb-10 max-w-xl mx-auto leading-relaxed tracking-wide"
         >
-          Your gateway to the electronic music scene. Find events, explore
-          artist lineups, and discover curated Spotify playlists.
+          Your gateway to the underground. Find events, explore artist
+          lineups, and discover curated Spotify playlists.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ duration: 0.6, delay: 0.65 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3"
         >
           <Link href="/events">
-            <Button size="lg" className="rounded-full px-8 text-base">
+            <Button
+              size="lg"
+              className="rounded-none px-8 text-xs tracking-[0.15em] uppercase font-brand"
+            >
               Browse Events
             </Button>
           </Link>
@@ -74,7 +97,7 @@ export function HeroSection() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-full px-8 text-base"
+              className="rounded-none px-8 text-xs tracking-[0.15em] uppercase font-brand border-white/20 hover:border-white/50"
             >
               Explore Artists
             </Button>
@@ -87,15 +110,14 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
+        <span className="eyebrow text-white/20">Scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5"
-        >
-          <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
-        </motion.div>
+          className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent"
+        />
       </motion.div>
     </section>
   );

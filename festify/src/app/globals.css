@@ -31,6 +31,8 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
 
+  --color-neon: var(--neon);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
 
@@ -43,9 +45,9 @@
   --font-brand-light: "Gotham-Light", sans-serif;
   --font-brand-thin: "Gotham-Thin", sans-serif;
 
-  --radius-lg: 0.75rem;
-  --radius-md: 0.5rem;
-  --radius-sm: 0.25rem;
+  --radius-lg: 0.25rem;
+  --radius-md: 0.125rem;
+  --radius-sm: 0;
 
   --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
   --animate-rotate-word: rotate-word 3s ease-in-out infinite;
@@ -94,27 +96,35 @@
 
 /* ── CSS Variables ── */
 :root {
-  --background: #0d0a12;
-  --background-secondary: #150f1e;
-  --foreground: #e2dce8;
+  /* Pure black foundation — RA / underground */
+  --background: #080808;
+  --background-secondary: #0f0f0f;
+  --foreground: #f0f0f0;
 
+  /* Purple stays, reads more vivid on true black */
   --primary: #9c1db9;
   --primary-foreground: #ffffff;
 
+  /* Acid neon — Abloh's yellow, rave culture */
+  --neon: #b3ff00;
+
+  /* Teal accent stays for Spotify-adjacent elements */
   --accent: #00d4aa;
   --accent-foreground: #ffffff;
 
-  --muted: #1e1728;
-  --muted-foreground: #8b7fa0;
+  /* Neutral greys — no purple tint */
+  --muted: #181818;
+  --muted-foreground: #5a5a5a;
 
-  --card: #161122;
-  --card-foreground: #e2dce8;
+  --card: #0f0f0f;
+  --card-foreground: #f0f0f0;
 
   --border-color: rgba(255, 255, 255, 0.08);
 
-  --glass-bg: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 16px;
+  /* Glass — darker, more opaque, less frosted */
+  --glass-bg: rgba(8, 8, 8, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 20px;
 }
 
 /* ── Base Styles ── */
@@ -126,9 +136,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Global noise overlay — zine / photocopy grain ── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  background-repeat: repeat;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -136,8 +159,8 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 3px;
+  background: #2a2a2a;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -150,11 +173,11 @@ body {
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  border-radius: 2px;
 }
 
 .glass-hover:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.15);
   transition: all 0.3s ease;
 }
@@ -168,7 +191,7 @@ body {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(13, 10, 18, 0.6) 50%,
+    rgba(8, 8, 8, 0.6) 50%,
     var(--background) 100%
   );
 }
@@ -176,15 +199,15 @@ body {
 .gradient-overlay-strong {
   background: linear-gradient(
     180deg,
-    rgba(13, 10, 18, 0.3) 0%,
-    rgba(13, 10, 18, 0.8) 60%,
+    rgba(8, 8, 8, 0.3) 0%,
+    rgba(8, 8, 8, 0.85) 60%,
     var(--background) 100%
   );
 }
 
 /* ── Selection ── */
 ::selection {
-  background: rgba(156, 29, 185, 0.4);
+  background: rgba(179, 255, 0, 0.25);
   color: white;
 }
 
@@ -196,12 +219,34 @@ body {
   background-clip: text;
 }
 
+/* ── Neon Text ── */
+.text-neon {
+  color: var(--neon);
+}
+
+/* ── Eyebrow Label — tracked uppercase editorial tag ── */
+.eyebrow {
+  font-family: var(--font-brand);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* ── Section Rule ── */
+.section-rule {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
 /* ── Card Glow ── */
 .card-glow {
   transition: box-shadow 0.3s ease;
 }
 .card-glow:hover {
-  box-shadow: 0 0 30px rgba(156, 29, 185, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
 /* ── Equalizer Bars ── */
@@ -224,12 +269,12 @@ body {
   display: inline-flex;
   align-items: flex-end;
   gap: 2px;
-  height: 16px;
+  height: 14px;
 }
 .eq-bar {
-  width: 3px;
-  background: linear-gradient(to top, #9c1db9, #d946ef);
-  border-radius: 2px;
+  width: 2px;
+  background: var(--neon);
+  border-radius: 0;
   transform-origin: bottom;
 }
 .eq-bar:nth-child(1) { animation: eq-bounce-1 1s ease-in-out infinite; height: 100%; }
