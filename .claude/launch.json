@@ -4,8 +4,10 @@
     {
       "name": "Festify (Next.js)",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "festify", "run", "dev"],
-      "port": 3000
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "festify",
+      "port": 3000,
+      "autoPort": true
     },
     {
       "name": "API Server (Express)",

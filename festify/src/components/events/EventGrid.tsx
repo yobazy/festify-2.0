@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { EventCard } from "./EventCard";
-import { EventFilters } from "./EventFilters";
+import { EventFilters, type DateRange } from "./EventFilters";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
@@ -13,21 +13,70 @@ interface EventGridProps {
   events: Event[];
 }
 
+function getDateBound(range: DateRange): Date | null {
+  const now = new Date();
+  if (range === "week") {
+    const d = new Date(now);
+    d.setDate(d.getDate() + 7);
+    return d;
+  }
+  if (range === "month") {
+    const d = new Date(now);
+    d.setMonth(d.getMonth() + 1);
+    return d;
+  }
+  if (range === "3months") {
+    const d = new Date(now);
+    d.setMonth(d.getMonth() + 3);
+    return d;
+  }
+  return null;
+}
+
 export function EventGrid({ events }: EventGridProps) {
   const [query, setQuery] = useState("");
+  const [dateRange, setDateRange] = useState<DateRange>("all");
+  const [location, setLocation] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const debouncedQuery = useDebounce(query);
 
+  const uniqueLocations = useMemo(() => {
+    const locs = new Set<string>();
+    events.forEach((e) => {
+      if (e.event_location) locs.add(e.event_location);
+    });
+    return Array.from(locs).sort();
+  }, [events]);
+
   const filtered = useMemo(() => {
-    if (!debouncedQuery) return events;
+    const now = new Date();
+    const upperBound = getDateBound(dateRange);
     const q = debouncedQuery.toLowerCase();
-    return events.filter(
-      (e) =>
-        e.event_name.toLowerCase().includes(q) ||
-        e.event_location?.toLowerCase().includes(q) ||
-        e.event_venue?.toLowerCase().includes(q)
-    );
-  }, [events, debouncedQuery]);
+
+    return events.filter((e) => {
+      // Text search
+      if (
+        q &&
+        !e.event_name.toLowerCase().includes(q) &&
+        !e.event_location?.toLowerCase().includes(q) &&
+        !e.event_venue?.toLowerCase().includes(q)
+      ) {
+        return false;
+      }
+
+      // Date filter
+      if (dateRange !== "all") {
+        const eventDate = new Date(e.event_date);
+        if (eventDate < now) return false;
+        if (upperBound && eventDate > upperBound) return false;
+      }
+
+      // Location filter
+      if (location && e.event_location !== location) return false;
+
+      return true;
+    });
+  }, [events, debouncedQuery, dateRange, location]);
 
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const paginated = filtered.slice(
@@ -50,14 +99,18 @@ export function EventGrid({ events }: EventGridProps) {
     return groups;
   }, [paginated]);
 
+  const resetPage = () => setCurrentPage(1);
+
   return (
     <div>
       <EventFilters
         query={query}
-        onQueryChange={(q) => {
-          setQuery(q);
-          setCurrentPage(1);
-        }}
+        onQueryChange={(q) => { setQuery(q); resetPage(); }}
+        dateRange={dateRange}
+        onDateRangeChange={(r) => { setDateRange(r); resetPage(); }}
+        location={location}
+        onLocationChange={(loc) => { setLocation(loc); resetPage(); }}
+        uniqueLocations={uniqueLocations}
         totalResults={filtered.length}
       />
 
@@ -78,7 +131,7 @@ export function EventGrid({ events }: EventGridProps) {
         <div className="text-center py-20">
           <p className="text-muted-foreground text-lg">No events found</p>
           <p className="text-muted-foreground/60 text-sm mt-2">
-            Try adjusting your search
+            Try adjusting your filters
           </p>
         </div>
       )}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
+import { GlobalSearch } from "./GlobalSearch";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -52,8 +53,9 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Auth / Sign In */}
-            <div className="hidden md:flex items-center gap-3">
+            {/* Search + Auth */}
+            <div className="hidden md:flex items-center gap-2">
+              <GlobalSearch />
               <Link
                 href="/auth/login"
                 className={cn(

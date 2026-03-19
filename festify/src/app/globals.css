@@ -187,3 +187,61 @@ body {
   background: rgba(156, 29, 185, 0.4);
   color: white;
 }
+
+/* ── Gradient Text ── */
+.text-gradient {
+  background: linear-gradient(135deg, #9c1db9, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Card Glow ── */
+.card-glow {
+  transition: box-shadow 0.3s ease;
+}
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(156, 29, 185, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Equalizer Bars ── */
+@keyframes eq-bounce-1 {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+@keyframes eq-bounce-2 {
+  0%, 100% { transform: scaleY(0.8); }
+  30% { transform: scaleY(0.3); }
+  70% { transform: scaleY(1); }
+}
+@keyframes eq-bounce-3 {
+  0%, 100% { transform: scaleY(0.6); }
+  40% { transform: scaleY(1); }
+  80% { transform: scaleY(0.2); }
+}
+
+.eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 16px;
+}
+.eq-bar {
+  width: 3px;
+  background: linear-gradient(to top, #9c1db9, #d946ef);
+  border-radius: 2px;
+  transform-origin: bottom;
+}
+.eq-bar:nth-child(1) { animation: eq-bounce-1 1s ease-in-out infinite; height: 100%; }
+.eq-bar:nth-child(2) { animation: eq-bounce-2 1.2s ease-in-out infinite; height: 80%; }
+.eq-bar:nth-child(3) { animation: eq-bounce-3 0.9s ease-in-out infinite; height: 60%; }
+.eq-bar:nth-child(4) { animation: eq-bounce-1 1.3s ease-in-out infinite; height: 90%; animation-delay: 0.2s; }
+
+/* ── Scrollbar Hide ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
