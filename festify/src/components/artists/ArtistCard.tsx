@@ -17,14 +17,15 @@ interface ArtistCardProps {
 export function ArtistCard({ artist, index = 0 }: ArtistCardProps) {
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <Link href={`/artists/${artist.artist_id}`}>
+      <Link href={`/artists/${artist.artist_id}`} className="block h-full">
         <div
           className={cn(
-            "group relative glass glass-hover p-5",
+            "group relative h-[320px] glass glass-hover p-5",
             "flex flex-col items-center text-center",
             "hover:shadow-lg hover:shadow-primary/10"
           )}
@@ -41,36 +42,40 @@ export function ArtistCard({ artist, index = 0 }: ArtistCardProps) {
           </div>
 
           {/* Name */}
-          <h3 className="font-brand text-base text-white mb-2 group-hover:text-primary transition-colors">
+          <h3 className="mb-2 min-h-[3rem] text-base font-brand text-white transition-colors group-hover:text-primary flex items-center justify-center">
             {artist.artist_name}
           </h3>
 
           {/* Genres */}
-          {artist.genres && artist.genres.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-1.5 mb-3">
-              {artist.genres.slice(0, 3).map((genre) => (
-                <Badge key={genre} variant="muted" className="text-[10px]">
-                  {genre}
-                </Badge>
-              ))}
-            </div>
-          )}
+          <div className="mb-3 min-h-[3.5rem]">
+            {artist.genres && artist.genres.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-1.5">
+                {artist.genres.slice(0, 3).map((genre) => (
+                  <Badge key={genre} variant="muted" className="text-[10px]">
+                    {genre}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Popularity */}
-          {artist.popularity !== null && (
-            <div className="w-full max-w-[120px]">
+          <div className="mt-auto flex min-h-[1.75rem] w-full max-w-[120px] flex-col justify-end">
+            {artist.popularity !== null && (
               <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
                 <span>Popularity</span>
                 <span>{artist.popularity}</span>
               </div>
-              <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+            )}
+            <div className="h-1 overflow-hidden rounded-full bg-white/5">
+              {artist.popularity !== null && (
                 <div
-                  className="h-full gradient-purple rounded-full transition-all duration-500"
+                  className="h-full rounded-full gradient-purple transition-all duration-500"
                   style={{ width: `${artist.popularity}%` }}
                 />
-              </div>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Spotify link indicator */}
           {artist.spotify_link && (
