@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { ArtistHero } from "@/components/artist-detail/ArtistHero";
+import { ArtistTopTracks } from "@/components/artist-detail/ArtistTopTracks";
 import { UpcomingEvents } from "@/components/artist-detail/UpcomingEvents";
 import { GradientBackground } from "@/components/ui/GradientBackground";
 import type { Artist } from "@/types/artist";
@@ -63,6 +64,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
       <div className="relative">
         <GradientBackground variant="subtle" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <ArtistTopTracks artist={artist as Artist} />
           <UpcomingEvents events={events} />
         </div>
       </div>

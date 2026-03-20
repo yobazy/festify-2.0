@@ -47,11 +47,41 @@ export default async function EventDetailPage({ params }: PageProps) {
     .select("artists(*)")
     .eq("event_id", id);
 
-  const artists: Artist[] =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (gigs as any[] | null)
-      ?.map((g) => g.artists as Artist | null)
-      .filter((a): a is Artist => a !== null) ?? [];
+  const artistMap = new Map<number, Artist>();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (gigs as any[] | null)
+    ?.map((g) => g.artists as Artist | null)
+    .filter((a): a is Artist => a !== null)
+    .forEach((artist) => {
+      const existing = artistMap.get(artist.artist_id);
+
+      if (!existing) {
+        artistMap.set(artist.artist_id, artist);
+        return;
+      }
+
+      // Keep the richer artist record if duplicates appear through the junction.
+      artistMap.set(artist.artist_id, {
+        ...existing,
+        ...artist,
+        genres: artist.genres ?? existing.genres,
+        img_url: artist.img_url ?? existing.img_url,
+        popularity: artist.popularity ?? existing.popularity,
+        spotify_link: artist.spotify_link ?? existing.spotify_link,
+      });
+    });
+
+  const artists = Array.from(artistMap.values()).sort((a, b) => {
+    const popularityA = a.popularity ?? -1;
+    const popularityB = b.popularity ?? -1;
+
+    if (popularityA !== popularityB) {
+      return popularityB - popularityA;
+    }
+
+    return a.artist_name.localeCompare(b.artist_name);
+  });
 
   return (
     <>
