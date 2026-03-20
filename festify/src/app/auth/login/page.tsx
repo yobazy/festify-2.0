@@ -3,12 +3,22 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signIn } from "./actions";
 
 export default function LoginPage() {
   const [state, action, isPending] = useActionState(signIn, null);
+  const searchParams = useSearchParams();
+  const callbackError = searchParams.get("error");
+  const signupMessage = searchParams.get("message");
+  const infoMessage =
+    signupMessage === "check-email"
+      ? "Check your email to confirm your account, then sign in."
+      : callbackError === "auth_callback_failed"
+        ? "We couldn't finish signing you in. Please try again."
+        : null;
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -44,6 +54,12 @@ export default function LoginPage() {
         {/* Card */}
         <div className="glass p-8 rounded-2xl">
           <form action={action} className="space-y-5">
+            {infoMessage && (
+              <div className="px-4 py-3 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm">
+                {infoMessage}
+              </div>
+            )}
+
             {/* Error message */}
             {state?.error && (
               <div className="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -117,6 +133,13 @@ export default function LoginPage() {
               {isPending ? "Signing in…" : "Sign In"}
             </button>
           </form>
+
+          <p className="text-center text-sm text-muted-foreground mt-6">
+            New here?{" "}
+            <Link href="/auth/signup" className="text-white hover:text-primary transition-colors">
+              Create an account
+            </Link>
+          </p>
         </div>
 
         {/* Back link */}

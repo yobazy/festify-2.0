@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, ExternalLink } from "lucide-react";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { SaveEventButton } from "@/components/taste/SaveEventButton";
 import type { Event } from "@/types/event";
 
 interface EventHeaderProps {
@@ -53,6 +53,8 @@ export function EventHeader({ event }: EventHeaderProps) {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="flex flex-wrap items-center gap-4 text-muted-foreground"
         >
+          <SaveEventButton event={event} className="bg-white/10 hover:bg-white/15" />
+
           <div className="flex items-center gap-2">
             <Calendar size={16} />
             <span>

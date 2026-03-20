@@ -24,7 +24,7 @@ export default async function ArtistsPage() {
           Artists
         </h1>
         <p className="text-muted-foreground mb-8">
-          Explore the artists behind the festivals
+          Filter by genre, popularity, and Spotify availability to narrow the field
         </p>
 
         <ArtistGrid artists={(artists as Artist[]) ?? []} />

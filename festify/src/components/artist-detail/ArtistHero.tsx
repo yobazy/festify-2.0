@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { FollowArtistButton } from "@/components/taste/FollowArtistButton";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import type { Artist } from "@/types/artist";
 
@@ -77,8 +78,10 @@ export function ArtistHero({ artist }: ArtistHeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.35 }}
-          className="flex items-center gap-6"
+          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6"
         >
+          <FollowArtistButton artist={artist} className="bg-white/10 hover:bg-white/15" />
+
           {artist.popularity !== null && (
             <div className="text-center">
               <div className="text-2xl font-brand text-white">

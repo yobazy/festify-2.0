@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Calendar, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { SaveEventButton } from "@/components/taste/SaveEventButton";
 import type { Event } from "@/types/event";
 
 interface EventCardProps {
@@ -22,7 +23,12 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <Link href={`/events/${event.event_id}`}>
+      <div className="relative">
+        <div className="absolute left-3 top-3 z-10">
+          <SaveEventButton event={event} />
+        </div>
+
+        <Link href={`/events/${event.event_id}`}>
         <div
           className={cn(
             "group relative overflow-hidden rounded-2xl h-72",
@@ -86,7 +92,8 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             </div>
           </div>
         </div>
-      </Link>
+        </Link>
+      </div>
     </motion.div>
   );
 }

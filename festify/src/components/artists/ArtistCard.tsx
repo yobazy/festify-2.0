@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
+import { FollowArtistButton } from "@/components/taste/FollowArtistButton";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import type { Artist } from "@/types/artist";
 
@@ -22,7 +23,12 @@ export function ArtistCard({ artist, index = 0 }: ArtistCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <Link href={`/artists/${artist.artist_id}`} className="block h-full">
+      <div className="relative h-full">
+        <div className="absolute left-3 top-3 z-10">
+          <FollowArtistButton artist={artist} />
+        </div>
+
+        <Link href={`/artists/${artist.artist_id}`} className="block h-full">
         <div
           className={cn(
             "group relative h-[320px] glass glass-hover p-5",
@@ -85,7 +91,8 @@ export function ArtistCard({ artist, index = 0 }: ArtistCardProps) {
             />
           )}
         </div>
-      </Link>
+        </Link>
+      </div>
     </motion.div>
   );
 }
