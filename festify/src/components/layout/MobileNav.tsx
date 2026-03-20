@@ -62,10 +62,21 @@ export function MobileNav({ isOpen, onClose, links }: MobileNavProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="mt-8"
+              className="mt-8 space-y-3"
             >
               <Link
                 href="/auth/login"
+                onClick={onClose}
+                className={cn(
+                  "block text-center py-3 rounded-full text-sm font-medium",
+                  "border border-white/10 text-white hover:bg-white/5 transition-colors"
+                )}
+              >
+                Sign In
+              </Link>
+
+              <Link
+                href="/auth/signup"
                 onClick={onClose}
                 className={cn(
                   "block text-center py-3 rounded-full text-sm font-medium",
@@ -73,7 +84,7 @@ export function MobileNav({ isOpen, onClose, links }: MobileNavProps) {
                   "hover:opacity-90 transition-opacity"
                 )}
               >
-                Sign In
+                Sign Up
               </Link>
             </motion.div>
           </motion.div>

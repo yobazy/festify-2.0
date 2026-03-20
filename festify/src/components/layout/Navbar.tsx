@@ -57,12 +57,22 @@ export function Navbar() {
               <Link
                 href="/auth/login"
                 className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium",
+                  "text-muted-foreground hover:text-white",
+                  "hover:bg-white/5 transition-all duration-200"
+                )}
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/signup"
+                className={cn(
                   "px-5 py-2 rounded-full text-sm font-medium",
                   "gradient-purple text-white",
                   "hover:opacity-90 transition-opacity"
                 )}
               >
-                Sign In
+                Sign Up
               </Link>
             </div>
 
