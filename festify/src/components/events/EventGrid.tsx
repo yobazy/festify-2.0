@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EventCard } from "./EventCard";
 import { EventFilters } from "./EventFilters";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Event } from "@/types/event";
 
 interface EventGridProps {
@@ -14,20 +15,47 @@ interface EventGridProps {
 }
 
 export function EventGrid({ events }: EventGridProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const debouncedQuery = useDebounce(query);
 
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+
+  // Initialize from URL and keep in sync when navigating back/forward.
+  useEffect(() => {
+    setFrom(searchParams.get("from") ?? "");
+    setTo(searchParams.get("to") ?? "");
+  }, [searchParams]);
+
+  const filteredByDate = useMemo(() => {
+    if (!from && !to) return events;
+    const fromDate = from ? new Date(`${from}T00:00:00`).getTime() : null;
+    const toDate = to ? new Date(`${to}T23:59:59`).getTime() : null;
+
+    return events.filter((e) => {
+      const t = new Date(e.event_date).getTime();
+      if (Number.isNaN(t)) return false;
+      if (fromDate !== null && t < fromDate) return false;
+      if (toDate !== null && t > toDate) return false;
+      return true;
+    });
+  }, [events, from, to]);
+
   const filtered = useMemo(() => {
-    if (!debouncedQuery) return events;
+    if (!debouncedQuery) return filteredByDate;
     const q = debouncedQuery.toLowerCase();
-    return events.filter(
+    return filteredByDate.filter(
       (e) =>
         e.event_name.toLowerCase().includes(q) ||
         e.event_location?.toLowerCase().includes(q) ||
         e.event_venue?.toLowerCase().includes(q)
     );
-  }, [events, debouncedQuery]);
+  }, [filteredByDate, debouncedQuery]);
 
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const paginated = filtered.slice(
@@ -57,6 +85,24 @@ export function EventGrid({ events }: EventGridProps) {
         onQueryChange={(q) => {
           setQuery(q);
           setCurrentPage(1);
+        }}
+        from={from}
+        to={to}
+        onFromChange={(v) => {
+          setFrom(v);
+          setCurrentPage(1);
+          const params = new URLSearchParams(searchParams.toString());
+          if (v) params.set("from", v);
+          else params.delete("from");
+          router.replace(`${pathname}?${params.toString()}`);
+        }}
+        onToChange={(v) => {
+          setTo(v);
+          setCurrentPage(1);
+          const params = new URLSearchParams(searchParams.toString());
+          if (v) params.set("to", v);
+          else params.delete("to");
+          router.replace(`${pathname}?${params.toString()}`);
         }}
         totalResults={filtered.length}
       />

@@ -15,7 +15,7 @@ interface EventCardProps {
 
 export function EventCard({ event, index = 0 }: EventCardProps) {
   const imageUrl =
-    (event.use_alt ? event.alt_img : event.img_url) || PLACEHOLDER_IMAGE;
+    (event.use_alt ? event.alt_img : event.img_url) || "/images/event-placeholder.svg";
 
   return (
     <motion.div
@@ -57,7 +57,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
           </div>
 
           {/* Festival Badge */}
-          {event.festivalInd && (
+          {event.festivalind && (
             <div className="absolute top-3 left-3 bg-primary/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white">
               Festival
             </div>

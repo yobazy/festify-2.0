@@ -1,0 +1,40 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED"/>
+      <stop offset="0.5" stop-color="#06B6D4"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1160 260) rotate(140) scale(760 520)">
+      <stop stop-color="#FFFFFF" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="grid" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+
+  <!-- subtle grid -->
+  <g opacity="0.55">
+    <path d="M0 180H1600" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M0 360H1600" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M0 540H1600" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M0 720H1600" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M320 0V900" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M640 0V900" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M960 0V900" stroke="url(#grid)" stroke-width="1"/>
+    <path d="M1280 0V900" stroke="url(#grid)" stroke-width="1"/>
+  </g>
+
+  <!-- icon -->
+  <g opacity="0.9" transform="translate(110 610)">
+    <rect x="0" y="-120" width="140" height="140" rx="24" fill="#000000" fill-opacity="0.35" stroke="#FFFFFF" stroke-opacity="0.16"/>
+    <path d="M50 -70C50 -87.673 64.327 -102 82 -102C99.673 -102 114 -87.673 114 -70V-16C114 1.673 99.673 16 82 16C64.327 16 50 1.673 50 -16V-70Z" fill="#FFFFFF" fill-opacity="0.85"/>
+    <path d="M74 -60C74 -70.493 82.507 -79 93 -79H99V-56H93C88.582 -56 85 -52.418 85 -48V-3C85 7.493 76.493 16 66 16H60V-7H66C70.418 -7 74 -10.582 74 -15V-60Z" fill="#FFFFFF" fill-opacity="0.55"/>
+  </g>
+</svg>
+

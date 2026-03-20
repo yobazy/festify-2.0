@@ -30,12 +30,9 @@ const DAYS_AHEAD = 90; // How far into the future to pull events
 const RA_PAGE_SIZE = 100; // Max results per RA page (their API caps at 100)
 const RA_RATE_LIMIT_MS = 600; // Pause between RA pages to avoid rate limiting
 
-// ─── Supabase client ─────────────────────────────────────────────────────────
+// ─── Supabase client (initialized in main after env validation) ──────────────
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+let supabase;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -143,6 +140,9 @@ async function syncEDMTrain() {
 
   for (const item of json.data) {
     try {
+      if (!item?.name) {
+        throw new Error('Missing event name');
+      }
       const eventData = {
         event_name:        item.name,
         event_date:        item.date,
@@ -150,9 +150,9 @@ async function syncEDMTrain() {
         event_location:    item.location?.metro || item.location?.state || '',
         event_venue:       item.location?.name  || '',
         edmtrain_link:     item.link            || null,
-        festivalInd:       item.festivalInd  === 1,
-        livestreamInd:     item.livestreamInd === 1,
-        electronicGenreInd: true,
+        festivalind:       item.festivalInd  === 1,
+        livestreamind:     item.livestreamInd === 1,
+        electronicgenreind: true,
         img_url:   null,
         alt_img:   null,
         use_alt:   false,
@@ -176,41 +176,35 @@ async function syncEDMTrain() {
 
 // ─── Resident Advisor ─────────────────────────────────────────────────────────
 
-const RA_QUERY = /* GraphQL */ `
-  query GET_EVENT_LISTINGS(
-    $filters: EventListingFilterInputType
-    $pageSize: Int
-    $page: Int
+const RA_EVENTS_QUERY = /* GraphQL */ `
+  query GET_EVENTS(
+    $type: EventQueryType!
+    $orderBy: PickOrderByType
+    $areaId: ID
+    $limit: Int
   ) {
-    eventListings(filters: $filters, pageSize: $pageSize, page: $page) {
-      totalResults
-      data {
+    events(type: $type, orderBy: $orderBy, areaId: $areaId, limit: $limit) {
+      id
+      title
+      date
+      startTime
+      endTime
+      images { filename type }
+      venue {
         id
-        listingDate
-        event {
-          id
-          title
-          date
-          startTime
-          endTime
-          images { filename type }
-          venue {
-            id
-            name
-            area {
-              name
-              country { name }
-            }
-          }
-          artists { id name }
-          contentUrl
+        name
+        area {
+          name
+          country { name }
         }
       }
+      artists { id name }
+      contentUrl
     }
   }
 `;
 
-async function fetchRAPage(dateFrom, dateTo, page) {
+async function fetchRAEvents({ type, orderBy, areaId, limit }) {
   const res = await fetch('https://ra.co/graphql', {
     method: 'POST',
     headers: {
@@ -219,24 +213,19 @@ async function fetchRAPage(dateFrom, dateTo, page) {
       'User-Agent':   'Mozilla/5.0 (compatible; Festify/2.0; +https://github.com/festify)',
     },
     body: JSON.stringify({
-      query: RA_QUERY,
-      variables: {
-        filters:  { dateFrom, dateTo },
-        page,
-        pageSize: RA_PAGE_SIZE,
-      },
+      query: RA_EVENTS_QUERY,
+      variables: { type, orderBy, areaId, limit },
     }),
   });
 
   if (!res.ok) throw new Error(`RA HTTP ${res.status}`);
 
   const json = await res.json();
-
   if (json.errors?.length) {
     throw new Error(`RA GraphQL error: ${json.errors[0].message}`);
   }
 
-  return json.data?.eventListings ?? null;
+  return json.data?.events ?? [];
 }
 
 function raImageUrl(images) {
@@ -246,80 +235,90 @@ function raImageUrl(images) {
 }
 
 async function syncRA() {
-  console.log('🎛️   Syncing Resident Advisor (worldwide)...');
+  console.log('🎛️   Syncing Resident Advisor...');
 
-  const { start, end } = getDateRange();
+  // eventListings currently returns empty/-1 without additional internal filters.
+  // Instead, use area-based "picks" + "today" feeds to populate events + images.
+  const areaIds = (process.env.RA_AREA_IDS ||
+    // Default: major cities (ids discovered via RA areas search)
+    '8,23,13,34,29,44,17,38,218,25,27,1,20,399,28'
+  )
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-  let page = 1;
-  let totalResults = null;
-  let fetched = 0;
+  const feeds = [
+    { type: 'PICKS', orderBy: 'THISWEEK' },
+    { type: 'PICKS', orderBy: 'THISWEEKEND' },
+    { type: 'TODAY', orderBy: null },
+  ];
+
+  const limitPerFeed = 100;
+  const seenLinks = new Set();
   let synced = 0;
+  let fetched = 0;
 
-  do {
-    let result;
-    try {
-      result = await fetchRAPage(start, end, page);
-    } catch (err) {
-      console.error(`  ✗  RA page ${page} fetch failed: ${err.message}`);
-      break;
-    }
-
-    if (!result) break;
-
-    if (totalResults === null) {
-      totalResults = result.totalResults;
-      console.log(`  Found ${totalResults} RA listings — fetching in pages of ${RA_PAGE_SIZE}...`);
-    }
-
-    const listings = result.data ?? [];
-    fetched += listings.length;
-
-    for (const listing of listings) {
-      const ev = listing.event;
-      if (!ev) continue;
-
+  for (const areaId of areaIds) {
+    for (const feed of feeds) {
+      let events;
       try {
-        const location = [ev.venue?.area?.name, ev.venue?.area?.country?.name]
-          .filter(Boolean)
-          .join(', ');
-
-        const eventData = {
-          event_name:        ev.title,
-          event_date:        ev.date?.split('T')[0] ?? ev.date,
-          event_end_date:    null,
-          event_location:    location,
-          event_venue:       ev.venue?.name || '',
-          edmtrain_link:     ev.contentUrl ? `https://ra.co${ev.contentUrl}` : null,
-          festivalInd:       false,
-          livestreamInd:     false,
-          electronicGenreInd: true,
-          img_url:  raImageUrl(ev.images),
-          alt_img:  null,
-          use_alt:  false,
-        };
-
-        const eventId = await upsertEvent(eventData);
-
-        for (const artist of ev.artists ?? []) {
-          const artistId = await upsertArtist(artist.name);
-          await linkArtistToEvent(eventId, artistId);
-        }
-
-        synced++;
+        events = await fetchRAEvents({
+          type: feed.type,
+          orderBy: feed.orderBy,
+          areaId,
+          limit: limitPerFeed,
+        });
       } catch (err) {
-        console.error(`  ✗  RA — "${ev.title}": ${err.message}`);
+        console.error(`  ✗  RA area ${areaId} (${feed.type}${feed.orderBy ? `:${feed.orderBy}` : ''}) failed: ${err.message}`);
+        continue;
       }
-    }
 
-    console.log(`  Page ${page}: ${synced} synced so far (${fetched} / ${totalResults} fetched)...`);
-    page++;
+      fetched += events.length;
 
-    if (fetched < totalResults) {
+      for (const ev of events) {
+        try {
+          const link = ev.contentUrl ? `https://ra.co${ev.contentUrl}` : null;
+          if (link && seenLinks.has(link)) continue;
+          if (link) seenLinks.add(link);
+
+          const location = [ev.venue?.area?.name, ev.venue?.area?.country?.name]
+            .filter(Boolean)
+            .join(', ');
+
+          const eventData = {
+            event_name:        ev.title,
+            event_date:        ev.date?.split('T')[0] ?? ev.date,
+            event_end_date:    null,
+            event_location:    location,
+            event_venue:       ev.venue?.name || '',
+            edmtrain_link:     link,
+            festivalind:       false,
+            livestreamind:     false,
+            electronicgenreind: true,
+            img_url:  raImageUrl(ev.images),
+            alt_img:  null,
+            use_alt:  false,
+          };
+
+          const eventId = await upsertEvent(eventData);
+
+          for (const artist of ev.artists ?? []) {
+            const artistId = await upsertArtist(artist.name);
+            await linkArtistToEvent(eventId, artistId);
+          }
+
+          synced++;
+        } catch (err) {
+          console.error(`  ✗  RA — "${ev.title}": ${err.message}`);
+        }
+      }
+
+      // Gentle pacing to avoid rate limits.
       await new Promise((r) => setTimeout(r, RA_RATE_LIMIT_MS));
     }
-  } while (fetched < totalResults);
+  }
 
-  console.log(`  ✓  Resident Advisor: ${synced} / ${totalResults} events synced\n`);
+  console.log(`  ✓  Resident Advisor: ${synced} events synced (fetched ${fetched} across ${areaIds.length} areas)\n`);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -333,10 +332,20 @@ async function main() {
     process.exit(1);
   }
 
+  supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+
   console.log(`\n🚀  Festify event sync  —  ${new Date().toISOString()}\n`);
 
-  try { await syncEDMTrain(); } catch (err) { console.error('EDMTrain sync failed:', err.message); }
-  try { await syncRA();       } catch (err) { console.error('RA sync failed:',       err.message); }
+  const args = new Set(process.argv.slice(2));
+  const runEDMTrain = args.has('--edmtrain-only') || (!args.has('--ra-only') && !args.has('--skip-edmtrain'));
+  const runRA = args.has('--ra-only') || (!args.has('--edmtrain-only') && !args.has('--skip-ra'));
+
+  if (runEDMTrain) {
+    try { await syncEDMTrain(); } catch (err) { console.error('EDMTrain sync failed:', err.message); }
+  }
+  if (runRA) {
+    try { await syncRA();       } catch (err) { console.error('RA sync failed:',       err.message); }
+  }
 
   console.log('✅  Done!');
 }

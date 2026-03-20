@@ -12,7 +12,7 @@ interface EventHeaderProps {
 
 export function EventHeader({ event }: EventHeaderProps) {
   const imageUrl =
-    (event.use_alt ? event.alt_img : event.img_url) || PLACEHOLDER_IMAGE;
+    (event.use_alt ? event.alt_img : event.img_url) || "/images/event-placeholder.svg";
 
   return (
     <section className="relative h-[60vh] min-h-[400px] flex items-end overflow-hidden">
@@ -36,7 +36,7 @@ export function EventHeader({ event }: EventHeaderProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {event.festivalInd && (
+          {event.festivalind && (
             <span className="inline-block bg-primary/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white mb-4">
               Festival
             </span>
