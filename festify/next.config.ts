@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "zdbroencbancathizkro.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "images.ra.co",
+      },
     ],
   },
 };

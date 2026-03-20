@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Calendar, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import type { Event } from "@/types/event";
 
 interface EventCardProps {
@@ -14,8 +13,8 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, index = 0 }: EventCardProps) {
-  const imageUrl =
-    (event.use_alt ? event.alt_img : event.img_url) || "/images/event-placeholder.svg";
+  const rawImageUrl = event.use_alt ? event.alt_img : event.img_url;
+  const imageUrl = normalizeImageUrl(rawImageUrl) || "/images/event-placeholder.svg";
 
   return (
     <motion.div
@@ -90,6 +89,21 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
       </Link>
     </motion.div>
   );
+}
+
+function normalizeImageUrl(url: string | null): string | null {
+  if (!url) return null;
+
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  // Some RA rows include a full URL after the CDN host prefix.
+  const raPrefix = "https://images.ra.co/";
+  if (trimmed.startsWith(raPrefix + "https://")) {
+    return trimmed.slice(raPrefix.length);
+  }
+
+  return trimmed;
 }
 
 function formatDate(dateStr: string): string {
