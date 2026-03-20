@@ -53,6 +53,11 @@ After completing any significant task:
 - User OAuth requires Authorization Code Flow; store tokens in Supabase `user_spotify_tokens` table
 - Always pass `market=US` on track endpoints
 
+### Artist image enrichment
+- `server/scripts/sync-events.js` enriches artists from Spotify when `img_url` is missing and Spotify credentials are available
+- Use `node scripts/sync-events.js --backfill-artists` to fill existing `artists.img_url = null` rows, or `--artists-only` to run only the artist backfill
+- Artist matching is intentionally conservative: exact normalized/compact matches win first, fuzzy matches need a very strong score and clear lead, and unmatched artists should keep the placeholder
+
 ### Motion conventions
 - Never animate `height: 0 → auto` — use `layout` prop or `scaleY`
 - Spring physics for interactive (press/hover): `{ type: "spring", stiffness: 400, damping: 25 }`

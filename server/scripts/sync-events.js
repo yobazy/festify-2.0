@@ -7,11 +7,15 @@
  * Usage:
  *   node scripts/sync-events.js
  *   npm run sync           (from the server/ directory)
+ *   node scripts/sync-events.js --backfill-artists
+ *   node scripts/sync-events.js --artists-only
  *
  * Required env vars (root .env or server/.env):
  *   SUPABASE_URL           Supabase project URL
  *   SUPABASE_SERVICE_KEY   Supabase service-role key (bypasses RLS for writes)
  *   EDMTRAIN_API_KEY       EDMTrain client key
+ *   SPOTIFY_CLIENT_ID      Spotify client id (optional for sync, required for artist backfill)
+ *   SPOTIFY_CLIENT_SECRET  Spotify client secret (optional for sync, required for artist backfill)
  */
 
 'use strict';
@@ -29,10 +33,13 @@ const { createClient } = require('@supabase/supabase-js');
 const DAYS_AHEAD = 90; // How far into the future to pull events
 const RA_PAGE_SIZE = 100; // Max results per RA page (their API caps at 100)
 const RA_RATE_LIMIT_MS = 600; // Pause between RA pages to avoid rate limiting
+const ARTIST_ENRICH_RATE_LIMIT_MS = 150; // Gentle pacing for Spotify artist lookups
 
 // ─── Supabase client (initialized in main after env validation) ──────────────
 
 let supabase;
+let cachedSpotifyToken;
+const attemptedArtistEnrichment = new Set();
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -43,6 +50,275 @@ function getDateRange(daysAhead = DAYS_AHEAD) {
   return { start: fmt(today), end: fmt(future) };
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function hasSpotifyCredentials() {
+  return Boolean(process.env.SPOTIFY_CLIENT_ID && process.env.SPOTIFY_CLIENT_SECRET);
+}
+
+function normalizeArtistName(name) {
+  return String(name || '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\([^)]*\)|\[[^\]]*\]|\{[^}]*\}/g, ' ')
+    .replace(/\b(feat|featuring|ft)\b.*$/g, ' ')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function compactArtistName(name) {
+  return normalizeArtistName(name).replace(/\s+/g, '');
+}
+
+function tokenizeArtistName(name) {
+  return normalizeArtistName(name).split(' ').filter(Boolean);
+}
+
+function isAmbiguousArtistName(name) {
+  const normalized = normalizeArtistName(name);
+  const tokens = tokenizeArtistName(name);
+  return normalized.length < 4 || (tokens.length === 1 && normalized.length <= 3);
+}
+
+function calculateArtistNameConfidence(sourceName, candidateName) {
+  const normalizedSource = normalizeArtistName(sourceName);
+  const normalizedCandidate = normalizeArtistName(candidateName);
+
+  if (!normalizedSource || !normalizedCandidate) return 0;
+  if (normalizedSource === normalizedCandidate) return 1;
+  if (compactArtistName(sourceName) === compactArtistName(candidateName)) return 0.97;
+
+  const sourceTokens = new Set(tokenizeArtistName(sourceName));
+  const candidateTokens = new Set(tokenizeArtistName(candidateName));
+  const sharedTokens = [...sourceTokens].filter((token) => candidateTokens.has(token));
+  const unionSize = new Set([...sourceTokens, ...candidateTokens]).size || 1;
+  let score = sharedTokens.length / unionSize;
+
+  if (
+    normalizedCandidate.startsWith(normalizedSource) ||
+    normalizedSource.startsWith(normalizedCandidate)
+  ) {
+    score = Math.max(score, 0.9);
+  }
+
+  if (
+    compactArtistName(candidateName).includes(compactArtistName(sourceName)) ||
+    compactArtistName(sourceName).includes(compactArtistName(candidateName))
+  ) {
+    score = Math.max(score, 0.88);
+  }
+
+  return Number(score.toFixed(2));
+}
+
+function shouldRetrySpotifyStatus(status) {
+  return status === 429 || status >= 500;
+}
+
+async function fetchSpotifyJson(url, options, label) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const response = await fetch(url, options);
+
+    if (response.ok) {
+      return response.json();
+    }
+
+    if (!shouldRetrySpotifyStatus(response.status) || attempt === 2) {
+      throw new Error(`${label} failed: ${response.status} ${response.statusText}`);
+    }
+
+    const retryAfter = Number(response.headers.get('retry-after'));
+    const waitMs = Number.isFinite(retryAfter)
+      ? retryAfter * 1000
+      : ARTIST_ENRICH_RATE_LIMIT_MS * (attempt + 1) * 4;
+
+    await sleep(waitMs);
+  }
+
+  throw new Error(`${label} failed`);
+}
+
+async function getSpotifyToken() {
+  if (cachedSpotifyToken && Date.now() < cachedSpotifyToken.expiresAt) {
+    return cachedSpotifyToken.token;
+  }
+
+  if (!hasSpotifyCredentials()) {
+    throw new Error('Missing Spotify credentials');
+  }
+
+  const data = await fetchSpotifyJson(
+    'https://accounts.spotify.com/api/token',
+    {
+      method: 'POST',
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(
+            `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+          ).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({ grant_type: 'client_credentials' }),
+    },
+    'Spotify auth'
+  );
+
+  const expiresInMs =
+    typeof data.expires_in === 'number'
+      ? Math.max((data.expires_in - 300) * 1000, 60_000)
+      : 55 * 60 * 1000;
+
+  cachedSpotifyToken = {
+    token: data.access_token,
+    expiresAt: Date.now() + expiresInMs,
+  };
+
+  return cachedSpotifyToken.token;
+}
+
+async function searchSpotifyArtists(artistName) {
+  const accessToken = await getSpotifyToken();
+  const url = new URL('https://api.spotify.com/v1/search');
+  url.searchParams.set('q', artistName);
+  url.searchParams.set('type', 'artist');
+  url.searchParams.set('limit', '5');
+
+  const data = await fetchSpotifyJson(
+    url.toString(),
+    { headers: { Authorization: `Bearer ${accessToken}` } },
+    'Spotify artist search'
+  );
+  return data.artists?.items ?? [];
+}
+
+function pickBestSpotifyArtistMatch(artistName, candidates) {
+  const normalizedSource = normalizeArtistName(artistName);
+  const exactCompactMatch = compactArtistName(artistName);
+  const rankedCandidates = candidates
+    .map((candidate) => ({
+      artist: candidate,
+      score: calculateArtistNameConfidence(artistName, candidate.name),
+    }))
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return (b.artist.popularity || 0) - (a.artist.popularity || 0);
+    });
+
+  const bestMatch = rankedCandidates[0] || null;
+  const secondBestMatch = rankedCandidates[1] || null;
+
+  if (!bestMatch) return null;
+
+  const normalizedCandidate = normalizeArtistName(bestMatch.artist.name);
+  const compactCandidate = compactArtistName(bestMatch.artist.name);
+  const isExactMatch =
+    normalizedCandidate === normalizedSource || compactCandidate === exactCompactMatch;
+
+  if (isAmbiguousArtistName(artistName) && !isExactMatch) {
+    return null;
+  }
+
+  if (!isExactMatch && bestMatch.score < 0.96) {
+    return null;
+  }
+
+  if (
+    !isExactMatch &&
+    secondBestMatch &&
+    secondBestMatch.score >= bestMatch.score - 0.03
+  ) {
+    return null;
+  }
+
+  return bestMatch;
+}
+
+function buildArtistUpdates(existingArtist, spotifyArtist) {
+  const updates = {};
+  const imageUrl = spotifyArtist.images?.[0]?.url || null;
+  const spotifyLink = spotifyArtist.external_urls?.spotify || null;
+
+  if (!existingArtist.img_url && imageUrl) {
+    updates.img_url = imageUrl;
+  }
+  if (!existingArtist.spotify_link && spotifyLink) {
+    updates.spotify_link = spotifyLink;
+  }
+  if (existingArtist.popularity === null && typeof spotifyArtist.popularity === 'number') {
+    updates.popularity = spotifyArtist.popularity;
+  }
+  if (
+    (!Array.isArray(existingArtist.genres) || existingArtist.genres.length === 0) &&
+    Array.isArray(spotifyArtist.genres) &&
+    spotifyArtist.genres.length > 0
+  ) {
+    updates.genres = spotifyArtist.genres;
+  }
+
+  return updates;
+}
+
+function shouldEnrichArtist(artist) {
+  return !artist.img_url;
+}
+
+async function enrichArtistFromSpotify(artist, { logPrefix = 'Artist' } = {}) {
+  if (!hasSpotifyCredentials() || !shouldEnrichArtist(artist)) {
+    return false;
+  }
+
+  if (attemptedArtistEnrichment.has(artist.artist_id)) {
+    return false;
+  }
+
+  let attemptedLookup = false;
+
+  try {
+    attemptedLookup = true;
+    attemptedArtistEnrichment.add(artist.artist_id);
+    const candidates = await searchSpotifyArtists(artist.artist_name);
+    const match = pickBestSpotifyArtistMatch(artist.artist_name, candidates);
+
+    if (!match) {
+      console.log(`  -  ${logPrefix}: no confident Spotify match for "${artist.artist_name}"`);
+      return false;
+    }
+
+    const updates = buildArtistUpdates(artist, match.artist);
+    if (Object.keys(updates).length === 0) {
+      return false;
+    }
+
+    const { error } = await supabase
+      .from('artists')
+      .update(updates)
+      .eq('artist_id', artist.artist_id);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    console.log(
+      `  ✓  ${logPrefix}: enriched "${artist.artist_name}" from Spotify (score ${match.score.toFixed(2)})`
+    );
+    return true;
+  } catch (err) {
+    attemptedArtistEnrichment.delete(artist.artist_id);
+    console.error(`  ✗  ${logPrefix}: "${artist.artist_name}" enrichment failed: ${err.message}`);
+    return false;
+  } finally {
+    if (attemptedLookup) {
+      await sleep(ARTIST_ENRICH_RATE_LIMIT_MS);
+    }
+  }
+}
+
 // ─── Supabase helpers ─────────────────────────────────────────────────────────
 
 /**
@@ -51,19 +327,23 @@ function getDateRange(daysAhead = DAYS_AHEAD) {
 async function upsertArtist(name) {
   const { data: existing } = await supabase
     .from('artists')
-    .select('artist_id')
+    .select('artist_id, artist_name, img_url, genres, popularity, spotify_link')
     .ilike('artist_name', name)
     .maybeSingle();
 
-  if (existing) return existing.artist_id;
+  if (existing) {
+    await enrichArtistFromSpotify(existing);
+    return existing.artist_id;
+  }
 
   const { data, error } = await supabase
     .from('artists')
     .insert({ artist_name: name })
-    .select('artist_id')
+    .select('artist_id, artist_name, img_url, genres, popularity, spotify_link')
     .single();
 
   if (error) throw new Error(`upsertArtist("${name}"): ${error.message}`);
+  await enrichArtistFromSpotify(data);
   return data.artist_id;
 }
 
@@ -321,12 +601,66 @@ async function syncRA() {
   console.log(`  ✓  Resident Advisor: ${synced} events synced (fetched ${fetched} across ${areaIds.length} areas)\n`);
 }
 
+async function backfillArtists() {
+  if (!hasSpotifyCredentials()) {
+    throw new Error('Artist backfill requires SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET');
+  }
+
+  console.log('🖼️   Backfilling artist images from Spotify...');
+
+  let lastArtistId = 0;
+  let processed = 0;
+  let enriched = 0;
+  let unchanged = 0;
+
+  while (true) {
+    const { data: artists, error } = await supabase
+      .from('artists')
+      .select('artist_id, artist_name, img_url, genres, popularity, spotify_link')
+      .is('img_url', null)
+      .gt('artist_id', lastArtistId)
+      .order('artist_id', { ascending: true })
+      .limit(100);
+
+    if (error) {
+      throw new Error(`Artist backfill query failed: ${error.message}`);
+    }
+    if (!artists.length) break;
+
+    for (const artist of artists) {
+      processed++;
+      lastArtistId = artist.artist_id;
+
+      const didEnrich = await enrichArtistFromSpotify(artist, { logPrefix: 'Backfill' });
+      if (didEnrich) enriched++;
+      else unchanged++;
+    }
+  }
+
+  console.log(
+    `  ✓  Artist backfill: ${enriched} enriched / ${processed} checked (${unchanged} unchanged)\n`
+  );
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const missing = ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY', 'EDMTRAIN_API_KEY'].filter(
-    (k) => !process.env[k]
-  );
+  const args = new Set(process.argv.slice(2));
+  const runEDMTrain =
+    !args.has('--artists-only') &&
+    (args.has('--edmtrain-only') || (!args.has('--ra-only') && !args.has('--skip-edmtrain')));
+  const runRA =
+    !args.has('--artists-only') &&
+    (args.has('--ra-only') || (!args.has('--edmtrain-only') && !args.has('--skip-ra')));
+  const runArtistBackfill = args.has('--backfill-artists') || args.has('--artists-only');
+
+  const requiredEnv = ['SUPABASE_URL', 'SUPABASE_SERVICE_KEY'];
+  if (runEDMTrain) requiredEnv.push('EDMTRAIN_API_KEY');
+  if (runArtistBackfill) {
+    requiredEnv.push('SPOTIFY_CLIENT_ID', 'SPOTIFY_CLIENT_SECRET');
+  }
+
+  const missing = requiredEnv.filter((k) => !process.env[k]);
   if (missing.length) {
     console.error(`Missing required env vars: ${missing.join(', ')}`);
     process.exit(1);
@@ -336,15 +670,18 @@ async function main() {
 
   console.log(`\n🚀  Festify event sync  —  ${new Date().toISOString()}\n`);
 
-  const args = new Set(process.argv.slice(2));
-  const runEDMTrain = args.has('--edmtrain-only') || (!args.has('--ra-only') && !args.has('--skip-edmtrain'));
-  const runRA = args.has('--ra-only') || (!args.has('--edmtrain-only') && !args.has('--skip-ra'));
+  if (!hasSpotifyCredentials()) {
+    console.log('ℹ️   Spotify credentials missing: artist image enrichment disabled.\n');
+  }
 
   if (runEDMTrain) {
     try { await syncEDMTrain(); } catch (err) { console.error('EDMTrain sync failed:', err.message); }
   }
   if (runRA) {
     try { await syncRA();       } catch (err) { console.error('RA sync failed:',       err.message); }
+  }
+  if (runArtistBackfill) {
+    try { await backfillArtists(); } catch (err) { console.error('Artist backfill failed:', err.message); }
   }
 
   console.log('✅  Done!');
