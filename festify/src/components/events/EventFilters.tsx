@@ -3,7 +3,7 @@
 import { SearchInput } from "@/components/ui/SearchInput";
 import { cn } from "@/lib/utils";
 
-type EventTypeFilter = "all" | "festival" | "electronic" | "livestream";
+type EventTypeFilter = "all" | "festival" | "electronic";
 type EventViewMode = "all" | "recommended" | "saved";
 
 interface EventFiltersProps {
@@ -53,7 +53,6 @@ export function EventFilters({
     { value: "all", label: "All events" },
     { value: "festival", label: "Festivals" },
     { value: "electronic", label: "Electronic" },
-    { value: "livestream", label: "Livestreams" },
   ];
 
   return (

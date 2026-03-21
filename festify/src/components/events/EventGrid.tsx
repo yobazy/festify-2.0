@@ -34,13 +34,11 @@ export function EventGrid({ events }: EventGridProps) {
   const from = searchParams.get("from") ?? "";
   const to = searchParams.get("to") ?? "";
   const locationParam = searchParams.get("location") ?? "";
+  const typeParam = searchParams.get("type");
   const type =
-    (searchParams.get("type") as
-      | "all"
-      | "festival"
-      | "electronic"
-      | "livestream"
-      | null) ?? "all";
+    typeParam === "festival" || typeParam === "electronic"
+      ? typeParam
+      : "all";
 
   const eventsWithLocation = useMemo(
     () => events.filter((event) => hasEventLocation(event)),
@@ -84,7 +82,6 @@ export function EventGrid({ events }: EventGridProps) {
 
     return filteredByDate.filter((event) => {
       if (type === "festival") return event.festivalind;
-      if (type === "livestream") return event.livestreamind;
       if (type === "electronic") return event.electronicgenreind;
       return true;
     });

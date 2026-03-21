@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   CalendarRange,
   Headphones,
-  RadioTower,
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -33,13 +32,6 @@ export function DiscoveryPaths() {
       description: "Start with artists you can preview or open in Spotify.",
       icon: Headphones,
       accent: "text-green-500",
-    },
-    {
-      href: "/events?type=livestream",
-      title: "Livestreams",
-      description: "An easy way to find something new tonight.",
-      icon: RadioTower,
-      accent: "text-white",
     },
   ];
 

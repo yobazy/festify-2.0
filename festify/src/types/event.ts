@@ -9,7 +9,6 @@ export interface Event {
   event_venue: string;
   edmtrain_link: string | null;
   festivalind: boolean;
-  livestreamind: boolean;
   electronicgenreind: boolean;
   img_url: string | null;
   alt_img: string | null;

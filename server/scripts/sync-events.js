@@ -30,7 +30,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
-const DAYS_AHEAD = 90; // How far into the future to pull events
+const DAYS_AHEAD = 120; // How far into the future to pull events (~4 months)
 const RA_PAGE_SIZE = 100; // Max results per RA page (their API caps at 100)
 const RA_RATE_LIMIT_MS = 600; // Pause between RA pages to avoid rate limiting
 const ARTIST_ENRICH_RATE_LIMIT_MS = 150; // Gentle pacing for Spotify artist lookups
@@ -431,7 +431,6 @@ async function syncEDMTrain() {
         event_venue:       item.location?.name  || '',
         edmtrain_link:     item.link            || null,
         festivalind:       item.festivalInd  === 1,
-        livestreamind:     item.livestreamInd === 1,
         electronicgenreind: true,
         img_url:   null,
         alt_img:   null,
@@ -573,7 +572,6 @@ async function syncRA() {
             event_venue:       ev.venue?.name || '',
             edmtrain_link:     link,
             festivalind:       false,
-            livestreamind:     false,
             electronicgenreind: true,
             img_url:  raImageUrl(ev.images),
             alt_img:  null,

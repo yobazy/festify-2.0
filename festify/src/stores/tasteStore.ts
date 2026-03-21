@@ -19,7 +19,6 @@ type StoredEvent = Pick<
   | "event_location"
   | "event_venue"
   | "festivalind"
-  | "livestreamind"
   | "electronicgenreind"
   | "img_url"
   | "alt_img"
@@ -99,7 +98,6 @@ export const useTasteStore = create<TasteState>()(
                 event_location: event.event_location,
                 event_venue: event.event_venue,
                 festivalind: event.festivalind,
-                livestreamind: event.livestreamind,
                 electronicgenreind: event.electronicgenreind,
                 img_url: event.img_url,
                 alt_img: event.alt_img,
