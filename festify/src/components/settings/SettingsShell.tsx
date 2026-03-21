@@ -15,7 +15,7 @@ const settingsLinks = [
   {
     href: "/settings/music",
     label: "Music",
-    description: "Spotify connection and saved playlists",
+    description: "Spotify connection and sync",
   },
 ];
 
@@ -37,8 +37,7 @@ export function SettingsShell({ children, userEmail }: SettingsShellProps) {
               Your Festify setup
             </h1>
             <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-              Manage your account, connect Spotify, and keep a library of
-              playlists you want to revisit.
+              Manage your account and Spotify connection.
             </p>
           </div>
 

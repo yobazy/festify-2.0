@@ -40,6 +40,11 @@ const ARTIST_ENRICH_RATE_LIMIT_MS = 150; // Gentle pacing for Spotify artist loo
 let supabase;
 let cachedSpotifyToken;
 const attemptedArtistEnrichment = new Set();
+const eventPopularityTiers = [
+  { minimum: 85, label: 'Peak draw' },
+  { minimum: 70, label: 'Hot ticket' },
+  { minimum: 55, label: 'On the rise' },
+];
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -118,6 +123,52 @@ function calculateArtistNameConfidence(sourceName, candidateName) {
 
 function shouldRetrySpotifyStatus(status) {
   return status === 429 || status >= 500;
+}
+
+function getDaysAway(dateString) {
+  const target = new Date(`${dateString}T00:00:00`);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function calculateEventPopularityScore(event, artists) {
+  const artistPopularities = (artists || [])
+    .map((artist) => artist?.popularity || 0)
+    .filter((value) => value > 0)
+    .sort((a, b) => b - a);
+
+  const headlinerScore = artistPopularities[0] || 0;
+  const supportActs = artistPopularities.slice(1, 4);
+  const supportAverage = supportActs.length
+    ? supportActs.reduce((sum, value) => sum + value, 0) / supportActs.length
+    : 0;
+  const notableArtists = artistPopularities.filter((value) => value >= 55).length;
+  const lineupDepthScore = Math.min(notableArtists * 4 + Math.min(artistPopularities.length, 7), 15);
+  const festivalBonus = event.festivalind ? 8 : 0;
+  const daysAway = getDaysAway(event.event_date);
+  const timeBonus =
+    daysAway < 0 ? 0 :
+    daysAway <= 14 ? 7 :
+    daysAway <= 30 ? 5 :
+    daysAway <= 60 ? 3 :
+    0;
+
+  return Math.round(
+    Math.min(
+      100,
+      headlinerScore * 0.6 +
+      supportAverage * 0.25 +
+      lineupDepthScore +
+      festivalBonus +
+      timeBonus
+    )
+  );
+}
+
+function getEventPopularityTier(score) {
+  return eventPopularityTiers.find((tier) => score >= tier.minimum)?.label || 'Discovery pick';
 }
 
 async function fetchSpotifyJson(url, options, label) {
@@ -420,17 +471,21 @@ async function syncEDMTrain() {
 
   for (const item of json.data) {
     try {
-      if (!item?.name) {
+      // Build event name: use explicit name, or fall back to artist names
+      const artistNames = (item.artistList ?? []).map(a => a.name).filter(Boolean);
+      const eventName = item.name
+        || (artistNames.length ? artistNames.join(', ') : null);
+      if (!eventName) {
         throw new Error('Missing event name');
       }
       const eventData = {
-        event_name:        item.name,
+        event_name:        eventName,
         event_date:        item.date,
         event_end_date:    item.endDate   || null,
-        event_location:    item.location?.metro || item.location?.state || '',
-        event_venue:       item.location?.name  || '',
+        event_location:    item.venue?.location || item.venue?.state || '',
+        event_venue:       item.venue?.name     || '',
         edmtrain_link:     item.link            || null,
-        festivalind:       item.festivalInd  === 1,
+        festivalind:       item.festivalInd === true,
         electronicgenreind: true,
         img_url:   null,
         alt_img:   null,
@@ -439,7 +494,7 @@ async function syncEDMTrain() {
 
       const eventId = await upsertEvent(eventData);
 
-      for (const artist of item.artists ?? []) {
+      for (const artist of item.artistList ?? []) {
         const artistId = await upsertArtist(artist.name);
         await linkArtistToEvent(eventId, artistId);
       }
@@ -640,6 +695,61 @@ async function backfillArtists() {
   );
 }
 
+async function refreshEventPopularity() {
+  console.log('📈  Refreshing event popularity...');
+
+  const [{ data: events, error: eventsError }, { data: gigs, error: gigsError }] =
+    await Promise.all([
+      supabase
+        .from('events')
+        .select('event_id, event_date, festivalind'),
+      supabase
+        .from('gigs')
+        .select('event_id, artists(popularity)'),
+    ]);
+
+  if (eventsError) {
+    throw new Error(`Event popularity query failed: ${eventsError.message}`);
+  }
+
+  if (gigsError) {
+    throw new Error(`Gig popularity query failed: ${gigsError.message}`);
+  }
+
+  const artistsByEvent = new Map();
+  for (const row of gigs || []) {
+    const artists = artistsByEvent.get(row.event_id) || [];
+    if (row.artists) {
+      artists.push(row.artists);
+    }
+    artistsByEvent.set(row.event_id, artists);
+  }
+
+  let updated = 0;
+  for (const event of events || []) {
+    const score = calculateEventPopularityScore(
+      event,
+      artistsByEvent.get(event.event_id) || []
+    );
+    const tier = getEventPopularityTier(score);
+    const { error } = await supabase
+      .from('events')
+      .update({
+        popularity_score: score,
+        popularity_tier: tier,
+      })
+      .eq('event_id', event.event_id);
+
+    if (error) {
+      throw new Error(`Event ${event.event_id} popularity update failed: ${error.message}`);
+    }
+
+    updated++;
+  }
+
+  console.log(`  ✓  Event popularity refreshed for ${updated} events\n`);
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -680,6 +790,9 @@ async function main() {
   }
   if (runArtistBackfill) {
     try { await backfillArtists(); } catch (err) { console.error('Artist backfill failed:', err.message); }
+  }
+  if (runEDMTrain || runRA || runArtistBackfill) {
+    try { await refreshEventPopularity(); } catch (err) { console.error('Event popularity refresh failed:', err.message); }
   }
 
   console.log('✅  Done!');

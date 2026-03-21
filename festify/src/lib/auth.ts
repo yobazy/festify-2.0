@@ -13,12 +13,20 @@ export async function getCurrentUser(): Promise<User | null> {
   return user;
 }
 
-export async function requireUser() {
+export async function requireUser(nextPath = "/settings") {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth/login?next=/settings");
+    redirect(`/auth/login?next=${encodeURIComponent(getSafeNextPath(nextPath))}`);
   }
 
   return user;
+}
+
+function getSafeNextPath(nextPath: string) {
+  if (!nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return "/settings";
+  }
+
+  return nextPath;
 }

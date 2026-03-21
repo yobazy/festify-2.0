@@ -46,6 +46,8 @@ After completing any significant task:
 - Auth exists but gates nothing — no registration flow, no user-gated features
 - EventLineup is a flat pill grid with no hierarchy; popularity score on artist record can drive tier system
 - Festival Dust is the main scheduling competitor; Festify's defensible position is the audio/playlist layer
+- `/playlists` should behave as a public discovery page first and a personal saved library second
+- Event discovery ranking should come from lineup strength first: headliner popularity carries the most weight, then support-act average, lineup depth, festival bonus, and near-term timing
 
 ### Spotify Integration
 - `festify/src/lib/spotify.ts` has: client credentials token fetch, `searchPlaylists`, `searchArtist`, `getArtistTopTracks`

@@ -2,12 +2,13 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, hasAdminCredentials } from "@/lib/supabase/admin";
-import type { SavedPlaylist } from "@/types/playlist";
+import type { SavedPlaylist, SpotifyPlaylist } from "@/types/playlist";
 
 export const SPOTIFY_STATE_COOKIE = "festify_spotify_state";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 const SPOTIFY_ACCOUNTS_BASE = "https://accounts.spotify.com";
+let cachedAppSpotifyToken: { token: string; expiresAt: number } | null = null;
 const SPOTIFY_SCOPES = [
   "playlist-modify-private",
   "playlist-modify-public",
@@ -98,6 +99,37 @@ async function requestSpotifyToken(body: URLSearchParams) {
   }
 
   return (await response.json()) as SpotifyTokenResponse;
+}
+
+function buildPlaylistSearchQuery(query: string, appendFestival = true) {
+  let searchQuery = query;
+
+  if (
+    appendFestival &&
+    !searchQuery.toLowerCase().includes("festival") &&
+    !searchQuery.toLowerCase().includes("fest")
+  ) {
+    searchQuery += " festival";
+  }
+
+  return searchQuery;
+}
+
+async function getAppSpotifyAccessToken() {
+  if (cachedAppSpotifyToken && Date.now() < cachedAppSpotifyToken.expiresAt) {
+    return cachedAppSpotifyToken.token;
+  }
+
+  const token = await requestSpotifyToken(
+    new URLSearchParams({ grant_type: "client_credentials" })
+  );
+
+  cachedAppSpotifyToken = {
+    token: token.access_token,
+    expiresAt: Date.now() + Math.max((token.expires_in - 300) * 1000, 60_000),
+  };
+
+  return cachedAppSpotifyToken.token;
 }
 
 async function getSpotifyTokenRow(userId: string) {
@@ -317,6 +349,48 @@ export async function getSpotifyConnection(userId: string) {
   }
 
   return data;
+}
+
+export async function searchPlaylistsForQuery(
+  query: string,
+  options?: {
+    appendFestival?: boolean;
+    limit?: number;
+  }
+) {
+  const accessToken = await getAppSpotifyAccessToken();
+  const searchQuery = buildPlaylistSearchQuery(
+    query,
+    options?.appendFestival ?? true
+  );
+  const limit = options?.limit ?? 3;
+  const url = new URL(`${SPOTIFY_API_BASE}/search`);
+  url.searchParams.set("q", searchQuery);
+  url.searchParams.set("type", "playlist");
+  url.searchParams.set("limit", String(limit));
+  url.searchParams.set("market", "US");
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    next: {
+      revalidate: 60 * 30,
+    },
+  });
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Spotify playlist search failed: ${message}`);
+  }
+
+  const data = (await response.json()) as {
+    playlists?: { items?: Array<SpotifyPlaylist | null> };
+  };
+
+  return (data.playlists?.items ?? []).filter(
+    (playlist): playlist is SpotifyPlaylist => Boolean(playlist)
+  );
 }
 
 export async function disconnectSpotifyConnection(userId: string) {

@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/events", label: "Events" },
   { href: "/artists", label: "Artists" },
+  { href: "/playlists", label: "Playlists" },
 ];
 
 interface NavbarProps {

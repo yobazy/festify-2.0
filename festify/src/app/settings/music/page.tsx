@@ -3,10 +3,7 @@ import Link from "next/link";
 import { disconnectSpotify } from "@/app/settings/actions";
 import { requireUser } from "@/lib/auth";
 import { hasAdminCredentials } from "@/lib/supabase/admin";
-import {
-  getSpotifyConnection,
-  listSavedPlaylistsForUser,
-} from "@/lib/spotify-server";
+import { getSpotifyConnection } from "@/lib/spotify-server";
 
 interface MusicSettingsPageProps {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -37,10 +34,7 @@ export default async function MusicSettingsPage({
     : resolvedSearchParams?.spotify ?? null;
   const message = getStatusMessage(spotifyStatus);
   const spotifySyncAvailable = hasAdminCredentials();
-  const [spotifyConnection, savedPlaylists] = await Promise.all([
-    getSpotifyConnection(user.id),
-    listSavedPlaylistsForUser(user.id),
-  ]);
+  const spotifyConnection = await getSpotifyConnection(user.id);
 
   return (
     <section className="space-y-6">
@@ -49,8 +43,8 @@ export default async function MusicSettingsPage({
           <div>
             <h2 className="font-brand text-2xl text-white">Music</h2>
             <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-              Connect Spotify to mirror saved playlists there, or just keep a
-              Festify library you can return to later.
+              Connect Spotify so playlists you save from artist pages can follow
+              there too.
             </p>
           </div>
 
@@ -96,11 +90,13 @@ export default async function MusicSettingsPage({
           </div>
 
           {spotifyConnection && spotifyConnection.spotify_avatar_url ? (
-            <div className="h-12 w-12 overflow-hidden rounded-full border border-white/10">
-              <img
+            <div className="relative h-12 w-12 overflow-hidden rounded-full border border-white/10">
+              <Image
                 src={spotifyConnection.spotify_avatar_url}
                 alt="Spotify profile avatar"
-                className="h-full w-full object-cover"
+                fill
+                sizes="48px"
+                className="object-cover"
               />
             </div>
           ) : null}
@@ -111,71 +107,23 @@ export default async function MusicSettingsPage({
             ? "Spotify OAuth is disabled until the server-side Supabase service key is available in the app environment."
             : spotifyConnection
             ? `Connected as ${spotifyConnection.spotify_display_name ?? "your Spotify account"}.`
-            : "Saved playlists stay inside Festify until you connect Spotify."}
+            : "Connect Spotify to follow future playlist saves from Festify."}
         </p>
-      </div>
 
-      <div className="glass rounded-3xl border border-white/5 p-6 sm:p-8">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
-              Festify library
-            </p>
-            <h3 className="mt-2 text-lg font-medium text-white">
-              Saved playlists
-            </h3>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {savedPlaylists.length} playlist{savedPlaylists.length === 1 ? "" : "s"}
+        <div className="mt-6 rounded-2xl border border-white/5 bg-white/5 p-4">
+          <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
+            Playlist library
           </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Saved playlists now live on the dedicated Playlists page.
+          </p>
+          <Link
+            href="/playlists"
+            className="mt-4 inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/5"
+          >
+            Open playlists
+          </Link>
         </div>
-
-        {savedPlaylists.length === 0 ? (
-          <p className="mt-6 text-sm text-muted-foreground">
-            Nothing here yet. Save a playlist from any artist page to start your
-            library.
-          </p>
-        ) : (
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {savedPlaylists.map((playlist) => (
-              <a
-                key={playlist.id}
-                href={playlist.spotify_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-3xl border border-white/5 bg-white/5 p-4 transition-colors hover:border-white/10 hover:bg-white/8"
-              >
-                <div className="flex gap-4">
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-white/5">
-                    {playlist.image_url ? (
-                      <Image
-                        src={playlist.image_url}
-                        alt={playlist.name}
-                        fill
-                        sizes="80px"
-                        className="object-cover"
-                      />
-                    ) : null}
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">
-                      {playlist.name}
-                    </p>
-                    <p className="mt-1 truncate text-xs text-muted-foreground">
-                      {playlist.owner_name ?? "Spotify playlist"}
-                    </p>
-                    {playlist.artist_name ? (
-                      <p className="mt-3 text-xs uppercase tracking-[0.18em] text-primary/80">
-                        From {playlist.artist_name}
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );

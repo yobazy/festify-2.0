@@ -1,17 +1,11 @@
 import Link from "next/link";
-import { Music2, UserRound, Sparkles } from "lucide-react";
+import { Music2, UserRound } from "lucide-react";
 import { requireUser } from "@/lib/auth";
-import {
-  getSpotifyConnection,
-  listSavedPlaylistsForUser,
-} from "@/lib/spotify-server";
+import { getSpotifyConnection } from "@/lib/spotify-server";
 
 export default async function SettingsOverviewPage() {
   const user = await requireUser();
-  const [spotifyConnection, savedPlaylists] = await Promise.all([
-    getSpotifyConnection(user.id),
-    listSavedPlaylistsForUser(user.id),
-  ]);
+  const spotifyConnection = await getSpotifyConnection(user.id);
 
   const cards = [
     {
@@ -25,17 +19,10 @@ export default async function SettingsOverviewPage() {
       href: "/settings/music",
       icon: Music2,
       title: "Music",
-      description: "Manage Spotify sync and saved playlists.",
+      description: "Manage Spotify connection and playlist sync.",
       meta: spotifyConnection
         ? "Spotify connected"
         : "Spotify not connected yet",
-    },
-    {
-      href: "/settings/music",
-      icon: Sparkles,
-      title: "Saved playlists",
-      description: "Your running list of playlists saved from artist pages.",
-      meta: `${savedPlaylists.length} saved`,
     },
   ];
 
@@ -44,12 +31,11 @@ export default async function SettingsOverviewPage() {
       <div className="glass rounded-3xl border border-white/5 p-6 sm:p-8">
         <h2 className="font-brand text-2xl text-white">Overview</h2>
         <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-          This is your shortcut into account controls, Spotify sync, and the
-          playlists you save while exploring artists.
+          This is your shortcut into account controls and Spotify sync.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         {cards.map((card) => {
           const Icon = card.icon;
 
