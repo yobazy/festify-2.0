@@ -10,18 +10,26 @@ export async function getSpotifyToken(): Promise<string> {
 }
 
 export async function searchPlaylists(
-  eventName: string,
-  accessToken: string
+  query: string,
+  accessToken: string,
+  options?: {
+    appendFestival?: boolean;
+    limit?: number;
+  }
 ): Promise<SpotifyPlaylist[]> {
-  let query = eventName;
+  let searchQuery = query;
+  const shouldAppendFestival = options?.appendFestival ?? true;
+
   if (
-    !query.toLowerCase().includes("festival") &&
-    !query.toLowerCase().includes("fest")
+    shouldAppendFestival &&
+    !searchQuery.toLowerCase().includes("festival") &&
+    !searchQuery.toLowerCase().includes("fest")
   ) {
-    query += " festival";
+    searchQuery += " festival";
   }
 
-  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=playlist&limit=15`;
+  const limit = options?.limit ?? 15;
+  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchQuery)}&type=playlist&limit=${limit}`;
 
   const response = await fetch(url, {
     headers: { Authorization: `Bearer ${accessToken}` },

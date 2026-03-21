@@ -4,12 +4,30 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+function getSafeRedirectPath(nextPath: FormDataEntryValue | null) {
+  if (typeof nextPath !== "string") {
+    return "/";
+  }
+
+  if (
+    !nextPath.startsWith("/") ||
+    nextPath.startsWith("//") ||
+    nextPath.includes("\\") ||
+    nextPath.includes("://")
+  ) {
+    return "/";
+  }
+
+  return nextPath;
+}
+
 export async function signIn(
   _prevState: { error: string } | null,
   formData: FormData
 ) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const nextPath = getSafeRedirectPath(formData.get("next"));
 
   const supabase = await createClient();
 
@@ -19,7 +37,7 @@ export async function signIn(
     return { error: error.message };
   }
 
-  redirect("/");
+  redirect(nextPath);
 }
 
 export async function signUp(
@@ -55,4 +73,10 @@ export async function signUp(
   return {
     success: "Check your email to confirm your account, then sign in.",
   };
+}
+
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
 }

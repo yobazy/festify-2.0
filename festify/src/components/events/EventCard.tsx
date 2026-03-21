@@ -6,6 +6,7 @@ import { Calendar, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SaveEventButton } from "@/components/taste/SaveEventButton";
+import { getEventLocationLabel } from "@/lib/event-data";
 import type { Event } from "@/types/event";
 
 interface EventCardProps {
@@ -16,6 +17,7 @@ interface EventCardProps {
 export function EventCard({ event, index = 0 }: EventCardProps) {
   const rawImageUrl = event.use_alt ? event.alt_img : event.img_url;
   const imageUrl = normalizeImageUrl(rawImageUrl) || "/images/event-placeholder.svg";
+  const locationLabel = getEventLocationLabel(event) ?? "Location TBA";
 
   return (
     <motion.div
@@ -77,10 +79,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                 <MapPin size={14} className="shrink-0" />
-                <span className="truncate">
-                  {event.event_venue}
-                  {event.event_location && `, ${event.event_location}`}
-                </span>
+                <span className="truncate">{locationLabel}</span>
               </div>
 
               {event.artists && event.artists.length > 0 && (

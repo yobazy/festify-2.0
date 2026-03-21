@@ -30,3 +30,27 @@ export function attachArtistsToEvents(
     artists: artistsByEvent.get(event.event_id) ?? [],
   }));
 }
+
+export function getEventLocationLabel(
+  event: Pick<Event, "event_location" | "event_venue">
+) {
+  const venue = normalizeEventText(event.event_venue);
+  const location = normalizeEventText(event.event_location);
+
+  if (venue && location) {
+    return `${venue}, ${location}`;
+  }
+
+  return venue ?? location;
+}
+
+export function hasEventLocation(
+  event: Pick<Event, "event_location" | "event_venue">
+) {
+  return Boolean(getEventLocationLabel(event));
+}
+
+function normalizeEventText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}

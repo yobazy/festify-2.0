@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { getEventLocationLabel, hasEventLocation } from "@/lib/event-data";
 import type { Event } from "@/types/event";
 
 interface FeaturedEventsProps {
@@ -14,7 +15,9 @@ interface FeaturedEventsProps {
 }
 
 export function FeaturedEvents({ events }: FeaturedEventsProps) {
-  if (events.length === 0) return null;
+  const featuredEvents = events.filter((event) => hasEventLocation(event)).slice(0, 6);
+
+  if (featuredEvents.length === 0) return null;
 
   return (
     <section className="relative py-20 px-4">
@@ -29,7 +32,7 @@ export function FeaturedEvents({ events }: FeaturedEventsProps) {
         </AnimatedSection>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.slice(0, 6).map((event, i) => (
+          {featuredEvents.map((event, i) => (
             <AnimatedSection key={event.event_id} delay={i * 0.1}>
               <Link href={`/events/${event.event_id}`}>
                 <GlassCard
@@ -63,9 +66,7 @@ export function FeaturedEvents({ events }: FeaturedEventsProps) {
                     </h3>
                     <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                       <MapPin size={14} />
-                      <span>
-                        {event.event_venue}, {event.event_location}
-                      </span>
+                      <span>{getEventLocationLabel(event) ?? "Location TBA"}</span>
                     </div>
                   </div>
                 </GlassCard>

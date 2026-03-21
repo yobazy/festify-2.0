@@ -5,6 +5,7 @@ import { EventCard } from "./EventCard";
 import { EventFilters } from "./EventFilters";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
+import { hasEventLocation } from "@/lib/event-data";
 import { Button } from "@/components/ui/Button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -32,6 +33,7 @@ export function EventGrid({ events }: EventGridProps) {
 
   const from = searchParams.get("from") ?? "";
   const to = searchParams.get("to") ?? "";
+  const locationParam = searchParams.get("location") ?? "";
   const type =
     (searchParams.get("type") as
       | "all"
@@ -40,17 +42,42 @@ export function EventGrid({ events }: EventGridProps) {
       | "livestream"
       | null) ?? "all";
 
-  const filteredByDate = useMemo(() => {
-    if (!from && !to) return events;
+  const eventsWithLocation = useMemo(
+    () => events.filter((event) => hasEventLocation(event)),
+    [events]
+  );
 
-    return events.filter((e) => {
+  const locationOptions = useMemo(() => {
+    const uniqueLocations = new Set<string>();
+
+    eventsWithLocation.forEach((event) => {
+      const normalizedLocation = normalizeLocation(event.event_location);
+      if (normalizedLocation) {
+        uniqueLocations.add(normalizedLocation);
+      }
+    });
+
+    return Array.from(uniqueLocations).sort((a, b) => a.localeCompare(b));
+  }, [eventsWithLocation]);
+
+  const location = useMemo(() => {
+    const normalizedLocation = normalizeLocation(locationParam);
+    return normalizedLocation && locationOptions.includes(normalizedLocation)
+      ? normalizedLocation
+      : "";
+  }, [locationOptions, locationParam]);
+
+  const filteredByDate = useMemo(() => {
+    if (!from && !to) return eventsWithLocation;
+
+    return eventsWithLocation.filter((e) => {
       const eventDate = getDateFilterValue(e.event_date);
       if (!eventDate) return false;
       if (from && eventDate < from) return false;
       if (to && eventDate > to) return false;
       return true;
     });
-  }, [events, from, to]);
+  }, [eventsWithLocation, from, to]);
 
   const filteredByType = useMemo(() => {
     if (type === "all") return filteredByDate;
@@ -63,12 +90,23 @@ export function EventGrid({ events }: EventGridProps) {
     });
   }, [filteredByDate, type]);
 
+  const filteredByLocation = useMemo(() => {
+    if (!location) return filteredByType;
+
+    const selectedLocation = location.toLowerCase();
+
+    return filteredByType.filter((event) => {
+      const eventLocation = normalizeLocation(event.event_location);
+      return eventLocation?.toLowerCase() === selectedLocation;
+    });
+  }, [filteredByType, location]);
+
   const filteredByViewMode = useMemo(() => {
-    if (viewMode === "all") return filteredByType;
+    if (viewMode === "all") return filteredByLocation;
 
     if (viewMode === "saved") {
       const savedIds = new Set(savedEvents.map((event) => event.event_id));
-      return filteredByType.filter((event) => savedIds.has(event.event_id));
+      return filteredByLocation.filter((event) => savedIds.has(event.event_id));
     }
 
     const followedIds = new Set(
@@ -78,7 +116,7 @@ export function EventGrid({ events }: EventGridProps) {
       preferredGenres.map((genre) => genre.toLowerCase())
     );
 
-    return [...filteredByType]
+    return [...filteredByLocation]
       .map((event) => ({
         event,
         score: scoreEvent(event, followedIds, normalizedGenres),
@@ -86,7 +124,7 @@ export function EventGrid({ events }: EventGridProps) {
       .filter((entry) => entry.score > 0)
       .sort((a, b) => b.score - a.score)
       .map((entry) => entry.event);
-  }, [filteredByType, followedArtists, preferredGenres, savedEvents, viewMode]);
+  }, [filteredByLocation, followedArtists, preferredGenres, savedEvents, viewMode]);
 
   const filtered = useMemo(() => {
     if (!debouncedQuery) return filteredByViewMode;
@@ -121,7 +159,7 @@ export function EventGrid({ events }: EventGridProps) {
   }, [paginated]);
 
   const hasActiveFilters = Boolean(
-    from || to || type !== "all" || query || viewMode !== "all"
+    from || to || location || type !== "all" || query || viewMode !== "all"
   );
   const hasTasteProfile =
     followedArtists.length > 0 ||
@@ -136,6 +174,9 @@ export function EventGrid({ events }: EventGridProps) {
           setQuery(q);
           setCurrentPage(1);
         }}
+        location={location}
+        locationOptions={locationOptions}
+        onLocationChange={(value) => updateSearchParam("location", value)}
         from={from}
         to={to}
         onFromChange={(value) => updateSearchParam("from", value)}
@@ -280,6 +321,11 @@ function getDateFilterValue(dateStr: string) {
   if (Number.isNaN(parsed.getTime())) return null;
 
   return formatDateInput(parsed);
+}
+
+function normalizeLocation(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
 }
 
 function scoreEvent(

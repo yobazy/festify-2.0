@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { ArtistHero } from "@/components/artist-detail/ArtistHero";
+import { ArtistPlaylists } from "@/components/artist-detail/ArtistPlaylists";
 import { ArtistTopTracks } from "@/components/artist-detail/ArtistTopTracks";
 import { UpcomingEvents } from "@/components/artist-detail/UpcomingEvents";
 import { GradientBackground } from "@/components/ui/GradientBackground";
@@ -31,6 +32,9 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function ArtistDetailPage({ params }: PageProps) {
   const { id } = await params;
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Fetch artist
   const { data: artist } = await supabase
@@ -65,6 +69,10 @@ export default async function ArtistDetailPage({ params }: PageProps) {
         <GradientBackground variant="subtle" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <ArtistTopTracks artist={artist as Artist} />
+          <ArtistPlaylists
+            artist={artist as Artist}
+            isSignedIn={Boolean(user)}
+          />
           <UpcomingEvents events={events} />
         </div>
       </div>

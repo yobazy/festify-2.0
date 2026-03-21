@@ -7,3 +7,16 @@ export interface SpotifyPlaylist {
   tracks: { total: number };
   owner: { display_name: string };
 }
+
+export interface SavedPlaylist {
+  id: number;
+  playlist_id: string;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  spotify_url: string;
+  owner_name: string | null;
+  track_total: number;
+  artist_name: string | null;
+  created_at: string;
+}

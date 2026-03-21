@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
+import { signOut } from "@/app/auth/login/actions";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -13,8 +14,13 @@ const navLinks = [
   { href: "/artists", label: "Artists" },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  userEmail?: string | null;
+}
+
+export function Navbar({ userEmail }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isSignedIn = Boolean(userEmail);
 
   return (
     <>
@@ -54,26 +60,52 @@ export function Navbar() {
 
             {/* Auth / Sign In */}
             <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/auth/login"
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium",
-                  "text-muted-foreground hover:text-white",
-                  "hover:bg-white/5 transition-all duration-200"
-                )}
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/signup"
-                className={cn(
-                  "px-5 py-2 rounded-full text-sm font-medium",
-                  "gradient-purple text-white",
-                  "hover:opacity-90 transition-opacity"
-                )}
-              >
-                Sign Up
-              </Link>
+              {isSignedIn ? (
+                <>
+                  <Link
+                    href="/settings"
+                    className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm text-white transition-colors hover:bg-primary/15"
+                  >
+                    <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+                    <span className="max-w-[180px] truncate">{userEmail}</span>
+                  </Link>
+                  <form action={signOut}>
+                    <button
+                      type="submit"
+                      className={cn(
+                        "px-4 py-2 rounded-lg text-sm font-medium",
+                        "text-muted-foreground hover:text-white",
+                        "hover:bg-white/5 transition-all duration-200"
+                      )}
+                    >
+                      Sign Out
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className={cn(
+                      "px-4 py-2 rounded-lg text-sm font-medium",
+                      "text-muted-foreground hover:text-white",
+                      "hover:bg-white/5 transition-all duration-200"
+                    )}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className={cn(
+                      "px-5 py-2 rounded-full text-sm font-medium",
+                      "gradient-purple text-white",
+                      "hover:opacity-90 transition-opacity"
+                    )}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -93,6 +125,7 @@ export function Navbar() {
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
         links={navLinks}
+        userEmail={userEmail}
       />
     </>
   );

@@ -10,6 +10,9 @@ interface EventFiltersProps {
   query: string;
   onQueryChange: (q: string) => void;
   totalResults: number;
+  location: string;
+  locationOptions: string[];
+  onLocationChange: (location: string) => void;
   from: string;
   to: string;
   onFromChange: (v: string) => void;
@@ -29,6 +32,9 @@ export function EventFilters({
   query,
   onQueryChange,
   totalResults,
+  location,
+  locationOptions,
+  onLocationChange,
   from,
   to,
   onFromChange,
@@ -83,6 +89,20 @@ export function EventFilters({
           placeholder="Search events, venues, locations..."
           className="flex-1"
         />
+
+        <select
+          value={location}
+          onChange={(e) => onLocationChange(e.target.value)}
+          className="h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white transition-all duration-200 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 lg:w-[220px]"
+          aria-label="Filter by location"
+        >
+          <option value="">All locations</option>
+          {locationOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
 
         <div className="flex w-full items-center gap-2 lg:w-auto">
           <input
@@ -153,11 +173,18 @@ export function EventFilters({
         </div>
       </div>
 
-      {(from || to) && (
+      {(from || to || location) && (
         <div className="flex flex-wrap gap-2">
-          <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-xs font-medium text-primary">
-            {formatDateRangeLabel(from, to)}
-          </div>
+          {location && (
+            <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-xs font-medium text-primary">
+              {location}
+            </div>
+          )}
+          {(from || to) && (
+            <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-xs font-medium text-primary">
+              {formatDateRangeLabel(from, to)}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -70,3 +70,12 @@ After completing any significant task:
 - `user_saved_sets` table needed for personal schedule feature
 - `user_spotify_tokens` table needed for OAuth token storage
 - Offline caching: cache event schedule + lineup to localStorage on first event page load
+
+### Auth and settings
+- Validate any login `next` redirect as a single-site relative path only; reject protocol-relative (`//...`) and absolute URLs
+- Signed-in navbar affordances should route users into `/settings`, with account/session actions kept separate
+
+### Spotify account sync
+- `public.user_spotify_tokens` is service-role-only storage for Spotify OAuth tokens; do not expose it directly to user-session queries
+- `public.user_saved_playlists` is the user-facing library table; playlist save flows can bookmark there even if Spotify is not connected
+- Validate persisted Spotify links before writing them to the database: only allow `https://open.spotify.com/...` playlist URLs and trusted Spotify CDN image hosts

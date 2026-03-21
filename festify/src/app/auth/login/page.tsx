@@ -13,6 +13,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const callbackError = searchParams.get("error");
   const signupMessage = searchParams.get("message");
+  const nextPath = searchParams.get("next") ?? "/";
   const infoMessage =
     signupMessage === "check-email"
       ? "Check your email to confirm your account, then sign in."
@@ -54,6 +55,7 @@ export default function LoginPage() {
         {/* Card */}
         <div className="glass p-8 rounded-2xl">
           <form action={action} className="space-y-5">
+            <input type="hidden" name="next" value={nextPath} />
             {infoMessage && (
               <div className="px-4 py-3 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm">
                 {infoMessage}
