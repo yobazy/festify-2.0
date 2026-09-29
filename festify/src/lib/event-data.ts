@@ -36,8 +36,12 @@ export function getEventPopularityScore(
     artists?: Array<Pick<Artist, "popularity">>;
   }
 ) {
-  if (typeof event.popularity_score === "number") {
-    return event.popularity_score;
+  const storedScore = event.popularity_score as number | string | null;
+  if (storedScore !== null && storedScore !== undefined) {
+    const parsedScore = Number(storedScore);
+    if (Number.isFinite(parsedScore)) {
+      return parsedScore;
+    }
   }
 
   const artistPopularities = (event.artists ?? [])
