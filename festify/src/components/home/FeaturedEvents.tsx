@@ -6,9 +6,10 @@ import { Calendar, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { EVENT_PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { getEventLocationLabel, hasEventLocation } from "@/lib/event-data";
 import type { Event } from "@/types/event";
+import { formatEventDate } from "@/lib/dates";
 
 interface FeaturedEventsProps {
   events: Event[];
@@ -43,7 +44,7 @@ export function FeaturedEvents({ events }: FeaturedEventsProps) {
                   <Image
                     src={
                       (event.use_alt ? event.alt_img : event.img_url) ||
-                      PLACEHOLDER_IMAGE
+                      EVENT_PLACEHOLDER_IMAGE
                     }
                     alt={event.event_name}
                     fill
@@ -93,9 +94,5 @@ export function FeaturedEvents({ events }: FeaturedEventsProps) {
 }
 
 function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  return formatEventDate(dateStr);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EventCard } from "./EventCard";
 import { EventFilters } from "./EventFilters";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -11,6 +11,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTasteStore } from "@/stores/tasteStore";
 import type { Event } from "@/types/event";
+import {
+  addDaysToDateString,
+  formatEventDate,
+  getEndOfMonthDateString,
+  getTodayDateString,
+} from "@/lib/dates";
 
 interface EventGridProps {
   events: Event[];
@@ -21,7 +27,8 @@ export function EventGrid({ events }: EventGridProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [query, setQuery] = useState("");
+  // Seeded once from ?q= (the home hero search), then owned by local state.
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<"all" | "recommended" | "saved">(
     "all"
@@ -30,6 +37,18 @@ export function EventGrid({ events }: EventGridProps) {
   const followedArtists = useTasteStore((state) => state.followedArtists);
   const preferredGenres = useTasteStore((state) => state.preferredGenres);
   const savedEvents = useTasteStore((state) => state.savedEvents);
+
+  // Drop ?q= after seeding so refresh, Reset, or later filter changes can't
+  // resurrect a query the user has since edited or cleared.
+  useEffect(() => {
+    if (!searchParams.has("q")) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("q");
+    const nextQuery = params.toString();
+    // history API: Next keeps useSearchParams in sync without re-running the
+    // server component (and its Supabase queries) like router.replace would.
+    window.history.replaceState(null, "", nextQuery ? `${pathname}?${nextQuery}` : pathname);
+  }, [pathname, searchParams]);
 
   const from = searchParams.get("from") ?? "";
   const to = searchParams.get("to") ?? "";
@@ -71,7 +90,10 @@ export function EventGrid({ events }: EventGridProps) {
     return eventsWithLocation.filter((e) => {
       const eventDate = getDateFilterValue(e.event_date);
       if (!eventDate) return false;
-      if (from && eventDate < from) return false;
+      // Overlap test, so festivals already underway still match "from today".
+      const endDate = e.event_end_date ? getDateFilterValue(e.event_end_date) : null;
+      const lastDate = endDate && endDate > eventDate ? endDate : eventDate;
+      if (from && lastDate < from) return false;
       if (to && eventDate > to) return false;
       return true;
     });
@@ -130,7 +152,8 @@ export function EventGrid({ events }: EventGridProps) {
       (e) =>
         e.event_name.toLowerCase().includes(q) ||
         e.event_location?.toLowerCase().includes(q) ||
-        e.event_venue?.toLowerCase().includes(q)
+        e.event_venue?.toLowerCase().includes(q) ||
+        e.artists?.some((artist) => artist.artist_name.toLowerCase().includes(q))
     );
   }, [filteredByViewMode, debouncedQuery]);
 
@@ -144,8 +167,7 @@ export function EventGrid({ events }: EventGridProps) {
   const grouped = useMemo(() => {
     const groups: Record<string, Event[]> = {};
     paginated.forEach((event) => {
-      const date = new Date(event.event_date);
-      const key = date.toLocaleDateString("en-US", {
+      const key = formatEventDate(event.event_date, {
         month: "long",
         year: "numeric",
       });
@@ -181,15 +203,12 @@ export function EventGrid({ events }: EventGridProps) {
         type={type}
         onTypeChange={(value) => updateSearchParam("type", value === "all" ? "" : value)}
         onThisMonth={() => {
-          const today = new Date();
-          const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-          updateDateRange(formatDateInput(today), formatDateInput(endOfMonth));
+          const today = getTodayDateString();
+          updateDateRange(today, getEndOfMonthDateString(today));
         }}
         onNext30Days={() => {
-          const today = new Date();
-          const nextThirtyDays = new Date(today);
-          nextThirtyDays.setDate(today.getDate() + 30);
-          updateDateRange(formatDateInput(today), formatDateInput(nextThirtyDays));
+          const today = getTodayDateString();
+          updateDateRange(today, addDaysToDateString(today, 30));
         }}
         onReset={() => {
           setQuery("");
@@ -223,7 +242,7 @@ export function EventGrid({ events }: EventGridProps) {
       {filtered.length === 0 && (
         <div className="text-center py-20">
           <p className="text-muted-foreground text-lg">No events found</p>
-          <p className="text-muted-foreground/60 text-sm mt-2">
+          <p className="text-muted-foreground text-sm mt-2">
             Try adjusting your search
           </p>
         </div>
@@ -288,7 +307,7 @@ export function EventGrid({ events }: EventGridProps) {
     else params.delete("to");
 
     const nextQuery = params.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname);
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   }
 
   function updateSearchParam(key: string, value: string) {
@@ -299,7 +318,7 @@ export function EventGrid({ events }: EventGridProps) {
     else params.delete(key);
 
     const nextQuery = params.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname);
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   }
 }
 

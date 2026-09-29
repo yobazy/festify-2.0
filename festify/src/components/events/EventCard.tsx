@@ -5,9 +5,11 @@ import Image from "next/image";
 import { Calendar, MapPin, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { EVENT_PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { SaveEventButton } from "@/components/taste/SaveEventButton";
 import { getEventLocationLabel } from "@/lib/event-data";
 import type { Event } from "@/types/event";
+import { formatEventDate } from "@/lib/dates";
 
 interface EventCardProps {
   event: Event;
@@ -16,7 +18,7 @@ interface EventCardProps {
 
 export function EventCard({ event, index = 0 }: EventCardProps) {
   const rawImageUrl = event.use_alt ? event.alt_img : event.img_url;
-  const imageUrl = normalizeImageUrl(rawImageUrl) || "/images/event-placeholder.svg";
+  const imageUrl = normalizeImageUrl(rawImageUrl) || EVENT_PLACEHOLDER_IMAGE;
   const locationLabel = getEventLocationLabel(event) ?? "Location TBA";
 
   return (
@@ -63,9 +65,9 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             )}
           </div>
 
-          {/* Festival Badge */}
+          {/* Festival Badge (sits under the date; the save button owns top-left) */}
           {event.festivalind && (
-            <div className="absolute top-3 left-3 bg-primary/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-white">
+            <div className="absolute top-12 right-3 bg-primary/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-primary-foreground">
               Festival
             </div>
           )}
@@ -85,7 +87,10 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
               {event.artists && event.artists.length > 0 && (
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Users size={14} className="shrink-0" />
-                  <span>{event.artists.length} artists</span>
+                  <span>
+                    {event.artists.length}{" "}
+                    {event.artists.length === 1 ? "artist" : "artists"}
+                  </span>
                 </div>
               )}
             </div>
@@ -113,9 +118,5 @@ function normalizeImageUrl(url: string | null): string | null {
 }
 
 function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  return formatEventDate(dateStr);
 }

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Music, ExternalLink } from "lucide-react";
-import { useSpotifyToken } from "@/hooks/useSpotifyToken";
 import { searchPlaylists } from "@/lib/spotify";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -16,19 +15,26 @@ interface PlaylistCarouselProps {
 }
 
 export function PlaylistCarousel({ eventName }: PlaylistCarouselProps) {
-  const { token } = useSpotifyToken();
   const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [activePlaylist, setActivePlaylist] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) return;
+    let cancelled = false;
 
-    searchPlaylists(eventName, token)
-      .then((results) => setPlaylists(results))
+    searchPlaylists(eventName)
+      .then((results) => {
+        if (!cancelled) setPlaylists(results);
+      })
       .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [token, eventName]);
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventName]);
 
   if (loading) {
     return (

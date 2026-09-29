@@ -5,11 +5,12 @@ import {
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { addDaysToDateString, getTodayDateString } from "@/lib/dates";
 
 export function DiscoveryPaths() {
-  const today = new Date();
-  const nextThirtyDays = new Date(today);
-  nextThirtyDays.setDate(today.getDate() + 30);
+  // Server component: use the event calendar day, not the server's UTC clock.
+  const today = getTodayDateString();
+  const nextThirtyDays = addDaysToDateString(today, 30);
 
   const quickPaths = [
     {
@@ -20,7 +21,7 @@ export function DiscoveryPaths() {
       accent: "text-primary",
     },
     {
-      href: `/events?from=${formatDateInput(today)}&to=${formatDateInput(nextThirtyDays)}`,
+      href: `/events?from=${today}&to=${nextThirtyDays}`,
       title: "Next 30 days",
       description: "Shows coming up soon, so you can plan fast.",
       icon: CalendarRange,
@@ -36,7 +37,7 @@ export function DiscoveryPaths() {
   ];
 
   return (
-    <section className="px-4 pb-10 pt-28">
+    <section className="px-4 pb-10 pt-8">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -89,11 +90,4 @@ export function DiscoveryPaths() {
       </div>
     </section>
   );
-}
-
-function formatDateInput(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
 }

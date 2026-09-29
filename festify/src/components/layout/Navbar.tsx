@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/brand/Logo";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MobileNav } from "./MobileNav";
@@ -22,6 +22,7 @@ interface NavbarProps {
 export function Navbar({ userEmail }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isSignedIn = Boolean(userEmail);
+  const closeMobileNav = useCallback(() => setMobileOpen(false), []);
 
   return (
     <>
@@ -29,17 +30,8 @@ export function Navbar({ userEmail }: NavbarProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group">
-              <Image
-                src="/images/icon.png"
-                alt="Festify"
-                width={32}
-                height={32}
-                className="rounded-lg group-hover:scale-110 transition-transform"
-              />
-              <span className="font-brand text-xl text-white tracking-wide">
-                Festify
-              </span>
+            <Link href="/" className="group" aria-label="Festify home">
+              <Logo />
             </Link>
 
             {/* Desktop Nav */}
@@ -113,7 +105,9 @@ export function Navbar({ userEmail }: NavbarProps) {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden p-2 text-muted-foreground hover:text-white transition-colors"
-              aria-label="Toggle menu"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls={mobileOpen ? "mobile-nav" : undefined}
             >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -124,7 +118,7 @@ export function Navbar({ userEmail }: NavbarProps) {
       {/* Mobile Nav */}
       <MobileNav
         isOpen={mobileOpen}
-        onClose={() => setMobileOpen(false)}
+        onClose={closeMobileNav}
         links={navLinks}
         userEmail={userEmail}
       />

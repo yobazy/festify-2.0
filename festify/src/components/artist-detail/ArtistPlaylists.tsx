@@ -8,7 +8,6 @@ import { Bookmark, ExternalLink, Loader2, Music2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { SpotifyEmbed } from "@/components/event-detail/SpotifyEmbed";
-import { useSpotifyToken } from "@/hooks/useSpotifyToken";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { searchPlaylists } from "@/lib/spotify";
 import { cn } from "@/lib/utils";
@@ -36,7 +35,6 @@ export function ArtistPlaylists({
   isSignedIn,
 }: ArtistPlaylistsProps) {
   const pathname = usePathname();
-  const { token, error } = useSpotifyToken();
   const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [activePlaylist, setActivePlaylist] = useState<string | null>(null);
@@ -51,10 +49,8 @@ export function ArtistPlaylists({
     let cancelled = false;
 
     async function loadPlaylists() {
-      if (!token) return;
-
       try {
-        const results = await searchPlaylists(artist.artist_name, token, {
+        const results = await searchPlaylists(artist.artist_name, {
           appendFestival: false,
           limit: 12,
         });
@@ -83,7 +79,7 @@ export function ArtistPlaylists({
     return () => {
       cancelled = true;
     };
-  }, [artist.artist_name, token]);
+  }, [artist.artist_name]);
 
   useEffect(() => {
     let cancelled = false;
@@ -129,8 +125,6 @@ export function ArtistPlaylists({
 
     return "Save playlists in Festify now, then connect Spotify later to sync future saves there too.";
   }, [accountState.connected, isSignedIn]);
-
-  if (error) return null;
 
   if (loading) {
     return (

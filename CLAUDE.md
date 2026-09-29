@@ -50,8 +50,8 @@ After completing any significant task:
 - Event discovery ranking should come from lineup strength first: headliner popularity carries the most weight, then support-act average, lineup depth, festival bonus, and near-term timing
 
 ### Spotify Integration
-- `festify/src/lib/spotify.ts` has: client credentials token fetch, `searchPlaylists`, `searchArtist`, `getArtistTopTracks`
-- `festify/src/app/api/spotify/token/` — existing token endpoint (client credentials, not user OAuth)
+- The app's client-credentials token never reaches the browser: `festify/src/lib/spotify-server.ts` holds it; browser code calls `/api/spotify/search` and `/api/spotify/top-tracks` via `festify/src/lib/spotify.ts` (`searchPlaylists`, `getArtistTopTracks`)
+- Public, CDN-cached API routes use the cookieless `lib/supabase/public.ts` client and are excluded from `src/proxy.ts` so responses never carry Set-Cookie
 - User OAuth requires Authorization Code Flow; store tokens in Supabase `user_spotify_tokens` table
 - Always pass `market=US` on track endpoints
 
@@ -81,3 +81,15 @@ After completing any significant task:
 - `public.user_spotify_tokens` is service-role-only storage for Spotify OAuth tokens; do not expose it directly to user-session queries
 - `public.user_saved_playlists` is the user-facing library table; playlist save flows can bookmark there even if Spotify is not connected
 - Validate persisted Spotify links before writing them to the database: only allow `https://open.spotify.com/...` playlist URLs and trusted Spotify CDN image hosts
+
+### Brand and dates (2026-09-29 logo + audit pass)
+- Logo = equalizer bars rising into a stage peak + teal pennant. Use `components/brand/Logo.tsx` (`Logo`/`LogoMark`), never the old `icon.png` directly. Full mark: `public/images/logo.svg`; `src/app/icon.svg` + `favicon.ico` are a simplified 3-bar cut for 16/32px. Colors are `--brand-from/--brand-to/--brand-glow` tokens
+- Never write `--` inside SVG/XML comments (invalid XML; breaks the icon)
+- Event dates are calendar days: format with `lib/dates.ts` (`formatEventDate`), never `new Date(event_date)` (renders a day early in US time zones)
+- "Upcoming" means the event's last day >= today (Pacific): use `upcomingEventsFilter()` in queries and `isEventUpcoming()` in JS so multi-day festivals stay listed
+- Redirect targets go through `lib/redirect.ts` `getSafeRedirectPath`
+- Session refresh lives in `src/proxy.ts` (Next 16 name; a root-level `middleware.ts` is ignored when `src/` exists)
+- Throw on Supabase errors in pages so `error.tsx` renders; `notFound()` only for missing rows (`maybeSingle`)
+- Turbopack dev sometimes serves stale `globals.css`; if a CSS change doesn't appear, stop the server and `rm -rf festify/.next`
+- Event images fall back to `EVENT_PLACEHOLDER_IMAGE` (brand gradient + centered mark); `PLACEHOLDER_IMAGE` is for people/playlists only
+- The festify-2 Supabase project pauses when idle and listings go stale: after a restore, run `cd server && npm run sync` before screenshots or demos (README screenshots were refreshed 2026-09-29 this way)

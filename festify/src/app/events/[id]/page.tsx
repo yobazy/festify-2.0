@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getEventLocationLabel } from "@/lib/event-data";
 import { notFound } from "next/navigation";
 import { EventHeader } from "@/components/event-detail/EventHeader";
 import { EventLineup } from "@/components/event-detail/EventLineup";
@@ -13,18 +14,22 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
+  if (!/^\d+$/.test(id)) return { title: "Event Not Found" };
+
   const supabase = await createClient();
   const { data: event } = await supabase
     .from("events")
     .select("event_name, event_venue, event_location")
     .eq("event_id", id)
-    .single();
+    .maybeSingle();
 
-  if (!event) return { title: "Event Not Found | Festify" };
+  if (!event) return { title: "Event Not Found" };
+
+  const locationLabel = getEventLocationLabel(event);
 
   return {
-    title: `${event.event_name} | Festify`,
-    description: `${event.event_name} at ${event.event_venue}, ${event.event_location}. Discover the lineup and Spotify playlists.`,
+    title: event.event_name,
+    description: `${event.event_name}${locationLabel ? ` at ${locationLabel}` : ""}. Discover the lineup and Spotify playlists.`,
   };
 }
 
@@ -33,12 +38,16 @@ export default async function EventDetailPage({ params }: PageProps) {
   const supabase = await createClient();
 
   // Fetch event
-  const { data: event } = await supabase
+  if (!/^\d+$/.test(id)) notFound();
+
+  const { data: event, error: eventError } = await supabase
     .from("events")
     .select("*")
     .eq("event_id", id)
-    .single();
+    .maybeSingle();
 
+  // A missing row is a 404; anything else is an outage and belongs in error.tsx.
+  if (eventError) throw new Error(`Error fetching event: ${eventError.message}`);
   if (!event) notFound();
 
   // Fetch artists via gigs junction (single query, no N+1)
@@ -90,7 +99,10 @@ export default async function EventDetailPage({ params }: PageProps) {
       <div className="relative">
         <GradientBackground variant="subtle" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <PlaylistCarousel eventName={(event as Event).event_name} />
+          <PlaylistCarousel
+            key={(event as Event).event_id}
+            eventName={(event as Event).event_name}
+          />
           <EventLineup artists={artists} />
         </div>
       </div>

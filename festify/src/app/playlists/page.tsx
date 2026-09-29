@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, ExternalLink, MapPin, Music2 } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { EVENT_PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
 import {
   attachArtistsToEvents,
@@ -20,9 +20,14 @@ import {
 import type { Artist } from "@/types/artist";
 import type { Event } from "@/types/event";
 import type { SavedPlaylist, SpotifyPlaylist } from "@/types/playlist";
+import {
+  formatEventDate,
+  getTodayDateString,
+  upcomingEventsFilter,
+} from "@/lib/dates";
 
 export const metadata: Metadata = {
-  title: "Festify | Playlists",
+  title: "Playlists",
   description:
     "Discover playlist spotlights for the strongest upcoming events, then save the ones you want to revisit.",
 };
@@ -30,7 +35,7 @@ export const metadata: Metadata = {
 export default async function PlaylistsPage() {
   const supabase = await createClient();
   const user = await getCurrentUser();
-  const today = new Date().toISOString().split("T")[0];
+  const today = getTodayDateString();
   const userContext: [
     Awaited<ReturnType<typeof getSpotifyConnection>>,
     SavedPlaylist[],
@@ -44,7 +49,7 @@ export default async function PlaylistsPage() {
   const { data: events, error: eventsError } = await supabase
     .from("events")
     .select("*")
-    .gte("event_date", today)
+    .or(upcomingEventsFilter(today))
     .order("popularity_score", { ascending: false, nullsFirst: false })
     .order("event_date", { ascending: true })
     .limit(24);
@@ -127,9 +132,8 @@ export default async function PlaylistsPage() {
               Ranked for discovery
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              This page is not your settings library anymore. It is a discovery
-              feed that surfaces playlists for the events with the strongest
-              upcoming lineups.
+              Playlists for the upcoming events with the strongest lineups,
+              ranked by headliner pull, supporting acts, and how soon they hit.
             </p>
             <Link
               href="/events"
@@ -198,7 +202,7 @@ export default async function PlaylistsPage() {
                 >
                   <div className="relative h-56">
                     <Image
-                      src={normalizeImageUrl(event.use_alt ? event.alt_img : event.img_url) ?? PLACEHOLDER_IMAGE}
+                      src={normalizeImageUrl(event.use_alt ? event.alt_img : event.img_url) ?? EVENT_PLACEHOLDER_IMAGE}
                       alt={event.event_name}
                       fill
                       sizes="(min-width: 1024px) 50vw, 100vw"
@@ -428,7 +432,7 @@ function normalizeImageUrl(url: string | null) {
 }
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  return formatEventDate(dateStr, {
     month: "short",
     day: "numeric",
     year: "numeric",

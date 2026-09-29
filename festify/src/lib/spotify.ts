@@ -1,76 +1,46 @@
 import type { SpotifyPlaylist } from "@/types/playlist";
 
-export async function getSpotifyToken(): Promise<string> {
-  const res = await fetch("/api/spotify/token", { method: "POST" });
-  if (!res.ok) {
-    throw new Error("Failed to fetch Spotify token");
-  }
-  const data = await res.json();
-  return data.access_token;
-}
+// Browser-side Spotify helpers. They call Festify's own API routes, which hold
+// the app token server-side (see lib/spotify-server.ts).
 
 export async function searchPlaylists(
   query: string,
-  accessToken: string,
   options?: {
     appendFestival?: boolean;
     limit?: number;
   }
 ): Promise<SpotifyPlaylist[]> {
-  let searchQuery = query;
-  const shouldAppendFestival = options?.appendFestival ?? true;
-
-  if (
-    shouldAppendFestival &&
-    !searchQuery.toLowerCase().includes("festival") &&
-    !searchQuery.toLowerCase().includes("fest")
-  ) {
-    searchQuery += " festival";
-  }
-
-  const limit = options?.limit ?? 15;
-  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(searchQuery)}&type=playlist&limit=${limit}`;
-
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+  const params = new URLSearchParams({
+    q: query,
+    festival: options?.appendFestival === false ? "0" : "1",
+    limit: String(options?.limit ?? 15),
   });
+  const response = await fetch(`/api/spotify/search?${params}`);
 
   if (!response.ok) {
-    throw new Error(`Spotify search failed: ${response.statusText}`);
+    throw new Error(`Spotify search failed: ${response.status}`);
   }
 
-  const data = await response.json();
-  return data.playlists?.items ?? [];
+  const data = (await response.json()) as { playlists?: SpotifyPlaylist[] };
+  return data.playlists ?? [];
 }
 
-export async function searchArtist(
-  artistName: string,
-  accessToken: string
-) {
-  const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist&limit=1`;
+export async function getArtistTopTracks<T>(args: {
+  spotifyArtistId?: string | null;
+  artistName: string;
+}): Promise<T[]> {
+  const params = new URLSearchParams();
+  // Malformed stored ids fall back to a name lookup instead of a 400.
+  if (args.spotifyArtistId && /^[A-Za-z0-9]{22}$/.test(args.spotifyArtistId)) {
+    params.set("artistId", args.spotifyArtistId);
+  }
+  else params.set("name", args.artistName);
 
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  const response = await fetch(`/api/spotify/top-tracks?${params}`);
+  if (!response.ok) {
+    throw new Error(`Spotify top tracks failed: ${response.status}`);
+  }
 
-  if (!response.ok) return null;
-
-  const data = await response.json();
-  return data.artists?.items?.[0] ?? null;
-}
-
-export async function getArtistTopTracks(
-  artistId: string,
-  accessToken: string
-) {
-  const url = `https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=US`;
-
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-
-  if (!response.ok) return [];
-
-  const data = await response.json();
+  const data = (await response.json()) as { tracks?: T[] };
   return data.tracks ?? [];
 }

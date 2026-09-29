@@ -9,14 +9,24 @@ interface RouteContext {
   params: Promise<{ playlistId: string }>;
 }
 
-function isAllowedSpotifyUrl(value: string) {
+const PLAYLIST_ID_PATTERN = /^[A-Za-z0-9]{22}$/;
+
+function isAllowedSpotifyUrl(value: string, playlistId: string) {
   try {
     const url = new URL(value);
 
-    return url.protocol === "https:" && url.hostname === "open.spotify.com";
+    return (
+      url.protocol === "https:" &&
+      url.hostname === "open.spotify.com" &&
+      url.pathname === `/playlist/${playlistId}`
+    );
   } catch {
     return false;
   }
+}
+
+function clampText(value: unknown, maxLength: number) {
+  return typeof value === "string" ? value.slice(0, maxLength) : null;
 }
 
 function sanitizeSpotifyImageUrl(value?: string | null) {
@@ -52,24 +62,34 @@ export async function POST(request: Request, { params }: RouteContext) {
   }
 
   const { playlistId } = await params;
-  const body = (await request.json()) as {
-    name?: string;
-    description?: string | null;
-    imageUrl?: string | null;
-    spotifyUrl?: string;
-    ownerName?: string | null;
-    trackTotal?: number;
-    artistName?: string | null;
-  };
+  if (!PLAYLIST_ID_PATTERN.test(playlistId)) {
+    return NextResponse.json({ error: "Invalid playlist id" }, { status: 400 });
+  }
 
-  if (!body.name || !body.spotifyUrl) {
+  let body: {
+    name?: unknown;
+    description?: unknown;
+    imageUrl?: unknown;
+    spotifyUrl?: unknown;
+    ownerName?: unknown;
+    trackTotal?: unknown;
+    artistName?: unknown;
+  };
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const name = clampText(body?.name, 200);
+  if (!name || typeof body.spotifyUrl !== "string") {
     return NextResponse.json(
       { error: "Missing playlist metadata" },
       { status: 400 }
     );
   }
 
-  if (!isAllowedSpotifyUrl(body.spotifyUrl)) {
+  if (!isAllowedSpotifyUrl(body.spotifyUrl, playlistId)) {
     return NextResponse.json(
       { error: "Invalid Spotify URL" },
       { status: 400 }
@@ -79,13 +99,16 @@ export async function POST(request: Request, { params }: RouteContext) {
   try {
     const result = await savePlaylistForUser(user.id, {
       playlistId,
-      name: body.name,
-      description: body.description,
-      imageUrl: sanitizeSpotifyImageUrl(body.imageUrl),
+      name,
+      description: clampText(body.description, 1000),
+      imageUrl: sanitizeSpotifyImageUrl(clampText(body.imageUrl, 1000)),
       spotifyUrl: body.spotifyUrl,
-      ownerName: body.ownerName,
-      trackTotal: body.trackTotal,
-      artistName: body.artistName,
+      ownerName: clampText(body.ownerName, 200),
+      trackTotal:
+        typeof body.trackTotal === "number" && Number.isFinite(body.trackTotal)
+          ? body.trackTotal
+          : undefined,
+      artistName: clampText(body.artistName, 200),
     });
 
     return NextResponse.json({
@@ -112,6 +135,9 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   }
 
   const { playlistId } = await params;
+  if (!PLAYLIST_ID_PATTERN.test(playlistId)) {
+    return NextResponse.json({ error: "Invalid playlist id" }, { status: 400 });
+  }
 
   try {
     const result = await removeSavedPlaylistForUser(user.id, playlistId);

@@ -380,6 +380,7 @@ export async function searchPlaylistsForQuery(
   });
 
   if (!response.ok) {
+    if (response.status === 401) cachedAppSpotifyToken = null;
     const message = await response.text();
     throw new Error(`Spotify playlist search failed: ${message}`);
   }
@@ -389,8 +390,63 @@ export async function searchPlaylistsForQuery(
   };
 
   return (data.playlists?.items ?? []).filter(
-    (playlist): playlist is SpotifyPlaylist => Boolean(playlist)
+    (playlist): playlist is SpotifyPlaylist => Boolean(playlist?.id)
   );
+}
+
+export interface SpotifyTrack {
+  id: string;
+  name: string;
+  preview_url: string | null;
+  duration_ms: number;
+  external_urls?: { spotify?: string };
+  album?: { name?: string; images?: Array<{ url: string }> };
+}
+
+async function spotifyAppGet<T>(path: string, params: Record<string, string>) {
+  const accessToken = await getAppSpotifyAccessToken();
+  const url = new URL(`${SPOTIFY_API_BASE}${path}`);
+  Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+
+  const response = await fetch(url.toString(), {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    next: { revalidate: 60 * 60 * 6 },
+  });
+
+  if (!response.ok) {
+    // Throw (never return empty) so routes answer with an uncached 502 instead
+    // of caching "no results" through a rate limit or outage.
+    if (response.status === 401) cachedAppSpotifyToken = null;
+    throw new Error(`Spotify ${path} failed: ${response.status}`);
+  }
+  return (await response.json()) as T;
+}
+
+/**
+ * Top tracks for an artist, resolving the Spotify artist id by name when the
+ * stored `spotify_link` doesn't carry one. Uses the app token server-side only.
+ */
+export async function getTopTracksForArtist(args: {
+  spotifyArtistId?: string | null;
+  artistName?: string | null;
+}): Promise<SpotifyTrack[]> {
+  let artistId = args.spotifyArtistId ?? null;
+
+  if (!artistId && args.artistName) {
+    const search = await spotifyAppGet<{ artists?: { items?: Array<{ id: string } | null> } }>(
+      "/search",
+      { q: args.artistName, type: "artist", limit: "1", market: "US" }
+    );
+    artistId = search?.artists?.items?.[0]?.id ?? null;
+  }
+
+  if (!artistId) return [];
+
+  const data = await spotifyAppGet<{ tracks?: SpotifyTrack[] }>(
+    `/artists/${encodeURIComponent(artistId)}/top-tracks`,
+    { market: "US" }
+  );
+  return data?.tracks ?? [];
 }
 
 export async function disconnectSpotifyConnection(userId: string) {

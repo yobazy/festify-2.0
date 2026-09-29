@@ -6,8 +6,7 @@ import { ExternalLink, Music2, Pause, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Badge } from "@/components/ui/Badge";
-import { useSpotifyToken } from "@/hooks/useSpotifyToken";
-import { getArtistTopTracks, searchArtist } from "@/lib/spotify";
+import { getArtistTopTracks } from "@/lib/spotify";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Artist } from "@/types/artist";
@@ -31,7 +30,6 @@ interface SpotifyTrack {
 }
 
 export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
-  const { token, error } = useSpotifyToken();
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [loading, setLoading] = useState(true);
   const [activePreview, setActivePreview] = useState<string | null>(null);
@@ -46,22 +44,11 @@ export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
     let cancelled = false;
 
     async function loadTracks() {
-      if (!token) return;
-
       try {
-        let artistId = spotifyArtistId;
-
-        if (!artistId) {
-          const spotifyArtist = await searchArtist(artist.artist_name, token);
-          artistId = spotifyArtist?.id ?? null;
-        }
-
-        if (!artistId) {
-          if (!cancelled) setTracks([]);
-          return;
-        }
-
-        const topTracks = await getArtistTopTracks(artistId, token);
+        const topTracks = await getArtistTopTracks<SpotifyTrack>({
+          spotifyArtistId,
+          artistName: artist.artist_name,
+        });
 
         if (!cancelled) {
           setTracks(topTracks.slice(0, 5));
@@ -79,7 +66,7 @@ export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
     return () => {
       cancelled = true;
     };
-  }, [artist.artist_name, spotifyArtistId, token]);
+  }, [artist.artist_name, spotifyArtistId]);
 
   useEffect(() => {
     return () => {
@@ -89,8 +76,6 @@ export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
       }
     };
   }, []);
-
-  if (error) return null;
 
   if (loading) {
     return (

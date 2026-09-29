@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, ExternalLink } from "lucide-react";
 import { SaveEventButton } from "@/components/taste/SaveEventButton";
 import type { Event } from "@/types/event";
+import { formatEventDate } from "@/lib/dates";
 
 interface EventHeaderProps {
   event: Event;
@@ -89,8 +90,7 @@ export function EventHeader({ event }: EventHeaderProps) {
 }
 
 function formatDateLong(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
+  return formatEventDate(dateStr, {
     weekday: "short",
     month: "long",
     day: "numeric",

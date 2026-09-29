@@ -4,9 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Calendar, MapPin } from "lucide-react";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { EVENT_PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Event } from "@/types/event";
+import { formatEventDate } from "@/lib/dates";
 
 interface UpcomingEventsProps {
   events: Event[];
@@ -38,7 +39,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
                   <Image
                     src={
                       (event.use_alt ? event.alt_img : event.img_url) ||
-                      PLACEHOLDER_IMAGE
+                      EVENT_PLACEHOLDER_IMAGE
                     }
                     alt={event.event_name}
                     fill
@@ -72,7 +73,7 @@ export function UpcomingEvents({ events }: UpcomingEventsProps) {
 }
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  return formatEventDate(dateStr, {
     month: "short",
     day: "numeric",
     year: "numeric",

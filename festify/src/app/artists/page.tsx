@@ -4,7 +4,7 @@ import { GradientBackground } from "@/components/ui/GradientBackground";
 import type { Artist } from "@/types/artist";
 
 export const metadata = {
-  title: "Artists | Festify",
+  title: "Artists",
   description: "Explore electronic music artists, genres, and Spotify profiles.",
 };
 

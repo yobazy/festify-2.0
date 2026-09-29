@@ -38,7 +38,22 @@ interface TasteState {
 
 export const useTasteStore = create<TasteState>()(
   persist(
-    (set) => ({
+    (baseSet) => {
+      // persist writes storage on every set. With skipHydration, a write before
+      // TasteStoreHydrator runs would overwrite saved taste with empty state, so
+      // load it first (localStorage is sync, so rehydrate applies immediately).
+      const set = (
+        partial:
+          | Partial<TasteState>
+          | ((state: TasteState) => Partial<TasteState>)
+      ) => {
+        if (!useTasteStore.persist.hasHydrated()) {
+          void useTasteStore.persist.rehydrate();
+        }
+        baseSet(partial);
+      };
+
+      return {
       followedArtists: [],
       savedEvents: [],
       preferredGenres: [],
@@ -132,10 +147,14 @@ export const useTasteStore = create<TasteState>()(
           savedEvents: [],
           preferredGenres: [],
         }),
-    }),
+      };
+    },
     {
       name: "festify-taste",
       storage: createJSONStorage(() => localStorage),
+      // Server HTML has no localStorage; rehydrate after mount (TasteStoreHydrator)
+      // so the first client render matches it.
+      skipHydration: true,
       partialize: (state) => ({
         followedArtists: state.followedArtists,
         savedEvents: state.savedEvents,

@@ -2,7 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/components/brand/Logo";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signUp } from "../login/actions";
@@ -21,17 +21,8 @@ export default function SignupPage() {
 
       <div className="w-full max-w-md relative">
         <div className="flex flex-col items-center mb-8">
-          <Link href="/" className="flex items-center gap-2 group mb-6">
-            <Image
-              src="/images/icon.png"
-              alt="Festify"
-              width={40}
-              height={40}
-              className="rounded-xl group-hover:scale-110 transition-transform"
-            />
-            <span className="font-brand text-2xl text-white tracking-wide">
-              Festify
-            </span>
+          <Link href="/" className="group mb-6" aria-label="Festify home">
+            <Logo size="lg" />
           </Link>
           <h1 className="text-2xl font-brand text-white">Create your account</h1>
           <p className="text-muted-foreground text-sm mt-1">

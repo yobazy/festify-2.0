@@ -1,102 +1,79 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { RotatingWords } from "./RotatingWords";
+import { ArrowRight, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function HeroSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-25"
-      >
-        <source src="/videos/header-video.mp4" type="video/mp4" />
-      </video>
-
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 gradient-overlay-strong" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/80" />
-
+    <section className="relative overflow-hidden px-4 pb-6 pt-28 sm:pt-32">
       {/* Ambient Glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[150px]" />
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[720px] max-w-full -translate-x-1/2 rounded-full bg-primary/15 blur-[140px]"
+        aria-hidden="true"
+      />
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <h1 className="font-brand text-5xl sm:text-6xl lg:text-8xl text-white mb-4 tracking-tight">
-            Discover
-          </h1>
-        </motion.div>
+      <div className="relative mx-auto max-w-7xl">
+        <p className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+          Upcoming EDM events, lineups you can listen to
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="mb-8"
-        >
-          <RotatingWords
-            words={["festivals", "playlists", "artists", "events"]}
-          />
-        </motion.div>
+        <h1 className="mt-5 max-w-3xl font-brand text-4xl leading-[1.05] text-white sm:text-6xl">
+          Find the festival.{" "}
+          <span className="bg-gradient-to-r from-primary to-brand-glow bg-clip-text text-transparent">
+            Hear the lineup
+          </span>{" "}
+          before you go.
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
-        >
-          Your gateway to the electronic music scene. Find events, explore
-          artist lineups, and discover curated Spotify playlists.
-        </motion.p>
+        <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
+          Browse shows and festivals, see who&apos;s playing, and preview every
+          artist on Spotify before you buy the ticket.
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+        <form
+          action="/events"
+          method="get"
+          role="search"
+          className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
         >
-          <Link href="/events">
-            <Button size="lg" className="rounded-full px-8 text-base">
-              Browse Events
-            </Button>
+          <label htmlFor="hero-search" className="sr-only">
+            Search events, artists, or cities
+          </label>
+          <div className="relative flex-1">
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <input
+              id="hero-search"
+              name="q"
+              type="search"
+              placeholder="Search events, artists, or cities"
+              className={cn(
+                "h-12 w-full rounded-full pl-11 pr-4",
+                "border border-white/10 bg-white/5",
+                "text-sm text-white placeholder:text-muted-foreground",
+                "transition-colors focus:border-primary/50"
+              )}
+            />
+          </div>
+          <button
+            type="submit"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium text-primary-foreground gradient-purple transition-opacity hover:opacity-90"
+          >
+            Find events
+            <ArrowRight size={16} aria-hidden="true" />
+          </button>
+        </form>
+
+        <p className="mt-4 text-sm text-muted-foreground">
+          Or jump to{" "}
+          <Link href="/playlists" className="text-white underline-offset-4 hover:underline">
+            playlists for top lineups
           </Link>
-          <Link href="/artists">
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full px-8 text-base"
-            >
-              Explore Artists
-            </Button>
-          </Link>
-        </motion.div>
+        </p>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-1.5"
-        >
-          <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

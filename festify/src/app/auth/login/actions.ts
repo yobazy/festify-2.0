@@ -3,23 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
-function getSafeRedirectPath(nextPath: FormDataEntryValue | null) {
-  if (typeof nextPath !== "string") {
-    return "/";
-  }
-
-  if (
-    !nextPath.startsWith("/") ||
-    nextPath.startsWith("//") ||
-    nextPath.includes("\\") ||
-    nextPath.includes("://")
-  ) {
-    return "/";
-  }
-
-  return nextPath;
-}
+import { getSafeRedirectPath } from "@/lib/redirect";
 
 export async function signIn(
   _prevState: { error: string } | null,

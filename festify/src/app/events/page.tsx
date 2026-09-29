@@ -1,43 +1,20 @@
 import { createClient } from "@/lib/supabase/server";
+import { fetchAllUpcomingEvents, withLineups } from "@/lib/event-queries";
 import { EventGrid } from "@/components/events/EventGrid";
 import { GradientBackground } from "@/components/ui/GradientBackground";
-import { attachArtistsToEvents } from "@/lib/event-data";
-import type { Artist } from "@/types/artist";
-import type { Event } from "@/types/event";
 
 export const metadata = {
-  title: "Events | Festify",
+  title: "Events",
   description: "Browse upcoming EDM festivals and electronic music events.",
 };
 
 export default async function EventsPage() {
   const supabase = await createClient();
 
-  const { data: events, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("event_date", { ascending: true });
-
-  if (error) {
-    console.error("Error fetching events:", error);
-  }
-
-  const eventIds = ((events as Event[] | null) ?? []).map((event) => event.event_id);
-
-  const { data: gigs } = eventIds.length
-    ? await supabase
-        .from("gigs")
-        .select("event_id, artists(*)")
-        .in("event_id", eventIds)
-    : { data: null };
-
-  const enrichedEvents = attachArtistsToEvents(
-    (events as Event[]) ?? [],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (gigs as any[] | null)?.map((gig) => ({
-      event_id: gig.event_id,
-      artists: gig.artists as Artist | null,
-    })) ?? null
+  // Throws on Supabase errors so outages render error.tsx, not an empty grid.
+  const enrichedEvents = await withLineups(
+    supabase,
+    await fetchAllUpcomingEvents(supabase)
   );
 
   return (

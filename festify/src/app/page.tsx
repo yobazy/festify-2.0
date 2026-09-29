@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { upcomingEventsFilter } from "@/lib/dates";
 import { DiscoveryPaths } from "@/components/home/DiscoveryPaths";
+import { HeroSection } from "@/components/home/HeroSection";
 import { PersonalizedHomeSections } from "@/components/home/PersonalizedHomeSections";
 import { FeaturedEvents } from "@/components/home/FeaturedEvents";
 import { GradientBackground } from "@/components/ui/GradientBackground";
-import { attachArtistsToEvents } from "@/lib/event-data";
+import { withLineups } from "@/lib/event-queries";
 import type { Artist } from "@/types/artist";
 import type { Event } from "@/types/event";
 
@@ -13,38 +15,39 @@ export default async function HomePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: events } = await supabase
-    .from("events")
-    .select("*")
-    .order("event_date", { ascending: true })
-    .limit(12);
+  const [eventsResult, artistsResult] = await Promise.all([
+    supabase
+      .from("events")
+      .select("*")
+      .or(upcomingEventsFilter())
+      .order("event_date", { ascending: true })
+      // Wide pool for "For you" scoring; followed artists' later shows come
+      // from /api/events/for-artists on the client.
+      .limit(60),
+    supabase
+      .from("artists")
+      .select("*")
+      .order("popularity", { ascending: false, nullsFirst: false })
+      .limit(20),
+  ]);
 
-  const eventIds = ((events as Event[] | null) ?? []).map((event) => event.event_id);
+  // Same policy as /events: outages render error.tsx instead of empty sections.
+  if (eventsResult.error) {
+    throw new Error(`Error fetching events: ${eventsResult.error.message}`);
+  }
+  if (artistsResult.error) {
+    throw new Error(`Error fetching artists: ${artistsResult.error.message}`);
+  }
 
-  const { data: gigs } = eventIds.length
-    ? await supabase
-        .from("gigs")
-        .select("event_id, artists(*)")
-        .in("event_id", eventIds)
-    : { data: null };
-
-  const { data: artists } = await supabase
-    .from("artists")
-    .select("*")
-    .order("popularity", { ascending: false, nullsFirst: false })
-    .limit(20);
-
-  const enrichedEvents = attachArtistsToEvents(
-    (events as Event[]) ?? [],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (gigs as any[] | null)?.map((gig) => ({
-      event_id: gig.event_id,
-      artists: gig.artists as Artist | null,
-    })) ?? null
+  const enrichedEvents = await withLineups(
+    supabase,
+    (eventsResult.data as Event[] | null) ?? []
   );
+  const artists = artistsResult.data;
 
   return (
     <>
+      <HeroSection />
       <DiscoveryPaths />
       <PersonalizedHomeSections
         events={enrichedEvents}

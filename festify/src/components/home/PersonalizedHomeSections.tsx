@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CalendarHeart, Heart, Sparkles, Tags } from "lucide-react";
 import { ArtistCard } from "@/components/artists/ArtistCard";
 import { EventCard } from "@/components/events/EventCard";
@@ -28,6 +28,47 @@ export function PersonalizedHomeSections({
     (state) => state.togglePreferredGenre
   );
   const clearTaste = useTasteStore((state) => state.clearTaste);
+
+  // The server only sends the next few weeks of events; pull in later shows
+  // for followed artists so "For you" isn't limited to that window.
+  const followedIdsKey = useMemo(
+    () =>
+      followedArtists
+        .map((artist) => artist.artist_id)
+        .sort((a, b) => a - b)
+        .join(","),
+    [followedArtists]
+  );
+  const [followedArtistEvents, setFollowedArtistEvents] = useState<{
+    key: string;
+    events: Event[];
+  }>({ key: "", events: [] });
+
+  useEffect(() => {
+    if (!followedIdsKey) return;
+
+    let cancelled = false;
+    fetch(`/api/events/for-artists?ids=${followedIdsKey}`)
+      .then((response) => (response.ok ? response.json() : { events: [] }))
+      .then((data: { events?: Event[] }) => {
+        if (!cancelled) {
+          setFollowedArtistEvents({ key: followedIdsKey, events: data.events ?? [] });
+        }
+      })
+      .catch((error) => console.error("Failed to load followed artist events", error));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [followedIdsKey]);
+
+  const candidateEvents = useMemo(() => {
+    if (followedArtistEvents.key !== followedIdsKey) return events;
+
+    const byId = new Map(events.map((event) => [event.event_id, event]));
+    followedArtistEvents.events.forEach((event) => byId.set(event.event_id, event));
+    return Array.from(byId.values());
+  }, [events, followedArtistEvents, followedIdsKey]);
 
   const suggestedGenres = useMemo(() => {
     const counts = new Map<string, number>();
@@ -63,7 +104,7 @@ export function PersonalizedHomeSections({
       tasteGenres.map((genre) => genre.toLowerCase())
     );
 
-    return [...events]
+    return [...candidateEvents]
       .map((event) => ({
         event,
         score: scoreEvent(event, followedIds, normalizedGenres),
@@ -72,7 +113,7 @@ export function PersonalizedHomeSections({
       .sort((a, b) => b.score - a.score)
       .slice(0, 6)
       .map((entry) => entry.event);
-  }, [events, followedArtists, tasteGenres]);
+  }, [candidateEvents, followedArtists, tasteGenres]);
 
   const recommendedArtists = useMemo(() => {
     const followedIds = new Set(
@@ -154,6 +195,7 @@ export function PersonalizedHomeSections({
             />
           </div>
 
+          {suggestedGenres.length > 0 && (
           <div className="mt-5">
             <p className="mb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
               Pick a few genres
@@ -169,10 +211,11 @@ export function PersonalizedHomeSections({
                     key={genre}
                     type="button"
                     onClick={() => togglePreferredGenre(genre)}
+                    aria-pressed={active}
                     className={cn(
                       "rounded-full px-3 py-2 text-xs font-medium transition-all",
                       active
-                        ? "bg-primary text-black"
+                        ? "bg-primary text-primary-foreground"
                         : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white"
                     )}
                   >
@@ -182,9 +225,11 @@ export function PersonalizedHomeSections({
               })}
             </div>
           </div>
+          )}
         </div>
 
-        {recommendedEvents.length > 0 && (
+        {/* Popularity alone always scores > 0, so only recommend once there is taste to match. */}
+        {hasTaste && recommendedEvents.length > 0 && (
           <section>
             <div className="mb-5 flex items-end justify-between gap-4">
               <div>
@@ -213,7 +258,7 @@ export function PersonalizedHomeSections({
           </section>
         )}
 
-        {recommendedArtists.length > 0 && (
+        {hasTaste && recommendedArtists.length > 0 && (
           <section>
             <div className="mb-5 flex items-end justify-between gap-4">
               <div>
