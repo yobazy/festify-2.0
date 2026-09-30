@@ -1,30 +1,20 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Event image fallback. Mark is centered so object-cover crops never clip it. -->
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#b52ad6"/>
-      <stop offset="0.55" stop-color="#5e1273"/>
-      <stop offset="1" stop-color="#0d0a12"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(800 520) scale(700 420)">
-      <stop stop-color="#00d4aa" stop-opacity="0.22"/>
-      <stop offset="1" stop-color="#00d4aa" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-
-  <rect width="1600" height="900" fill="url(#bg)"/>
-  <rect width="1600" height="900" fill="url(#glow)"/>
-
-  <!-- stage-peak mark (64-unit logo grid, scaled 6x, centered) -->
+  <!-- Event image fallback: the type-only flyer treatment. Mark is centered so object-cover crops never clip it. -->
+  <rect width="1600" height="900" fill="#141414"/>
+  <g stroke="#f2f0eb" stroke-opacity="0.08">
+    <line x1="400" y1="0" x2="400" y2="900"/>
+    <line x1="800" y1="0" x2="800" y2="900"/>
+    <line x1="1200" y1="0" x2="1200" y2="900"/>
+    <line x1="0" y1="300" x2="1600" y2="300"/>
+    <line x1="0" y1="600" x2="1600" y2="600"/>
+  </g>
   <g transform="translate(608 258) scale(6)">
-    <g fill="#FFFFFF" fill-opacity="0.22">
-      <rect x="11" y="37" width="6" height="15" rx="3"/>
-      <rect x="20" y="29" width="6" height="23" rx="3"/>
-      <rect x="29" y="19" width="6" height="33" rx="3"/>
-      <rect x="38" y="29" width="6" height="23" rx="3"/>
-      <rect x="47" y="37" width="6" height="15" rx="3"/>
-      <rect x="31" y="8" width="2" height="14" rx="1"/>
+    <rect x="6" y="6" width="52" height="8" fill="#f2f0eb" fill-opacity="0.16"/>
+    <g fill="#f2f0eb" fill-opacity="0.07">
+      <circle cx="27" cy="28" r="3"/><circle cx="41" cy="28" r="3"/><circle cx="55" cy="28" r="3"/>
+      <circle cx="13" cy="42" r="3"/><circle cx="27" cy="42" r="3"/><circle cx="41" cy="42" r="3"/><circle cx="55" cy="42" r="3"/>
+      <circle cx="13" cy="56" r="3"/><circle cx="27" cy="56" r="3"/><circle cx="41" cy="56" r="3"/><circle cx="55" cy="56" r="3"/>
     </g>
-    <path d="M33 8.5 L45 12.75 L33 17 Z" fill="#00d4aa" fill-opacity="0.5"/>
+    <circle cx="13" cy="28" r="6" fill="#00d4aa" fill-opacity="0.5"/>
   </g>
 </svg>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Music2, UserRound } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getSpotifyConnection } from "@/lib/spotify-server";
 
@@ -7,58 +6,39 @@ export default async function SettingsOverviewPage() {
   const user = await requireUser();
   const spotifyConnection = await getSpotifyConnection(user.id);
 
-  const cards = [
+  const rows = [
     {
       href: "/settings/account",
-      icon: UserRound,
       title: "Account",
-      description: "Review the session you are using right now.",
-      meta: user.email ?? "Signed in",
+      description: "Email, session and sign out.",
+      status: user.email ?? "Signed in",
     },
     {
       href: "/settings/music",
-      icon: Music2,
       title: "Music",
-      description: "Manage Spotify connection and playlist sync.",
-      meta: spotifyConnection
-        ? "Spotify connected"
-        : "Spotify not connected yet",
+      description: "Spotify connection and playlist sync.",
+      status: spotifyConnection ? "Spotify connected" : "Spotify not connected",
     },
   ];
 
   return (
-    <section className="space-y-6">
-      <div className="glass rounded-3xl border border-white/5 p-6 sm:p-8">
-        <h2 className="font-brand text-2xl text-white">Overview</h2>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-          This is your shortcut into account controls and Spotify sync.
-        </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {cards.map((card) => {
-          const Icon = card.icon;
-
-          return (
-            <Link
-              key={card.title}
-              href={card.href}
-              className="glass group rounded-3xl border border-white/5 p-6 transition-colors hover:border-white/10 hover:bg-white/5"
-            >
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/12 text-primary">
-                <Icon size={18} />
-              </div>
-              <h3 className="mt-5 text-lg font-medium text-white">{card.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {card.description}
-              </p>
-              <p className="mt-5 text-xs uppercase tracking-[0.2em] text-primary/80">
-                {card.meta}
-              </p>
-            </Link>
-          );
-        })}
-      </div>
+    <section>
+      {rows.map((row) => (
+        <div
+          key={row.href}
+          className="grid gap-2 border-b border-line py-5 sm:grid-cols-[minmax(0,1fr)_auto]"
+        >
+          <div className="min-w-0">
+            <h2 className="display-narrow text-2xl text-paper">
+              <Link href={row.href} className="transition-colors hover:text-signal">
+                {row.title}
+              </Link>
+            </h2>
+            <p className="mt-1 text-sm text-smoke">{row.description}</p>
+          </div>
+          <p className="meta truncate sm:text-right">{row.status}</p>
+        </div>
+      ))}
     </section>
   );
 }

@@ -1,34 +1,38 @@
 import { createClient } from "@/lib/supabase/server";
 import { ArtistGrid } from "@/components/artists/ArtistGrid";
-import { GradientBackground } from "@/components/ui/GradientBackground";
 import type { Artist } from "@/types/artist";
 
 export const metadata = {
   title: "Artists",
-  description: "Explore electronic music artists, genres, and Spotify profiles.",
+  description: "Every artist on an upcoming bill, ranked by popularity. Filter by genre.",
 };
 
 export default async function ArtistsPage() {
   const supabase = await createClient();
 
-  const { data: artists } = await supabase
+  const { data, error } = await supabase
     .from("artists")
     .select("*")
     .order("popularity", { ascending: false, nullsFirst: false });
 
-  return (
-    <div className="relative pt-24 pb-16 px-4">
-      <GradientBackground variant="subtle" />
-      <div className="max-w-7xl mx-auto relative">
-        <h1 className="font-brand text-4xl sm:text-5xl text-white mb-2">
-          Artists
-        </h1>
-        <p className="text-muted-foreground mb-8">
-          Filter by genre, popularity, and Spotify availability to narrow the field
-        </p>
+  // Throws on Supabase errors so outages render error.tsx, not an empty grid.
+  if (error) throw new Error(`Error fetching artists: ${error.message}`);
 
-        <ArtistGrid artists={(artists as Artist[]) ?? []} />
+  const artists = (data as Artist[]) ?? [];
+
+  return (
+    <div className="page pb-16 pt-10 sm:pt-14">
+      <div className="flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <h1 className="display text-6xl text-paper sm:text-8xl">Artists</h1>
+        <p className="meta-strong sm:text-right">
+          <span className="block">
+            {artists.length} {artists.length === 1 ? "artist" : "artists"}
+          </span>
+          <span className="block text-smoke">ranked by popularity</span>
+        </p>
       </div>
+
+      <ArtistGrid artists={artists} />
     </div>
   );
 }

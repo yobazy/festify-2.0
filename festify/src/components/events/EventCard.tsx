@@ -1,122 +1,80 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, MapPin, Users } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { EVENT_PLACEHOLDER_IMAGE } from "@/lib/constants";
-import { SaveEventButton } from "@/components/taste/SaveEventButton";
-import { getEventLocationLabel } from "@/lib/event-data";
-import type { Event } from "@/types/event";
 import { formatEventDate } from "@/lib/dates";
+import { getEventLocationLabel, normalizeEventImageUrl } from "@/lib/event-data";
+import { artistsNotNamedIn, rankLineup } from "@/lib/lineup";
+import { SaveEventButton } from "@/components/taste/SaveEventButton";
+import type { Event } from "@/types/event";
 
 interface EventCardProps {
   event: Event;
-  index?: number;
+  /** Larger type for two-up grids. */
+  size?: "md" | "lg";
+  className?: string;
+  priority?: boolean;
 }
 
-export function EventCard({ event, index = 0 }: EventCardProps) {
-  const rawImageUrl = event.use_alt ? event.alt_img : event.img_url;
-  const imageUrl = normalizeImageUrl(rawImageUrl) || EVENT_PLACEHOLDER_IMAGE;
-  const locationLabel = getEventLocationLabel(event) ?? "Location TBA";
+/** Poster tile: 3:4 image, name and top of the bill set at the foot. */
+export function EventCard({ event, size = "md", className, priority }: EventCardProps) {
+  const image =
+    normalizeEventImageUrl(event.use_alt ? event.alt_img : event.img_url) ??
+    EVENT_PLACEHOLDER_IMAGE;
+  const location = getEventLocationLabel(event) ?? "Venue TBA";
+  const bill = artistsNotNamedIn(rankLineup(event.artists), event.event_name).slice(0, 3);
+  const spansDays = event.event_end_date && event.event_end_date > event.event_date;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-    >
-      <div className="relative">
-        <div className="absolute left-3 top-3 z-10">
-          <SaveEventButton event={event} />
-        </div>
+    <article className={cn("group relative aspect-[3/4] overflow-hidden bg-ink-2", className)}>
+      <Image
+        src={image}
+        alt=""
+        fill
+        priority={priority}
+        sizes={size === "lg" ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
+        className="img-poster object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+      <div className="scrim-bottom absolute inset-0" />
 
-        <Link href={`/events/${event.event_id}`}>
-        <div
+      <Link
+        href={`/events/${event.event_id}`}
+        className="absolute inset-0 z-10"
+        aria-label={event.event_name}
+      />
+
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between p-4">
+        <p className="meta-strong leading-tight">
+          {formatEventDate(event.event_date, { weekday: "short", day: "2-digit", month: "short" })}
+          {spansDays && (
+            <span className="block text-smoke">
+              to {formatEventDate(event.event_end_date!, { day: "2-digit", month: "short" })}
+            </span>
+          )}
+        </p>
+        <div className="pointer-events-auto">
+          <SaveEventButton event={event} compact className="bg-ink/60 backdrop-blur-[2px]" />
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-4 sm:p-5">
+        <h3
           className={cn(
-            "group relative overflow-hidden rounded-2xl h-72",
-            "bg-card border border-white/5",
-            "hover:border-primary/30 transition-all duration-300",
-            "hover:shadow-lg hover:shadow-primary/10"
+            "display text-paper transition-colors group-hover:text-signal",
+            size === "lg" ? "text-3xl sm:text-4xl lg:text-5xl" : "text-2xl sm:text-3xl"
           )}
         >
-          {/* Background Image */}
-          <Image
-            src={imageUrl}
-            alt={event.event_name}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover opacity-35 group-hover:opacity-45 group-hover:scale-105 transition-all duration-500"
-          />
-
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-          {/* Date Badge */}
-          <div className="absolute top-3 right-3 glass px-3 py-1 text-xs font-medium text-white flex items-center gap-1.5">
-            <Calendar size={12} />
-            {formatDate(event.event_date)}
-            {event.event_end_date && (
-              <span className="text-muted-foreground">
-                {" "}
-                - {formatDate(event.event_end_date)}
-              </span>
-            )}
-          </div>
-
-          {/* Festival Badge (sits under the date; the save button owns top-left) */}
-          {event.festivalind && (
-            <div className="absolute top-12 right-3 bg-primary/80 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-medium text-primary-foreground">
-              Festival
-            </div>
-          )}
-
-          {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-5">
-            <h3 className="font-brand text-xl text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
-              {event.event_name}
-            </h3>
-
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin size={14} className="shrink-0" />
-                <span className="truncate">{locationLabel}</span>
-              </div>
-
-              {event.artists && event.artists.length > 0 && (
-                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <Users size={14} className="shrink-0" />
-                  <span>
-                    {event.artists.length}{" "}
-                    {event.artists.length === 1 ? "artist" : "artists"}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        </Link>
+          {event.event_name}
+        </h3>
+        {bill.length > 0 && (
+          <p className="billing-line mt-3 flex flex-wrap text-sm text-paper-2">
+            {bill.map((artist) => (
+              <span key={artist.artist_id}>{artist.artist_name}</span>
+            ))}
+          </p>
+        )}
+        <p className="meta mt-2 truncate">{location}</p>
       </div>
-    </motion.div>
+    </article>
   );
-}
-
-function normalizeImageUrl(url: string | null): string | null {
-  if (!url) return null;
-
-  const trimmed = url.trim();
-  if (!trimmed) return null;
-
-  // Some RA rows include a full URL after the CDN host prefix.
-  const raPrefix = "https://images.ra.co/";
-  if (trimmed.startsWith(raPrefix + "https://")) {
-    return trimmed.slice(raPrefix.length);
-  }
-
-  return trimmed;
-}
-
-function formatDate(dateStr: string): string {
-  return formatEventDate(dateStr);
 }

@@ -1,99 +1,89 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Calendar, MapPin, ExternalLink } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatEventDate } from "@/lib/dates";
+import { normalizeEventImageUrl } from "@/lib/event-data";
+import { PlayLineupLink } from "@/components/events/PlayLineupLink";
 import { SaveEventButton } from "@/components/taste/SaveEventButton";
 import type { Event } from "@/types/event";
-import { formatEventDate } from "@/lib/dates";
 
 interface EventHeaderProps {
   event: Event;
 }
 
+/**
+ * The top of the poster: the facts in mono, the name set huge. With a photo
+ * it's a full-bleed still; without one it's the type-only flyer.
+ */
 export function EventHeader({ event }: EventHeaderProps) {
-  const imageUrl =
-    (event.use_alt ? event.alt_img : event.img_url) || "/images/event-placeholder.svg";
+  const image = normalizeEventImageUrl(event.use_alt ? event.alt_img : event.img_url);
+  const venue = event.event_venue?.trim() || null;
+  const city = event.event_location?.trim() || null;
+  const spansDays = event.event_end_date && event.event_end_date > event.event_date;
 
   return (
-    <section className="relative h-[60vh] min-h-[400px] flex items-end overflow-hidden">
-      {/* Background Image */}
-      <Image
-        src={imageUrl}
-        alt={event.event_name}
-        fill
-        priority
-        className="object-cover"
-      />
+    <section
+      className={cn("relative overflow-hidden", image ? "min-h-[70svh] bg-ink-2" : "bg-ink")}
+    >
+      {image && (
+        <>
+          <Image
+            src={image}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="img-poster object-cover"
+          />
+          <div className="scrim-bottom absolute inset-0" />
+        </>
+      )}
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-black/50" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+      <div
+        className={cn(
+          "page relative flex flex-col justify-end",
+          image ? "min-h-[70svh] pb-10 pt-24 sm:pb-14" : "pb-12 pt-14 sm:pb-16 sm:pt-20"
+        )}
+      >
+        <p className="meta-strong mb-6 flex flex-wrap gap-x-6 gap-y-1">
+          <span>
+            {formatEventDate(event.event_date, {
+              weekday: "long",
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })}
+            {spansDays &&
+              ` to ${formatEventDate(event.event_end_date!, { day: "2-digit", month: "long" })}`}
+          </span>
+          {venue && <span>{venue}</span>}
+          {city && <span>{city}</span>}
+          {event.festivalind && <span>Festival</span>}
+        </p>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {event.festivalind && (
-            <span className="inline-block bg-primary/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white mb-4">
-              Festival
-            </span>
+        <h1
+          className={cn(
+            "display max-w-[14ch] text-paper",
+            image ? "text-[clamp(2.5rem,8vw,7.5rem)]" : "text-[clamp(3rem,11vw,10.5rem)]"
           )}
-
-          <h1 className="font-brand text-4xl sm:text-5xl lg:text-6xl text-white mb-4">
-            {event.event_name}
-          </h1>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="flex flex-wrap items-center gap-4 text-muted-foreground"
         >
-          <SaveEventButton event={event} className="bg-white/10 hover:bg-white/15" />
+          {event.event_name}
+        </h1>
 
-          <div className="flex items-center gap-2">
-            <Calendar size={16} />
-            <span>
-              {formatDateLong(event.event_date)}
-              {event.event_end_date &&
-                ` — ${formatDateLong(event.event_end_date)}`}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <MapPin size={16} />
-            <span>
-              {event.event_venue}, {event.event_location}
-            </span>
-          </div>
-
+        <div className="mt-10 flex flex-wrap items-center gap-6">
+          <PlayLineupLink eventId={event.event_id} label="Hear the lineup" />
+          <SaveEventButton event={event} />
           {event.edmtrain_link && (
             <a
               href={event.edmtrain_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors"
+              className="text-sm font-medium text-paper-2 underline-offset-4 hover:text-paper hover:underline"
             >
-              <ExternalLink size={14} />
-              EDMtrain
+              Tickets and info
             </a>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
-}
-
-function formatDateLong(dateStr: string): string {
-  return formatEventDate(dateStr, {
-    weekday: "short",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
 }

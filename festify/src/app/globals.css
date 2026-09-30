@@ -1,206 +1,307 @@
 @import "tailwindcss";
 
-/* ── Font Faces ── */
-@font-face {
-  font-family: "Gotham-Bold";
-  src: url("/fonts/Gotham-Bold.otf") format("opentype");
-  font-display: swap;
-}
+/*
+  Front Left design tokens.
 
-@font-face {
-  font-family: "Gotham-Light";
-  src: url("/fonts/Gotham-Light.otf") format("opentype");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Gotham-Thin";
-  src: url("/fonts/Gotham-Thin.otf") format("opentype");
-  font-display: swap;
-}
-
-/* ── Design Tokens ── */
+  A printed flyer in a dark room: ink, paper, one teal light that means "live".
+  Display type is Archivo set wide and heavy; facts (dates, venues, times) are
+  JetBrains Mono. Fonts are loaded in app/layout.tsx via next/font and exposed
+  as --font-archivo / --font-jetbrains.
+*/
 @theme inline {
-  --color-background: var(--background);
-  --color-background-secondary: var(--background-secondary);
-  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-smoke: var(--smoke);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
 
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+  /* Aliases used by shared components. */
+  --color-background: var(--ink);
+  --color-foreground: var(--paper);
+  --color-muted-foreground: var(--smoke);
+  --color-border: var(--line);
+  --color-accent: var(--signal);
+  --color-primary: var(--paper);
+  --color-primary-foreground: var(--ink);
+  --color-card: var(--ink-2);
 
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --font-display: var(--font-archivo), "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-archivo), "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-brand: var(--font-archivo), "Archivo", sans-serif;
 
-  --color-brand-glow: var(--brand-glow);
-
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-
-  --color-border: var(--border-color);
-
-  --font-brand: "Gotham-Bold", sans-serif;
-  --font-brand-light: "Gotham-Light", sans-serif;
-  --font-brand-thin: "Gotham-Thin", sans-serif;
-
-  --radius-lg: 0.75rem;
-  --radius-md: 0.5rem;
-  --radius-sm: 0.25rem;
-
-  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
-  --animate-rotate-word: rotate-word 3s ease-in-out infinite;
-  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
-
-  @keyframes fade-in-up {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes rotate-word {
-    0% {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    20% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    80% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-  }
-
-  @keyframes pulse-glow {
-    0%,
-    100% {
-      box-shadow: 0 0 20px rgba(156, 29, 185, 0.3);
-    }
-    50% {
-      box-shadow: 0 0 40px rgba(156, 29, 185, 0.6);
-    }
-  }
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
 }
 
-/* ── CSS Variables ── */
 :root {
-  --background: #0d0a12;
-  --background-secondary: #150f1e;
-  --foreground: #e2dce8;
+  --ink: #0a0a0a;
+  --ink-2: #141414;
+  --ink-3: #1f1f1f;
+  --paper: #f2f0eb;
+  --paper-2: #cfcdc7;
+  --smoke: #8a8a8a;
+  --line: rgba(242, 240, 235, 0.14);
+  --line-strong: rgba(242, 240, 235, 0.32);
+  --signal: #00d4aa;
+  --signal-ink: #06231c;
 
-  --primary: #9c1db9;
-  --primary-foreground: #ffffff;
-
-  --accent: #00d4aa;
-  --accent-foreground: #ffffff;
-
-  /* Logo tile gradient (see components/brand/Logo.tsx, public/images/logo.svg) */
-  --brand-from: #b52ad6;
-  --brand-to: #5e1273;
-  --brand-glow: #d946ef;
-
-  --muted: #1e1728;
-  --muted-foreground: #8b7fa0;
-
-  --card: #161122;
-  --card-foreground: #e2dce8;
-
-  --border-color: rgba(255, 255, 255, 0.08);
-
-  --glass-bg: rgba(255, 255, 255, 0.04);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 16px;
+  /* Brand mark tokens (components/brand/Logo.tsx, public/images/logo.svg). */
+  --brand-from: var(--paper);
+  --brand-to: var(--paper);
+  --brand-glow: var(--signal);
+  --accent: var(--signal);
 }
 
-/* ── Base Styles ── */
+/* ── Base ── */
+html {
+  background: var(--ink);
+  color-scheme: dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-brand-light), system-ui, sans-serif;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-}
-
-/* ── Glass Utilities ── */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-}
-
-.glass-hover:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  transition: all 0.3s ease;
-}
-
-/* ── Gradient Utilities ── */
-.gradient-purple {
-  background: linear-gradient(135deg, var(--primary), var(--brand-glow));
-}
-
-.gradient-overlay {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(13, 10, 18, 0.6) 50%,
-    var(--background) 100%
-  );
-}
-
-.gradient-overlay-strong {
-  background: linear-gradient(
-    180deg,
-    rgba(13, 10, 18, 0.3) 0%,
-    rgba(13, 10, 18, 0.8) 60%,
-    var(--background) 100%
-  );
-}
-
-/* ── Selection ── */
 ::selection {
-  background: rgba(156, 29, 185, 0.4);
-  color: white;
+  background: var(--paper);
+  color: var(--ink);
 }
 
-/* ── Focus ── */
-/* Many inputs use focus:outline-none; keep a visible ring for keyboard users.
-   Layered so components with their own focus-visible:ring utilities win. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--smoke);
+}
+
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--signal);
     outline-offset: 2px;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.5);
+    cursor: pointer;
+  }
+
+  select {
+    appearance: none;
+  }
+}
+
+/* ── Type ── */
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  font-variation-settings: "wdth" 112;
+}
+
+@utility display-narrow {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  font-variation-settings: "wdth" 88;
+}
+
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--smoke);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility meta-strong {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Structure ── */
+@utility hairline {
+  border-color: var(--line);
+}
+
+@utility rule {
+  border-top: 1px solid var(--line);
+}
+
+@utility rule-strong {
+  border-top: 1px solid var(--line-strong);
+}
+
+@utility page {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Image treatment: slightly desaturated and dimmed so paper text sits on it. */
+@utility img-poster {
+  filter: saturate(0.85) contrast(1.05);
+}
+
+@utility scrim-bottom {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0) 0%,
+    rgba(10, 10, 10, 0.35) 45%,
+    rgba(10, 10, 10, 0.92) 100%
+  );
+}
+
+@utility scrim-left {
+  background: linear-gradient(
+    90deg,
+    rgba(10, 10, 10, 0.92) 0%,
+    rgba(10, 10, 10, 0.55) 45%,
+    rgba(10, 10, 10, 0.1) 100%
+  );
+}
+
+/* Live/playing indicator: three bars pulsing in teal. */
+@utility live-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  & > span {
+    display: block;
+    width: 3px;
+    height: 100%;
+    background: var(--signal);
+    transform-origin: bottom;
+    animation: live-bar 0.9s ease-in-out infinite;
+  }
+  & > span:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  & > span:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes live-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/*
+  Grid of tiles on hairlines. Borders live on the tiles (not a gap over a line-
+  coloured background) so a short last row doesn't leave a grey slab.
+*/
+@utility tile-grid {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  & > * {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+/* Horizontal strip of tiles, same rules. */
+@utility tile-strip {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  & > * {
+    border-right: 1px solid var(--line);
+  }
+  & > *:first-child {
+    border-left: 1px solid var(--line);
+  }
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Poster billing separator between names on one line. */
+.billing-line > a + a::before,
+.billing-line > span + span::before {
+  content: "";
+  display: inline-block;
+  width: 0.2em;
+  height: 0.2em;
+  margin: 0 0.5em 0.1em;
+  vertical-align: middle;
+  background: var(--smoke);
+  opacity: 0.7;
+}
+
+/* Legacy aliases kept so any component not yet migrated still renders in-system. */
+.glass {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+}
+.glass-hover:hover {
+  border-color: var(--line-strong);
+}
+.gradient-purple {
+  background: var(--paper);
+  color: var(--ink);
+}
+.gradient-overlay,
+.gradient-overlay-strong {
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 10, 10, 0.7) 60%, var(--ink) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

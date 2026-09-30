@@ -5,7 +5,6 @@ import { ArtistHero } from "@/components/artist-detail/ArtistHero";
 import { ArtistPlaylists } from "@/components/artist-detail/ArtistPlaylists";
 import { ArtistTopTracks } from "@/components/artist-detail/ArtistTopTracks";
 import { UpcomingEvents } from "@/components/artist-detail/UpcomingEvents";
-import { GradientBackground } from "@/components/ui/GradientBackground";
 import type { Artist } from "@/types/artist";
 import type { Event } from "@/types/event";
 
@@ -15,7 +14,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
-  if (!/^\d+$/.test(id)) return { title: "Artist Not Found" };
+  if (!/^\d+$/.test(id)) return { title: "Artist not found" };
 
   const supabase = await createClient();
   const { data: artist } = await supabase
@@ -24,11 +23,11 @@ export async function generateMetadata({ params }: PageProps) {
     .eq("artist_id", id)
     .maybeSingle();
 
-  if (!artist) return { title: "Artist Not Found" };
+  if (!artist) return { title: "Artist not found" };
 
   return {
     title: `${artist.artist_name}`,
-    description: `Discover ${artist.artist_name} — upcoming events, genres, and Spotify profile.`,
+    description: `${artist.artist_name}: upcoming dates, top tracks, and playlists.`,
   };
 }
 
@@ -70,16 +69,10 @@ export default async function ArtistDetailPage({ params }: PageProps) {
     <>
       <ArtistHero artist={artist as Artist} />
 
-      <div className="relative">
-        <GradientBackground variant="subtle" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <ArtistTopTracks artist={artist as Artist} />
-          <ArtistPlaylists
-            artist={artist as Artist}
-            isSignedIn={Boolean(user)}
-          />
-          <UpcomingEvents events={events} />
-        </div>
+      <div className="page">
+        <ArtistTopTracks artist={artist as Artist} />
+        <ArtistPlaylists artist={artist as Artist} isSignedIn={Boolean(user)} />
+        <UpcomingEvents events={events} />
       </div>
     </>
   );

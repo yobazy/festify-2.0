@@ -4,13 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bookmark, ExternalLink, Loader2, Music2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { SectionHead } from "@/components/ui/SectionHead";
+import { Button } from "@/components/ui/Button";
 import { SpotifyEmbed } from "@/components/event-detail/SpotifyEmbed";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { searchPlaylists } from "@/lib/spotify";
-import { cn } from "@/lib/utils";
 import type { Artist } from "@/types/artist";
 import type { SpotifyPlaylist } from "@/types/playlist";
 
@@ -24,16 +23,16 @@ interface AccountState {
   savedPlaylistIds: string[];
 }
 
+const gridClass = "tile-grid grid-cols-2  md:grid-cols-3 xl:grid-cols-4";
+
 function sanitizeDescription(value: string | null) {
   if (!value) return null;
 
   return value.replace(/<[^>]+>/g, "").trim();
 }
 
-export function ArtistPlaylists({
-  artist,
-  isSignedIn,
-}: ArtistPlaylistsProps) {
+/** Playlists that lead with this artist. Tap a cover to play it here. */
+export function ArtistPlaylists({ artist, isSignedIn }: ArtistPlaylistsProps) {
   const pathname = usePathname();
   const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
@@ -116,26 +115,30 @@ export function ArtistPlaylists({
 
   const helperCopy = useMemo(() => {
     if (!isSignedIn) {
-      return "Sign in to save playlists to your Festify library.";
+      return "Sign in to keep playlists in your library.";
     }
 
     if (accountState.connected) {
-      return "Saved playlists stay in Festify and also follow in Spotify.";
+      return "Saved playlists also follow in your Spotify account.";
     }
 
-    return "Save playlists in Festify now, then connect Spotify later to sync future saves there too.";
+    return "Saved here now. Connect Spotify in settings to sync future saves.";
   }, [accountState.connected, isSignedIn]);
 
   if (loading) {
     return (
-      <section className="py-10">
-        <div className="mb-6 flex items-center gap-2">
-          <Music2 size={22} className="text-primary" />
-          <h2 className="font-brand text-2xl text-white">Playlists</h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <Skeleton key={index} className="h-72 rounded-3xl" />
+      <section className="py-14">
+        <SectionHead title="Playlists" note={helperCopy} />
+        <div className={`mt-6 ${gridClass}`}>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="bg-ink">
+              <Skeleton className="aspect-square w-full" />
+              <div className="p-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="mt-2 h-3 w-1/2" />
+                <Skeleton className="mt-4 h-8 w-20" />
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -189,131 +192,95 @@ export function ArtistPlaylists({
       if (isSaved) {
         setMessage(
           data.spotifyConnected
-            ? "Removed from your Festify library and unfollowed on Spotify."
-            : "Removed from your Festify library."
+            ? "Removed from your library and unfollowed in Spotify."
+            : "Removed from your library."
         );
       } else if (data.spotifyConnected && data.spotifySynced) {
-        setMessage("Saved in Festify and followed on Spotify.");
+        setMessage("Saved. It also follows in Spotify.");
       } else if (data.spotifyConnected) {
-        setMessage("Saved in Festify. Spotify sync is temporarily unavailable.");
+        setMessage("Saved. Spotify sync is unavailable right now.");
       } else {
-        setMessage("Saved in Festify. Connect Spotify in settings to sync future saves.");
+        setMessage("Saved. Connect Spotify in settings to sync future saves.");
       }
     } catch (saveError) {
       console.error("Failed to toggle playlist save", saveError);
-      setMessage("We couldn't update this playlist right now. Please try again.");
+      setMessage("Couldn't update that playlist. Try again.");
     } finally {
       setBusyPlaylistId(null);
     }
   }
 
   return (
-    <section className="py-10">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Music2 size={22} className="text-primary" />
-            <h2 className="font-brand text-2xl text-white">Playlists</h2>
-          </div>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Spotify playlists that can help you get a read on {artist.artist_name}
-            before the next event.
-          </p>
-        </div>
-        <p className="max-w-sm text-sm text-muted-foreground">{helperCopy}</p>
-      </div>
+    <section className="py-14">
+      <SectionHead title="Playlists" note={helperCopy} />
 
-      {message ? (
-        <div className="mb-6 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary">
+      {message && (
+        <div
+          role="status"
+          className="mt-6 border border-line px-4 py-3 text-sm text-paper"
+        >
           {message}
         </div>
-      ) : null}
+      )}
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {playlists.map((playlist, index) => {
-          const description = sanitizeDescription(playlist.description);
+      <div className={`mt-6 ${gridClass}`}>
+        {playlists.map((playlist) => {
           const isSaved = accountState.savedPlaylistIds.includes(playlist.id);
           const isBusy = busyPlaylistId === playlist.id;
+          const isActive = activePlaylist === playlist.id;
+          const owner = playlist.owner.display_name || "Spotify";
 
           return (
-            <motion.div
-              key={playlist.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: index * 0.04 }}
-              className="glass rounded-3xl border border-white/5 p-4"
-            >
+            <article key={playlist.id} className="flex flex-col bg-ink">
               <button
                 type="button"
-                onClick={() =>
-                  setActivePlaylist(
-                    activePlaylist === playlist.id ? null : playlist.id
-                  )
-                }
-                className="w-full text-left"
+                onClick={() => setActivePlaylist(isActive ? null : playlist.id)}
+                aria-pressed={isActive}
+                aria-label={isActive ? `Close ${playlist.name}` : `Play ${playlist.name}`}
+                className="group relative block aspect-square w-full overflow-hidden bg-ink-3 text-left"
               >
-                <div className="relative aspect-square overflow-hidden rounded-2xl bg-white/5">
-                  <Image
-                    src={playlist.images?.[0]?.url ?? PLACEHOLDER_IMAGE}
-                    alt={playlist.name}
-                    fill
-                    sizes="(min-width: 1280px) 320px, (min-width: 768px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="line-clamp-2 text-sm font-medium text-white">
-                      {playlist.name}
-                    </p>
-                  </div>
-                </div>
+                <Image
+                  src={playlist.images?.[0]?.url ?? PLACEHOLDER_IMAGE}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  className="img-poster object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                {isActive && (
+                  <>
+                    <div className="scrim-bottom absolute inset-0" />
+                    <span className="live-bars absolute bottom-3 left-3">
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  </>
+                )}
               </button>
 
-              <div className="mt-4 space-y-3">
-                <div>
-                  <p className="truncate text-xs uppercase tracking-[0.2em] text-primary/80">
-                    {playlist.owner.display_name || "Spotify"}
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {playlist.tracks.total} tracks
-                  </p>
-                  {description ? (
-                    <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
-                      {description}
-                    </p>
-                  ) : null}
-                </div>
+              <div className="flex flex-1 flex-col p-3">
+                <p className="line-clamp-2 text-sm text-paper">{playlist.name}</p>
+                <p className="meta mt-1 truncate">{owner}</p>
+                <p className="meta">
+                  {playlist.tracks.total} {playlist.tracks.total === 1 ? "track" : "tracks"}
+                </p>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-4">
                   {isSignedIn ? (
-                    <button
-                      type="button"
+                    <Button
+                      size="sm"
+                      variant={isSaved ? "solid" : "outline"}
                       onClick={() => toggleSave(playlist, isSaved)}
                       disabled={isBusy}
-                      className={cn(
-                        "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition-colors",
-                        isSaved
-                          ? "bg-primary text-black"
-                          : "bg-white/10 text-white hover:bg-white/15",
-                        isBusy && "opacity-70"
-                      )}
+                      aria-pressed={isSaved}
                     >
-                      {isBusy ? (
-                        <Loader2 size={12} className="animate-spin" />
-                      ) : (
-                        <Bookmark
-                          size={12}
-                          className={cn(isSaved && "fill-current")}
-                        />
-                      )}
                       {isSaved ? "Saved" : "Save"}
-                    </button>
+                    </Button>
                   ) : (
                     <Link
                       href={`/auth/login?next=${encodeURIComponent(pathname || "/artists")}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-white/15"
+                      className="meta-strong underline-offset-4 hover:underline"
                     >
-                      <Bookmark size={12} />
                       Sign in to save
                     </Link>
                   )}
@@ -322,23 +289,22 @@ export function ArtistPlaylists({
                     href={playlist.external_urls.spotify}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-white/5"
+                    className="meta-strong underline-offset-4 hover:underline"
                   >
-                    <ExternalLink size={12} />
                     Open in Spotify
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </article>
           );
         })}
       </div>
 
-      {activePlaylist ? (
+      {activePlaylist && (
         <div className="mt-6">
           <SpotifyEmbed playlistId={activePlaylist} />
         </div>
-      ) : null}
+      )}
     </section>
   );
 }

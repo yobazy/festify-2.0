@@ -2,15 +2,15 @@
 
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import { Logo } from "@/components/brand/Logo";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
 import { cn } from "@/lib/utils";
+import { GlobalSearch } from "./GlobalSearch";
 import { MobileNav } from "./MobileNav";
-import { signOut } from "@/app/auth/login/actions";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/events", label: "Events" },
+  { href: "/events", label: "Shows" },
   { href: "/artists", label: "Artists" },
   { href: "/playlists", label: "Playlists" },
 ];
@@ -21,101 +21,79 @@ interface NavbarProps {
 
 export function Navbar({ userEmail }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
   const isSignedIn = Boolean(userEmail);
   const closeMobileNav = useCallback(() => setMobileOpen(false), []);
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="group" aria-label="Festify home">
-              <Logo />
-            </Link>
+      <header className="sticky top-0 z-50 border-b border-line bg-ink">
+        {/* Three columns on desktop so the links sit on the page's true center,
+            whatever width the logo or the account side (and open search) take. */}
+        <div className="page flex h-14 items-center justify-between gap-6 md:grid md:grid-cols-[1fr_auto_1fr]">
+          <Link href="/" aria-label="Front Left home" className="flex shrink-0 items-center justify-self-start">
+            <Logo size="sm" />
+          </Link>
 
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
+          <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
+            {navLinks.map((link) => {
+              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "px-4 py-2 rounded-lg text-sm font-medium",
-                    "text-muted-foreground hover:text-white",
-                    "hover:bg-white/5 transition-all duration-200"
+                    "text-sm font-medium transition-colors",
+                    active ? "text-paper" : "text-smoke hover:text-paper"
                   )}
                 >
                   {link.label}
                 </Link>
-              ))}
-            </div>
+              );
+            })}
+          </nav>
 
-            {/* Auth / Sign In */}
-            <div className="hidden md:flex items-center gap-3">
-              {isSignedIn ? (
-                <>
-                  <Link
-                    href="/settings"
-                    className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm text-white transition-colors hover:bg-primary/15"
-                  >
-                    <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
-                    <span className="max-w-[180px] truncate">{userEmail}</span>
-                  </Link>
-                  <form action={signOut}>
-                    <button
-                      type="submit"
-                      className={cn(
-                        "px-4 py-2 rounded-lg text-sm font-medium",
-                        "text-muted-foreground hover:text-white",
-                        "hover:bg-white/5 transition-all duration-200"
-                      )}
-                    >
-                      Sign Out
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/auth/login"
-                    className={cn(
-                      "px-4 py-2 rounded-lg text-sm font-medium",
-                      "text-muted-foreground hover:text-white",
-                      "hover:bg-white/5 transition-all duration-200"
-                    )}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    className={cn(
-                      "px-5 py-2 rounded-full text-sm font-medium",
-                      "gradient-purple text-white",
-                      "hover:opacity-90 transition-opacity"
-                    )}
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 text-muted-foreground hover:text-white transition-colors"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-              aria-controls={mobileOpen ? "mobile-nav" : undefined}
-            >
-              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+          <div className="hidden items-center gap-4 justify-self-end md:flex">
+            <GlobalSearch />
+            {isSignedIn ? (
+              <Link
+                href="/settings"
+                className="meta-strong max-w-[200px] truncate underline-offset-4 hover:underline"
+                title="Settings"
+              >
+                {userEmail}
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="text-sm font-medium text-smoke transition-colors hover:text-paper"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="flex h-9 items-center bg-paper px-4 text-sm font-medium text-ink transition-colors hover:bg-white"
+                >
+                  Join
+                </Link>
+              </>
+            )}
           </div>
-        </div>
-      </nav>
 
-      {/* Mobile Nav */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="-mr-2 p-2 text-paper md:hidden"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            aria-controls={mobileOpen ? "mobile-nav" : undefined}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </header>
+
       <MobileNav
         isOpen={mobileOpen}
         onClose={closeMobileNav}

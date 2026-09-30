@@ -4,7 +4,7 @@ interface SpotifyEmbedProps {
 
 export function SpotifyEmbed({ playlistId }: SpotifyEmbedProps) {
   return (
-    <div className="glass rounded-2xl overflow-hidden">
+    <div className="border border-line bg-ink-2">
       <iframe
         src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
         width="100%"
@@ -12,8 +12,8 @@ export function SpotifyEmbed({ playlistId }: SpotifyEmbedProps) {
         frameBorder="0"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
-        className="rounded-2xl"
-        title="Spotify Playlist"
+        className="block"
+        title="Spotify playlist"
       />
     </div>
   );

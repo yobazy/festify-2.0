@@ -3,67 +3,90 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Search, X, Calendar, MapPin, Music } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { useDebounce } from "@/hooks/useDebounce";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { EVENT_PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { addDaysToDateString, formatEventDate, getTodayDateString, isEventUpcoming } from "@/lib/dates";
+import { getEventLocationLabel, normalizeEventImageUrl } from "@/lib/event-data";
 import type { Event } from "@/types/event";
 import type { Artist } from "@/types/artist";
 
 interface SearchResults {
+  query: string;
   events: Event[];
   artists: Artist[];
+}
+
+// Characters that would break a PostgREST `.or()`/`ilike` filter string.
+function sanitizeSearchTerm(value: string) {
+  return value.replace(/[%_,()*\\]/g, " ").trim().slice(0, 80);
 }
 
 export function GlobalSearch() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResults>({ events: [], artists: [] });
-  const [loading, setLoading] = useState(false);
+  // Results are keyed by the query that produced them, so a slow response for
+  // an old query can never show under a newer one.
+  const [results, setResults] = useState<SearchResults>({
+    query: "",
+    events: [],
+    artists: [],
+  });
   const debouncedQuery = useDebounce(query, 300);
+  const searchTerm = sanitizeSearchTerm(debouncedQuery);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Fetch results when debounced query changes
   useEffect(() => {
-    if (!debouncedQuery.trim()) {
-      setResults({ events: [], artists: [] });
-      return;
-    }
+    if (!searchTerm) return;
 
-    const fetchResults = async () => {
-      setLoading(true);
-      const supabase = createClient();
-      const q = `%${debouncedQuery}%`;
+    let cancelled = false;
+    const supabase = createClient();
+    const q = `%${searchTerm}%`;
+    const today = getTodayDateString();
 
-      const [eventsRes, artistsRes] = await Promise.all([
-        supabase
-          .from("events")
-          .select("event_id, event_name, event_date, event_venue, event_location, img_url, alt_img, use_alt")
-          .or(`event_name.ilike.${q},event_venue.ilike.${q},event_location.ilike.${q}`)
-          .order("event_date", { ascending: true })
-          .limit(5),
-        supabase
-          .from("artists")
-          .select("artist_id, artist_name, img_url, genres")
-          .ilike("artist_name", q)
-          .limit(5),
-      ]);
-
+    Promise.all([
+      supabase
+        .from("events")
+        .select(
+          "event_id, event_name, event_date, event_end_date, event_venue, event_location, img_url, alt_img, use_alt"
+        )
+        .or(`event_name.ilike.${q},event_venue.ilike.${q},event_location.ilike.${q}`)
+        // A week of slack catches festivals that started recently but are
+        // still running; isEventUpcoming makes the exact cut below.
+        .gte("event_date", addDaysToDateString(today, -7))
+        .order("event_date", { ascending: true })
+        .limit(15),
+      supabase
+        .from("artists")
+        .select("artist_id, artist_name, img_url, genres")
+        .ilike("artist_name", q)
+        .order("popularity", { ascending: false, nullsFirst: false })
+        .limit(5),
+    ]).then(([eventsRes, artistsRes]) => {
+      if (cancelled) return;
       setResults({
-        events: (eventsRes.data as Event[]) ?? [],
-        artists: (artistsRes.data as Artist[]) ?? [],
+        query: searchTerm,
+        events: ((eventsRes.data as Event[] | null) ?? [])
+          .filter((event) => isEventUpcoming(event, today))
+          .slice(0, 5),
+        artists: (artistsRes.data as Artist[] | null) ?? [],
       });
-      setLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
     };
+  }, [searchTerm]);
 
-    fetchResults();
-  }, [debouncedQuery]);
+  const hasQuery = searchTerm.length > 0;
+  const loading = hasQuery && results.query !== searchTerm;
+  const visibleResults = hasQuery && !loading ? results : { events: [], artists: [] };
 
-  // Close on click outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -74,27 +97,31 @@ export function GlobalSearch() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(false);
         setQuery("");
       }
+      // "/" focuses search, like a listings site should.
+      if (e.key === "/" && !isTypingTarget(e.target)) {
+        e.preventDefault();
+        setOpen(true);
+      }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
-  // Focus input when opened
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50);
     }
   }, [open]);
 
-  const hasResults = results.events.length > 0 || results.artists.length > 0;
-  const showDropdown = open && (hasResults || loading || query.length > 0);
+  const hasResults =
+    visibleResults.events.length > 0 || visibleResults.artists.length > 0;
+  const showDropdown = open && (hasResults || loading || hasQuery);
 
   const handleSelect = (href: string) => {
     router.push(href);
@@ -104,168 +131,135 @@ export function GlobalSearch() {
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Search trigger / input row */}
-      <div className="flex items-center gap-2">
-        <AnimatePresence>
+      <div className="flex items-center gap-1">
+        <AnimatePresence initial={false}>
           {open && (
             <motion.div
               initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 220, opacity: 1 }}
+              animate={{ width: 240, opacity: 1 }}
               exit={{ width: 0, opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
               className="overflow-hidden"
             >
-              <div className="relative">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (query.trim()) handleSelect(`/events?q=${encodeURIComponent(query.trim())}`);
+                }}
+              >
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search events, artists..."
+                  placeholder="Artist, event, city"
+                  aria-label="Search events and artists"
                   className={cn(
-                    "w-full h-9 pl-3 pr-8 rounded-lg text-sm",
-                    "bg-white/8 border border-white/10",
-                    "text-white placeholder:text-muted-foreground",
-                    "focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/25",
-                    "transition-all duration-200"
+                    "h-8 w-full border-0 border-b border-line bg-transparent px-1 text-sm",
+                    "text-paper placeholder:text-smoke focus:border-paper focus:outline-none"
                   )}
                 />
-                {query && (
-                  <button
-                    onClick={() => setQuery("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white"
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
 
         <button
           onClick={() => setOpen((o) => !o)}
-          className={cn(
-            "p-2 rounded-lg transition-all duration-200",
-            "text-muted-foreground hover:text-white hover:bg-white/5",
-            open && "text-white bg-white/5"
-          )}
-          aria-label="Search"
+          className="p-2 text-smoke transition-colors hover:text-paper"
+          aria-label={open ? "Close search" : "Search"}
+          aria-expanded={open}
         >
           {open ? <X size={18} /> : <Search size={18} />}
         </button>
       </div>
 
-      {/* Dropdown results */}
       <AnimatePresence>
         {showDropdown && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15 }}
-            className={cn(
-              "absolute right-0 top-full mt-2 w-80",
-              "glass border border-white/10 rounded-xl",
-              "shadow-2xl shadow-black/60 overflow-hidden z-50"
-            )}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.12 }}
+            className="absolute right-0 top-full z-50 mt-3 w-[22rem] border border-line bg-ink shadow-[0_24px_60px_rgba(0,0,0,0.6)]"
           >
-            {loading && (
-              <div className="px-4 py-6 text-center text-sm text-muted-foreground">
-                Searching...
-              </div>
+            {loading && <p className="meta px-4 py-5">Searching</p>}
+
+            {!loading && hasQuery && !hasResults && (
+              <p className="px-4 py-5 text-sm text-smoke">
+                Nothing listed for &ldquo;{query}&rdquo;.
+              </p>
             )}
 
-            {!loading && query && !hasResults && (
-              <div className="px-4 py-6 text-center text-sm text-muted-foreground">
-                No results for &quot;{query}&quot;
-              </div>
-            )}
-
-            {!loading && results.events.length > 0 && (
+            {!loading && visibleResults.events.length > 0 && (
               <div>
-                <div className="px-4 pt-3 pb-1.5 flex items-center gap-2">
-                  <Calendar size={11} className="text-primary" />
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                    Events
-                  </span>
-                </div>
-                {results.events.map((event) => {
-                  const img = (event.use_alt ? event.alt_img : event.img_url) || PLACEHOLDER_IMAGE;
+                <p className="meta border-b border-line px-4 py-2">Shows</p>
+                {visibleResults.events.map((event) => {
+                  const img =
+                    normalizeEventImageUrl(event.use_alt ? event.alt_img : event.img_url) ??
+                    EVENT_PLACEHOLDER_IMAGE;
                   return (
                     <button
                       key={event.event_id}
                       onClick={() => handleSelect(`/events/${event.event_id}`)}
-                      className={cn(
-                        "w-full flex items-center gap-3 px-4 py-2.5",
-                        "hover:bg-white/5 transition-colors text-left"
-                      )}
+                      className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-ink-2"
                     >
-                      <div className="relative w-9 h-9 rounded-md overflow-hidden shrink-0">
-                        <Image src={img} alt={event.event_name} fill className="object-cover opacity-80" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm text-white truncate">{event.event_name}</p>
-                        <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
-                          <MapPin size={10} />
-                          {event.event_location}
-                        </p>
-                      </div>
+                      <span className="meta-strong w-12 shrink-0 leading-tight">
+                        {formatEventDate(event.event_date, { day: "2-digit", month: "short" })}
+                      </span>
+                      <span className="relative h-9 w-9 shrink-0 overflow-hidden bg-ink-3">
+                        <Image src={img} alt="" fill sizes="36px" className="img-poster object-cover" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm text-paper">{event.event_name}</span>
+                        <span className="meta block truncate">
+                          {getEventLocationLabel(event) ?? "Venue TBA"}
+                        </span>
+                      </span>
                     </button>
                   );
                 })}
               </div>
             )}
 
-            {!loading && results.artists.length > 0 && (
-              <div className={cn(results.events.length > 0 && "border-t border-white/5")}>
-                <div className="px-4 pt-3 pb-1.5 flex items-center gap-2">
-                  <Music size={11} className="text-primary" />
-                  <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-                    Artists
-                  </span>
-                </div>
-                {results.artists.map((artist) => (
+            {!loading && visibleResults.artists.length > 0 && (
+              <div className={cn(visibleResults.events.length > 0 && "border-t border-line")}>
+                <p className="meta border-b border-line px-4 py-2">Artists</p>
+                {visibleResults.artists.map((artist) => (
                   <button
                     key={artist.artist_id}
                     onClick={() => handleSelect(`/artists/${artist.artist_id}`)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-4 py-2.5",
-                      "hover:bg-white/5 transition-colors text-left"
-                    )}
+                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-ink-2"
                   >
-                    <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 ring-1 ring-white/10">
+                    <span className="relative h-9 w-9 shrink-0 overflow-hidden bg-ink-3">
                       <Image
                         src={artist.img_url || PLACEHOLDER_IMAGE}
-                        alt={artist.artist_name}
+                        alt=""
                         fill
-                        className="object-cover"
+                        sizes="36px"
+                        className="img-poster object-cover"
                       />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm text-white truncate">{artist.artist_name}</p>
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm text-paper">{artist.artist_name}</span>
                       {artist.genres && artist.genres.length > 0 && (
-                        <p className="text-xs text-muted-foreground truncate">
+                        <span className="meta block truncate">
                           {artist.genres.slice(0, 2).join(", ")}
-                        </p>
+                        </span>
                       )}
-                    </div>
+                    </span>
                   </button>
                 ))}
               </div>
             )}
 
             {hasResults && (
-              <div className="border-t border-white/5 px-4 py-2.5">
+              <div className="border-t border-line px-4 py-2.5">
                 <button
-                  onClick={() => {
-                    router.push(`/events?q=${encodeURIComponent(query)}`);
-                    setOpen(false);
-                    setQuery("");
-                  }}
-                  className="text-xs text-primary hover:text-primary/80 transition-colors"
+                  onClick={() => handleSelect(`/events?q=${encodeURIComponent(query)}`)}
+                  className="meta-strong underline-offset-4 hover:underline"
                 >
-                  See all results for &quot;{query}&quot; →
+                  All shows for &ldquo;{query}&rdquo;
                 </button>
               </div>
             )}
@@ -274,4 +268,10 @@ export function GlobalSearch() {
       </AnimatePresence>
     </div>
   );
+}
+
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target.isContentEditable;
 }

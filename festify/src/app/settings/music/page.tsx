@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { disconnectSpotify } from "@/app/settings/actions";
 import { requireUser } from "@/lib/auth";
 import { hasAdminCredentials } from "@/lib/supabase/admin";
 import { getSpotifyConnection } from "@/lib/spotify-server";
+import { Button } from "@/components/ui/Button";
 
 interface MusicSettingsPageProps {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -12,11 +12,11 @@ interface MusicSettingsPageProps {
 function getStatusMessage(status: string | null) {
   switch (status) {
     case "connected":
-      return "Spotify is connected. New playlist saves will follow there too.";
+      return "Spotify connected. New saves will follow there too.";
     case "disconnected":
-      return "Spotify has been disconnected. Your Festify library is still here.";
+      return "Spotify disconnected. Your saved playlists are still on the Playlists page.";
     case "error":
-      return "Spotify connection did not complete. Please try again.";
+      return "Spotify connection didn't complete. Try again.";
     case "setup-required":
       return "Add SUPABASE_SERVICE_KEY to festify/.env.local before enabling Spotify sync.";
     default:
@@ -37,93 +37,70 @@ export default async function MusicSettingsPage({
   const spotifyConnection = await getSpotifyConnection(user.id);
 
   return (
-    <section className="space-y-6">
-      <div className="glass rounded-3xl border border-white/5 p-6 sm:p-8">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <h2 className="font-brand text-2xl text-white">Music</h2>
-            <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-              Connect Spotify so playlists you save from artist pages can follow
-              there too.
+    <section>
+      {message && (
+        <div className="mb-8 border border-line px-4 py-3 text-sm text-paper">{message}</div>
+      )}
+
+      <div className="grid gap-4 border-b border-line py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div className="flex items-center gap-4">
+          {spotifyConnection?.spotify_avatar_url && (
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden bg-ink-3">
+              {/* Spotify avatars come from arbitrary CDN hosts (fbcdn etc.), so
+                  next/image's remotePatterns can't cover them. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={spotifyConnection.spotify_avatar_url}
+                alt=""
+                width={40}
+                height={40}
+                className="img-poster h-full w-full object-cover"
+              />
+            </div>
+          )}
+          <div className="min-w-0">
+            <h2 className="display-narrow text-2xl text-paper">Spotify</h2>
+            <p className="meta mt-1 truncate">
+              {spotifyConnection
+                ? `Connected as ${spotifyConnection.spotify_display_name ?? "your Spotify account"}`
+                : "Not connected"}
             </p>
           </div>
+        </div>
 
+        <div className="sm:text-right">
           {spotifyConnection ? (
             <form action={disconnectSpotify}>
-              <button
-                type="submit"
-                className="rounded-full border border-white/10 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/5"
-              >
+              <Button type="submit" variant="outline">
                 Disconnect Spotify
-              </button>
+              </Button>
             </form>
           ) : !spotifySyncAvailable ? (
-            <div className="rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-2.5 text-sm font-medium text-amber-200">
-              Spotify sync needs server setup
-            </div>
+            <p className="max-w-sm text-sm text-smoke">
+              Spotify sync needs a server setup: add SUPABASE_SERVICE_KEY to festify/.env.local.
+            </p>
           ) : (
             <Link
               href="/api/spotify/connect"
-              className="rounded-full bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-500"
+              className="inline-flex h-10 items-center bg-paper px-4 text-sm font-medium text-ink hover:bg-white"
             >
               Connect Spotify
             </Link>
           )}
         </div>
-
-        {message && (
-          <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm text-primary">
-            {message}
-          </div>
-        )}
       </div>
 
-      <div className="glass rounded-3xl border border-white/5 p-6 sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
-              Spotify sync
-            </p>
-            <h3 className="mt-2 text-lg font-medium text-white">
-              {spotifyConnection ? "Connected" : "Not connected"}
-            </h3>
-          </div>
-
-          {spotifyConnection && spotifyConnection.spotify_avatar_url ? (
-            <div className="relative h-12 w-12 overflow-hidden rounded-full border border-white/10">
-              <Image
-                src={spotifyConnection.spotify_avatar_url}
-                alt="Spotify profile avatar"
-                fill
-                sizes="48px"
-                className="object-cover"
-              />
-            </div>
-          ) : null}
+      <div className="grid gap-2 border-b border-line py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <div>
+          <h2 className="display-narrow text-2xl text-paper">Library</h2>
+          <p className="mt-1 text-sm text-smoke">Saved playlists live on the Playlists page.</p>
         </div>
-
-        <p className="mt-4 text-sm text-muted-foreground">
-          {!spotifySyncAvailable
-            ? "Spotify OAuth is disabled until the server-side Supabase service key is available in the app environment."
-            : spotifyConnection
-            ? `Connected as ${spotifyConnection.spotify_display_name ?? "your Spotify account"}.`
-            : "Connect Spotify to follow future playlist saves from Festify."}
-        </p>
-
-        <div className="mt-6 rounded-2xl border border-white/5 bg-white/5 p-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
-            Playlist library
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Saved playlists now live on the dedicated Playlists page.
-          </p>
-          <Link
-            href="/playlists"
-            className="mt-4 inline-flex rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/5"
-          >
-            Open playlists
-          </Link>
-        </div>
+        <Link
+          href="/playlists"
+          className="meta-strong underline-offset-4 hover:underline sm:text-right"
+        >
+          Open playlists
+        </Link>
       </div>
     </section>
   );

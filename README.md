@@ -1,13 +1,14 @@
 <div align="center">
 
-<img src="festify/public/images/logo.svg" alt="Festify logo" width="96" height="96" />
+<img src="festify/public/images/logo.svg" alt="Front Left logo" width="96" height="96" />
 
-# Festify
+# Front Left
 
-**Find the festival. Hear the lineup before you go.**
+**See you front left.**
 
-Festify is an EDM event companion. Browse upcoming shows and festivals, see who's
-playing, and preview every artist on Spotify before you buy the ticket.
+Front Left is a music-event discovery site for people who actually like music. Every
+upcoming show and festival, the full bill ranked like a poster, and every artist on it
+ready to hear before you buy the ticket. Who's playing, and why you should care.
 
 [Features](#features) •
 [Screenshots](#screenshots) •
@@ -17,7 +18,7 @@ playing, and preview every artist on Spotify before you buy the ticket.
 
 </div>
 
-![Festify home page](screenshots/home.png)
+![Front Left home page](screenshots/home.png)
 
 ## Features
 

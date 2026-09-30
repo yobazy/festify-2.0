@@ -3,23 +3,22 @@ import { Skeleton } from "@/components/ui/Skeleton";
 export default function EventDetailLoading() {
   return (
     <>
-      {/* Hero skeleton */}
-      <Skeleton className="h-[60vh] w-full rounded-none" />
+      <Skeleton className="h-[70svh] w-full" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Playlists skeleton */}
-        <Skeleton className="h-8 w-48 mb-6" />
-        <div className="flex gap-4 overflow-hidden mb-12">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="w-44 h-44 rounded-xl shrink-0" />
-          ))}
+      <div className="page py-14">
+        <Skeleton className="h-8 w-40" />
+        <div className="mt-12 flex flex-col items-center gap-4">
+          <Skeleton className="h-14 w-3/4 max-w-2xl" />
+          <Skeleton className="h-8 w-2/3 max-w-xl" />
+          <Skeleton className="h-4 w-1/2 max-w-md" />
         </div>
+      </div>
 
-        {/* Lineup skeleton */}
-        <Skeleton className="h-8 w-32 mb-6" />
-        <div className="flex flex-wrap gap-3">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-10 w-36 rounded-full" />
+      <div className="page py-14">
+        <Skeleton className="h-8 w-32" />
+        <div className="scrollbar-hide mt-8 tile-strip overflow-hidden">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="aspect-square w-36 shrink-0 sm:w-40" />
           ))}
         </div>
       </div>

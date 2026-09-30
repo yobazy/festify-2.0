@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { EventHeader } from "@/components/event-detail/EventHeader";
 import { EventLineup } from "@/components/event-detail/EventLineup";
 import { PlaylistCarousel } from "@/components/event-detail/PlaylistCarousel";
-import { GradientBackground } from "@/components/ui/GradientBackground";
+import { TheBill } from "@/components/event-detail/TheBill";
 import type { Event } from "@/types/event";
 import type { Artist } from "@/types/artist";
 
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: event.event_name,
-    description: `${event.event_name}${locationLabel ? ` at ${locationLabel}` : ""}. Discover the lineup and Spotify playlists.`,
+    description: `${event.event_name}${locationLabel ? ` at ${locationLabel}` : ""}. The full bill, and playlists to hear it first.`,
   };
 }
 
@@ -95,17 +95,12 @@ export default async function EventDetailPage({ params }: PageProps) {
   return (
     <>
       <EventHeader event={event as Event} />
-
-      <div className="relative">
-        <GradientBackground variant="subtle" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <PlaylistCarousel
-            key={(event as Event).event_id}
-            eventName={(event as Event).event_name}
-          />
-          <EventLineup artists={artists} />
-        </div>
-      </div>
+      <TheBill artists={artists} />
+      <PlaylistCarousel
+        key={(event as Event).event_id}
+        eventName={(event as Event).event_name}
+      />
+      <EventLineup artists={artists} />
     </>
   );
 }

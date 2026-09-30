@@ -93,3 +93,21 @@ After completing any significant task:
 - Turbopack dev sometimes serves stale `globals.css`; if a CSS change doesn't appear, stop the server and `rm -rf festify/.next`
 - Event images fall back to `EVENT_PLACEHOLDER_IMAGE` (brand gradient + centered mark); `PLACEHOLDER_IMAGE` is for people/playlists only
 - The festify-2 Supabase project pauses when idle and listings go stale: after a restore, run `cd server && npm run sync` before screenshots or demos (README screenshots were refreshed 2026-09-29 this way)
+
+### Front Left design system (2026-09-29 redesign)
+- The app is **Front Left** in all UI copy and metadata (Festify remains only in package/db names and the `festify-taste` localStorage key). Brand vision doc: https://claude.ai/code/artifact/a4768b36-6d64-4ca4-b769-76dcb3698dcb
+- Tokens live in `globals.css`: `ink/ink-2/ink-3` backgrounds, `paper/paper-2/smoke` text, `line/line-strong` hairlines, `signal` teal. Teal means live/playing/now/the play affordance and nothing else. No purple, gradients (except `scrim-*`), glass, blur glows, shadows or rounded corners
+- Type: Archivo (next/font, `--font-archivo`, width axis) + JetBrains Mono. Utilities: `display` (900 wide caps: names, headlines), `display-narrow` (row/tile titles), `meta` / `meta-strong` (mono facts: dates, venues, counts). No tracked ALL-CAPS eyebrow labels, no `→` on links, no `A · B · C` meta strings
+- Layout: `page` (max-w 88rem + gutters), `SectionHead` for section titles on a rule, ledger rows (`EventRow`) on hairlines instead of card grids, `tile-grid` / `tile-strip` for image tiles (borders on tiles, never `gap-px bg-line`, which leaves a grey slab on short rows). Whole-row links = absolute `Link` overlay + `pointer-events-none` content
+- Lineups are typeset as poster billing via `Billing` (`lib/lineup.ts`: `rankLineup`, `billingTiers`). Use `artistsNotNamedIn(artists, event_name)` before billing under a title: many listings are titled after the acts and would stutter
+- Motion: one orchestrated moment per page at most (event page billing stagger), springs on press; no per-section fade-ups or card entrance staggers
+- Voice: dry and specific, sentence case, no hype or exclamation marks. Errors say what happened and what to do; empty states invite an action
+- `<meta name="darkreader-lock">` is set in layout metadata because the site is dark by design; Dark Reader otherwise repaints it and hides tiles
+- Spotify avatar URLs come from arbitrary CDN hosts: render them with a plain `<img>`, not `next/image`
+- `PLACEHOLDER_IMAGE` is now `placeholder-artist.svg`; `src/app/apple-icon.png` is still the old purple tile and needs regenerating from `logo.svg`
+
+### Shows page filters (2026-09-29)
+- UI copy says **shows**, never "listings" (read as ads). The route stays `/events`
+- Place filtering goes through `lib/places.ts` (`buildPlaces`): raw `event_location` strings fold into metros (`METROS`: Brooklyn/Queens → New York, Morrison → Denver, etc.) plus state/country options. URL is `?where=city:<slug>` or `?where=region:<code>`; legacy `?location=` still resolves. Add new satellite towns to `METROS` rather than special-casing
+- `/events` filter state lives in the URL (`where`, `from`, `to`, `type`, `sort=bill`); date presets (Tonight, This weekend, Next 30 days, This month) are derived from `from`/`to`, not stored separately
+- Navbar is a `1fr auto 1fr` grid on desktop so links sit on the true center; logo links must be `flex` (an inline link adds descender space and rides ~3px high)

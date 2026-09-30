@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTasteStore } from "@/stores/tasteStore";
 import type { Artist } from "@/types/artist";
@@ -8,11 +8,14 @@ import type { Artist } from "@/types/artist";
 interface FollowArtistButtonProps {
   artist: Artist;
   className?: string;
+  /** Icon-only, for grids. */
+  compact?: boolean;
 }
 
 export function FollowArtistButton({
   artist,
   className,
+  compact = false,
 }: FollowArtistButtonProps) {
   const followedArtists = useTasteStore((state) => state.followedArtists);
   const toggleFollowArtist = useTasteStore((state) => state.toggleFollowArtist);
@@ -30,16 +33,19 @@ export function FollowArtistButton({
         toggleFollowArtist(artist);
       }}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition-all",
+        "inline-flex items-center gap-2 text-xs font-medium transition-[background-color,color,border-color,transform] active:scale-95",
+        compact ? "h-9 w-9 justify-center" : "h-10 px-4",
         isFollowed
-          ? "bg-primary text-black"
-          : "bg-black/50 text-white hover:bg-black/65",
+          ? "bg-paper text-ink"
+          : "border border-line-strong text-paper hover:border-paper hover:bg-ink-2",
         className
       )}
       aria-pressed={isFollowed}
+      aria-label={isFollowed ? `Unfollow ${artist.artist_name}` : `Follow ${artist.artist_name}`}
+      title={isFollowed ? "Following" : "Follow"}
     >
-      <Heart size={14} className={cn(isFollowed && "fill-current")} />
-      {isFollowed ? "Following" : "Follow"}
+      {isFollowed ? <Check size={14} /> : <Plus size={14} />}
+      {!compact && (isFollowed ? "Following" : "Follow")}
     </button>
   );
 }

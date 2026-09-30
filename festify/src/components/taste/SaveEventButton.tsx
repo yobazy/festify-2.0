@@ -8,11 +8,14 @@ import type { Event } from "@/types/event";
 interface SaveEventButtonProps {
   event: Event;
   className?: string;
+  /** Icon-only, for listing rows. */
+  compact?: boolean;
 }
 
 export function SaveEventButton({
   event,
   className,
+  compact = false,
 }: SaveEventButtonProps) {
   const savedEvents = useTasteStore((state) => state.savedEvents);
   const toggleSaveEvent = useTasteStore((state) => state.toggleSaveEvent);
@@ -28,16 +31,19 @@ export function SaveEventButton({
         toggleSaveEvent(event);
       }}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition-all",
+        "inline-flex items-center gap-2 text-xs font-medium transition-[background-color,color,border-color,transform] active:scale-95",
+        compact ? "h-9 w-9 justify-center" : "h-10 px-4",
         isSaved
-          ? "bg-primary text-black"
-          : "bg-black/50 text-white hover:bg-black/65",
+          ? "bg-paper text-ink"
+          : "border border-line-strong text-paper hover:border-paper hover:bg-ink-2",
         className
       )}
       aria-pressed={isSaved}
+      aria-label={isSaved ? `Remove ${event.event_name} from saved` : `Save ${event.event_name}`}
+      title={isSaved ? "Saved" : "Save"}
     >
       <Bookmark size={14} className={cn(isSaved && "fill-current")} />
-      {isSaved ? "Saved" : "Save"}
+      {!compact && (isSaved ? "Saved" : "Save")}
     </button>
   );
 }

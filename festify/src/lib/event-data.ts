@@ -98,7 +98,8 @@ export function sortEventsByPopularity(events: Event[]) {
       return popularityDelta;
     }
 
-    return new Date(a.event_date).getTime() - new Date(b.event_date).getTime();
+    // Calendar-day strings sort correctly as text (see lib/dates.ts).
+    return a.event_date.localeCompare(b.event_date);
   });
 }
 
@@ -138,4 +139,19 @@ function getDaysAway(dateString: string) {
   return Math.round(
     (target.getTime() - startOfToday.getTime()) / (1000 * 60 * 60 * 24)
   );
+}
+
+/** Event image URL, fixing RA rows that store a full URL after the CDN host prefix. */
+export function normalizeEventImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+
+  const raPrefix = "https://images.ra.co/";
+  if (trimmed.startsWith(raPrefix + "https://")) {
+    return trimmed.slice(raPrefix.length);
+  }
+
+  return trimmed;
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Logo } from "@/components/brand/Logo";
 import { signOut } from "@/app/auth/login/actions";
 
 interface MobileNavProps {
@@ -14,12 +14,7 @@ interface MobileNavProps {
   userEmail?: string | null;
 }
 
-export function MobileNav({
-  isOpen,
-  onClose,
-  links,
-  userEmail,
-}: MobileNavProps) {
+export function MobileNav({ isOpen, onClose, links, userEmail }: MobileNavProps) {
   const isSignedIn = Boolean(userEmail);
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -69,131 +64,91 @@ export function MobileNav({
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            onClick={onClose}
-            aria-hidden="true"
-          />
-
-          {/* Drawer */}
-          <motion.div
-            ref={drawerRef}
-            id="mobile-nav"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site navigation"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className={cn(
-              "fixed top-0 right-0 bottom-0 z-[60] w-72",
-              "bg-background/95 backdrop-blur-xl",
-              "border-l border-white/10",
-              "flex flex-col pt-20 px-6"
-            )}
-          >
+        <motion.div
+          ref={drawerRef}
+          id="mobile-nav"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
+          className="fixed inset-0 z-[60] flex flex-col bg-ink"
+        >
+          <div className="page flex h-14 items-center justify-between border-b border-line">
+            <Link href="/" onClick={onClose} aria-label="Front Left home" className="flex items-center">
+              <Logo size="sm" />
+            </Link>
             <button
               type="button"
               onClick={onClose}
               aria-label="Close menu"
-              className="absolute right-4 top-4 p-2 text-muted-foreground transition-colors hover:text-white"
+              className="-mr-2 p-2 text-paper"
             >
-              <X size={24} />
+              <X size={22} />
             </button>
+          </div>
 
+          <nav className="page flex flex-1 flex-col justify-center" aria-label="Primary">
             {links.map((link, i) => (
               <motion.div
                 key={link.href}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 + i * 0.05, duration: 0.25, ease: "easeOut" }}
               >
                 <Link
                   href={link.href}
                   onClick={onClose}
-                  className={cn(
-                    "block py-3 text-lg font-medium",
-                    "text-muted-foreground hover:text-white",
-                    "border-b border-white/5 transition-colors"
-                  )}
+                  className="display block border-b border-line py-5 text-5xl text-paper transition-colors hover:text-signal"
                 >
                   {link.label}
                 </Link>
               </motion.div>
             ))}
+          </nav>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-8 space-y-3"
-            >
-              {isSignedIn ? (
-                <>
-                  <div className="rounded-2xl border border-primary/20 bg-primary/10 px-4 py-3 text-sm text-white">
-                    <p className="text-xs uppercase tracking-[0.2em] text-primary/80">
-                      Signed in
-                    </p>
-                    <p className="mt-1 truncate">{userEmail}</p>
-                  </div>
-                  <Link
-                    href="/settings"
+          <div className="page border-t border-line py-6">
+            {isSignedIn ? (
+              <div className="flex items-center justify-between gap-4">
+                <Link
+                  href="/settings"
+                  onClick={onClose}
+                  className="meta-strong min-w-0 truncate underline-offset-4 hover:underline"
+                >
+                  {userEmail}
+                </Link>
+                <form action={signOut}>
+                  <button
+                    type="submit"
                     onClick={onClose}
-                    className={cn(
-                      "block w-full text-center py-3 rounded-full text-sm font-medium",
-                      "border border-white/10 text-white hover:bg-white/5 transition-colors"
-                    )}
+                    className="text-sm font-medium text-smoke hover:text-paper"
                   >
-                    Settings
-                  </Link>
-                  <form action={signOut}>
-                    <button
-                      type="submit"
-                      onClick={onClose}
-                      className={cn(
-                        "block w-full text-center py-3 rounded-full text-sm font-medium",
-                        "border border-white/10 text-white hover:bg-white/5 transition-colors"
-                      )}
-                    >
-                      Sign Out
-                    </button>
-                  </form>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/auth/login"
-                    onClick={onClose}
-                    className={cn(
-                      "block text-center py-3 rounded-full text-sm font-medium",
-                      "border border-white/10 text-white hover:bg-white/5 transition-colors"
-                    )}
-                  >
-                    Sign In
-                  </Link>
-
-                  <Link
-                    href="/auth/signup"
-                    onClick={onClose}
-                    className={cn(
-                      "block text-center py-3 rounded-full text-sm font-medium",
-                      "gradient-purple text-white",
-                      "hover:opacity-90 transition-opacity"
-                    )}
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </motion.div>
-          </motion.div>
-        </>
+                    Sign out
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/auth/login"
+                  onClick={onClose}
+                  className="flex h-11 items-center justify-center border border-line-strong text-sm font-medium text-paper"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  onClick={onClose}
+                  className="flex h-11 items-center justify-center bg-paper text-sm font-medium text-ink"
+                >
+                  Join
+                </Link>
+              </div>
+            )}
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

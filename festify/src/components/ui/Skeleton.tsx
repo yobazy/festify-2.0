@@ -5,12 +5,5 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className }: SkeletonProps) {
-  return (
-    <div
-      className={cn(
-        "animate-pulse rounded-lg bg-white/5",
-        className
-      )}
-    />
-  );
+  return <div className={cn("animate-pulse bg-ink-3", className)} />;
 }

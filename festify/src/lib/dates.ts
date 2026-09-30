@@ -68,3 +68,14 @@ export function isEventUpcoming(
   const lastDay = end && end > event.event_date ? end : event.event_date;
   return lastDay >= today;
 }
+
+/**
+ * Friday to Sunday of this weekend, as YYYY-MM-DD. From Friday on it's the
+ * weekend already underway, so "this weekend" on a Saturday means today and tomorrow.
+ */
+export function getWeekendRange(today = getTodayDateString()): { from: string; to: string } {
+  const day = parseEventDate(today).getDay(); // 0 Sun … 6 Sat
+  if (day === 0) return { from: today, to: today };
+  if (day >= 5) return { from: today, to: addDaysToDateString(today, 7 - day) };
+  return { from: addDaysToDateString(today, 5 - day), to: addDaysToDateString(today, 7 - day) };
+}

@@ -2,10 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { ExternalLink, Music2, Pause, Play } from "lucide-react";
-import { motion } from "framer-motion";
+import { Pause, Play } from "lucide-react";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { Badge } from "@/components/ui/Badge";
+import { SectionHead } from "@/components/ui/SectionHead";
 import { getArtistTopTracks } from "@/lib/spotify";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -29,6 +28,10 @@ interface SpotifyTrack {
   };
 }
 
+const rowClass =
+  "grid grid-cols-[2.5rem_3rem_minmax(0,1fr)_auto] items-center gap-x-4 border-b border-line py-3";
+
+/** Five from Spotify, numbered like a tracklist, with 30-second previews. */
 export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,16 +82,24 @@ export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
 
   if (loading) {
     return (
-      <section className="py-10">
-        <div className="mb-6 flex items-center gap-2">
-          <Music2 size={22} className="text-primary" />
-          <h2 className="font-brand text-2xl text-white">Top Tracks</h2>
-        </div>
-        <div className="space-y-3">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Skeleton key={index} className="h-20 rounded-2xl" />
+      <section className="py-14">
+        <SectionHead
+          title="Top tracks"
+          note="Five from Spotify. Press play for a 30-second preview."
+        />
+        <ol className="mt-6">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <li key={index} className={rowClass}>
+              <Skeleton className="h-3 w-6" />
+              <Skeleton className="h-12 w-12" />
+              <div>
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="mt-2 h-3 w-1/3" />
+              </div>
+              <Skeleton className="h-10 w-10" />
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
     );
   }
@@ -96,91 +107,83 @@ export function ArtistTopTracks({ artist }: ArtistTopTracksProps) {
   if (tracks.length === 0) return null;
 
   return (
-    <section className="py-10">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Music2 size={22} className="text-primary" />
-            <h2 className="font-brand text-2xl text-white">Top Tracks</h2>
-          </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Quick taste check before you commit to a set.
-          </p>
-        </div>
-        <Badge variant="muted">Spotify</Badge>
-      </div>
+    <section className="py-14">
+      <SectionHead
+        title="Top tracks"
+        note="Five from Spotify. Press play for a 30-second preview."
+      />
 
-      <div className="space-y-3">
+      <ol className="mt-6">
         {tracks.map((track, index) => {
           const isPlaying = activePreview === track.id;
 
           return (
-            <motion.div
-              key={track.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={cn(
-                "glass flex items-center gap-4 rounded-2xl p-4",
-                "border border-white/5"
-              )}
-            >
-              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
+            <li key={track.id} className={rowClass}>
+              <span className="meta">{String(index + 1).padStart(2, "0")}</span>
+
+              <div className="relative h-12 w-12 overflow-hidden bg-ink-3">
                 <Image
                   src={track.album?.images?.[0]?.url || PLACEHOLDER_IMAGE}
-                  alt={track.name}
+                  alt=""
                   fill
-                  sizes="56px"
-                  className="object-cover"
+                  sizes="48px"
+                  className="img-poster object-cover"
                 />
               </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-white">
-                  {track.name}
+              <div className="min-w-0">
+                <p className="flex items-center gap-2 text-sm text-paper">
+                  <span className="truncate">{track.name}</span>
+                  {isPlaying && (
+                    <span className="live-bars shrink-0" aria-label="Playing">
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  )}
                 </p>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  {track.album?.name || artist.artist_name}
-                </p>
+                <p className="meta mt-1 truncate">{track.album?.name || artist.artist_name}</p>
               </div>
 
-              <div className="flex items-center gap-2">
-                {track.preview_url ? (
-                  <button
-                    type="button"
-                    onClick={() => togglePreview(track, isPlaying)}
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-medium transition-colors",
-                      isPlaying
-                        ? "bg-primary text-black"
-                        : "bg-white/10 text-white hover:bg-white/15"
-                    )}
-                  >
-                    {isPlaying ? <Pause size={12} /> : <Play size={12} />}
-                    {isPlaying ? "Pause" : "Preview"}
-                  </button>
-                ) : (
-                  <span className="text-xs text-muted-foreground">
-                    No preview
-                  </span>
-                )}
-
+              <div className="flex items-center gap-4">
                 {track.external_urls?.spotify && (
                   <a
                     href={track.external_urls.spotify}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-green-500"
+                    className="meta-strong hidden underline-offset-4 hover:underline sm:inline"
                   >
-                    <ExternalLink size={12} />
                     Spotify
                   </a>
                 )}
+
+                {track.preview_url ? (
+                  <button
+                    type="button"
+                    onClick={() => togglePreview(track, isPlaying)}
+                    aria-pressed={isPlaying}
+                    aria-label={isPlaying ? `Pause ${track.name}` : `Play ${track.name} preview`}
+                    className={cn(
+                      "inline-flex h-10 w-10 items-center justify-center transition-[background-color,color,border-color,transform] active:scale-95",
+                      isPlaying
+                        ? "bg-signal text-signal-ink"
+                        : "border border-line-strong text-paper hover:border-paper hover:bg-ink-2"
+                    )}
+                  >
+                    {isPlaying ? (
+                      <Pause size={14} className="fill-current" />
+                    ) : (
+                      <Play size={14} className="fill-current" />
+                    )}
+                  </button>
+                ) : (
+                  <span className="meta">No preview</span>
+                )}
               </div>
-            </motion.div>
+            </li>
           );
         })}
-      </div>
+      </ol>
     </section>
   );
 

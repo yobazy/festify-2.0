@@ -1,26 +1,32 @@
 "use client";
 
 import { SearchInput } from "@/components/ui/SearchInput";
+import { PlacePicker } from "./PlacePicker";
 import { cn } from "@/lib/utils";
+import type { Place } from "@/lib/places";
 
-type EventTypeFilter = "all" | "festival" | "electronic";
-type EventViewMode = "all" | "recommended" | "saved";
+export type EventTypeFilter = "all" | "festival" | "electronic";
+export type EventViewMode = "all" | "recommended" | "saved";
+export type EventSort = "date" | "bill";
+export type DatePreset = "tonight" | "weekend" | "next30" | "month";
 
 interface EventFiltersProps {
   query: string;
   onQueryChange: (q: string) => void;
   totalResults: number;
-  location: string;
-  locationOptions: string[];
-  onLocationChange: (location: string) => void;
+  places: Place[];
+  place: Place | null;
+  onPlaceChange: (place: Place | null) => void;
   from: string;
   to: string;
   onFromChange: (v: string) => void;
   onToChange: (v: string) => void;
+  activePreset: DatePreset | null;
+  onPresetChange: (preset: DatePreset | null) => void;
   type: EventTypeFilter;
   onTypeChange: (type: EventTypeFilter) => void;
-  onThisMonth: () => void;
-  onNext30Days: () => void;
+  sort: EventSort;
+  onSortChange: (sort: EventSort) => void;
   onReset: () => void;
   hasActiveFilters: boolean;
   viewMode: EventViewMode;
@@ -28,186 +34,175 @@ interface EventFiltersProps {
   hasTasteProfile: boolean;
 }
 
+const PRESETS: Array<{ value: DatePreset; label: string }> = [
+  { value: "tonight", label: "Tonight" },
+  { value: "weekend", label: "This weekend" },
+  { value: "next30", label: "Next 30 days" },
+  { value: "month", label: "This month" },
+];
+
+const dateFieldClass =
+  "h-11 w-full min-w-0 border-0 bg-transparent font-mono text-xs text-paper [color-scheme:dark] focus:outline-none";
+
+function Toggle({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "border-b pb-0.5 text-sm transition-colors",
+        active
+          ? "border-paper text-paper"
+          : "border-transparent text-smoke hover:border-line-strong hover:text-paper"
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Divider() {
+  return <span className="hidden h-4 w-px bg-line sm:block" aria-hidden="true" />;
+}
+
 export function EventFilters({
   query,
   onQueryChange,
   totalResults,
-  location,
-  locationOptions,
-  onLocationChange,
+  places,
+  place,
+  onPlaceChange,
   from,
   to,
   onFromChange,
   onToChange,
+  activePreset,
+  onPresetChange,
   type,
   onTypeChange,
-  onThisMonth,
-  onNext30Days,
+  sort,
+  onSortChange,
   onReset,
   hasActiveFilters,
   viewMode,
   onViewModeChange,
   hasTasteProfile,
 }: EventFiltersProps) {
-  const typeOptions: Array<{ value: EventTypeFilter; label: string }> = [
-    { value: "all", label: "All events" },
-    { value: "festival", label: "Festivals" },
-    { value: "electronic", label: "Electronic" },
-  ];
-
   return (
-    <div className="glass mb-8 space-y-4 p-4">
-      {hasTasteProfile && (
-        <div className="flex flex-wrap gap-2">
-          {[
-            { value: "all", label: "Everything" },
-            { value: "recommended", label: "For you" },
-            { value: "saved", label: "Saved" },
-          ].map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => onViewModeChange(option.value as EventViewMode)}
-              className={cn(
-                "rounded-full px-3 py-2 text-xs font-medium transition-all",
-                viewMode === option.value
-                  ? "bg-primary text-black"
-                  : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white"
-              )}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+    <div className="pt-4">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,0.8fr)]">
         <SearchInput
+          className="col-span-2 sm:col-span-1"
           value={query}
           onChange={onQueryChange}
-          placeholder="Search events, venues, locations..."
-          className="flex-1"
+          placeholder="Artist, event, venue"
+          label="Search shows"
         />
 
-        <select
-          value={location}
-          onChange={(e) => onLocationChange(e.target.value)}
-          className="h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white transition-all duration-200 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 lg:w-[220px]"
-          aria-label="Filter by location"
-        >
-          <option value="">All locations</option>
-          {locationOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+        <div className="col-span-2 sm:col-span-1">
+          <PlacePicker places={places} value={place} onChange={onPlaceChange} />
+        </div>
 
-        <div className="flex w-full items-center gap-2 lg:w-auto">
+        <label className="flex items-center gap-3 border-b border-line focus-within:border-paper">
+          <span className="meta shrink-0">From</span>
           <input
             type="date"
             value={from}
             onChange={(e) => onFromChange(e.target.value)}
-            className="h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white transition-all duration-200 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 sm:w-[150px]"
-            aria-label="From date"
+            className={cn(dateFieldClass, !from && "text-smoke")}
           />
-          <span className="text-sm text-muted-foreground">to</span>
+        </label>
+
+        <label className="flex items-center gap-3 border-b border-line focus-within:border-paper">
+          <span className="meta shrink-0">To</span>
           <input
             type="date"
             value={to}
+            min={from || undefined}
             onChange={(e) => onToChange(e.target.value)}
-            className="h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white transition-all duration-200 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25 sm:w-[150px]"
-            aria-label="To date"
+            className={cn(dateFieldClass, !to && "text-smoke")}
           />
-        </div>
-
-        <span className="text-sm text-muted-foreground whitespace-nowrap">
-          {totalResults} event{totalResults !== 1 ? "s" : ""}
-        </span>
+        </label>
       </div>
 
-      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-        <div className="flex flex-wrap gap-2">
-          {typeOptions.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => onTypeChange(option.value)}
-              className={cn(
-                "rounded-full px-3 py-2 text-xs font-medium transition-all",
-                type === option.value
-                  ? "bg-primary text-black"
-                  : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white"
-              )}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-line py-3">
+        <Toggle active={type === "all"} onClick={() => onTypeChange("all")}>
+          Everything
+        </Toggle>
+        <Toggle active={type === "festival"} onClick={() => onTypeChange("festival")}>
+          Festivals
+        </Toggle>
+        <Toggle active={type === "electronic"} onClick={() => onTypeChange("electronic")}>
+          Electronic
+        </Toggle>
 
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={onThisMonth}
-            className="rounded-full bg-white/5 px-3 py-2 text-xs font-medium text-muted-foreground transition-all hover:bg-white/10 hover:text-white"
+        <Divider />
+        {PRESETS.map((preset) => (
+          <Toggle
+            key={preset.value}
+            active={activePreset === preset.value}
+            onClick={() => onPresetChange(activePreset === preset.value ? null : preset.value)}
           >
-            This month
-          </button>
-          <button
-            type="button"
-            onClick={onNext30Days}
-            className="rounded-full bg-white/5 px-3 py-2 text-xs font-medium text-muted-foreground transition-all hover:bg-white/10 hover:text-white"
-          >
-            Next 30 days
-          </button>
+            {preset.label}
+          </Toggle>
+        ))}
+
+        {hasTasteProfile && (
+          <>
+            <Divider />
+            <Toggle
+              active={viewMode === "recommended"}
+              onClick={() => onViewModeChange(viewMode === "recommended" ? "all" : "recommended")}
+            >
+              For you
+            </Toggle>
+            <Toggle
+              active={viewMode === "saved"}
+              onClick={() => onViewModeChange(viewMode === "saved" ? "all" : "saved")}
+            >
+              Saved
+            </Toggle>
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3">
+        <p className="meta" aria-live="polite">
+          <span className="text-paper">{totalResults}</span>{" "}
+          {totalResults === 1 ? "show" : "shows"}
+          {place && <> in {place.label}</>}
           {hasActiveFilters && (
             <button
               type="button"
               onClick={onReset}
-              className="rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-white transition-all hover:border-white/20 hover:bg-white/5"
+              className="ml-4 text-paper underline underline-offset-4"
             >
               Clear filters
             </button>
           )}
-        </div>
-      </div>
+        </p>
 
-      {(from || to || location) && (
-        <div className="flex flex-wrap gap-2">
-          {location && (
-            <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-xs font-medium text-primary">
-              {location}
-            </div>
-          )}
-          {(from || to) && (
-            <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-xs font-medium text-primary">
-              {formatDateRangeLabel(from, to)}
-            </div>
-          )}
-        </div>
-      )}
+        {viewMode !== "recommended" && (
+          <div className="flex items-center gap-4">
+            <span className="meta">Sort</span>
+            <Toggle active={sort === "date"} onClick={() => onSortChange("date")}>
+              Soonest
+            </Toggle>
+            <Toggle active={sort === "bill"} onClick={() => onSortChange("bill")}>
+              Biggest bills
+            </Toggle>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
-
-function formatDateRangeLabel(from: string, to: string) {
-  if (from && to) {
-    return `Showing ${formatDateLabel(from)} to ${formatDateLabel(to)}`;
-  }
-
-  if (from) {
-    return `Showing from ${formatDateLabel(from)}`;
-  }
-
-  return `Showing through ${formatDateLabel(to)}`;
-}
-
-function formatDateLabel(value: string) {
-  const [year, month, day] = value.split("-").map(Number);
-  const date = new Date(year, (month ?? 1) - 1, day ?? 1);
-
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
 }

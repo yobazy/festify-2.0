@@ -1,0 +1,17 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- People/playlist image fallback: the mark, faint, on a raised ink square. -->
+  <rect width="800" height="800" fill="#1f1f1f"/>
+  <g stroke="#f2f0eb" stroke-opacity="0.08">
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="0" y1="400" x2="800" y2="400"/>
+  </g>
+  <g transform="translate(208 208) scale(6)">
+    <rect x="6" y="6" width="52" height="8" fill="#f2f0eb" fill-opacity="0.14"/>
+    <g fill="#f2f0eb" fill-opacity="0.06">
+      <circle cx="27" cy="28" r="3"/><circle cx="41" cy="28" r="3"/><circle cx="55" cy="28" r="3"/>
+      <circle cx="13" cy="42" r="3"/><circle cx="27" cy="42" r="3"/><circle cx="41" cy="42" r="3"/><circle cx="55" cy="42" r="3"/>
+      <circle cx="13" cy="56" r="3"/><circle cx="27" cy="56" r="3"/><circle cx="41" cy="56" r="3"/><circle cx="55" cy="56" r="3"/>
+    </g>
+    <circle cx="13" cy="28" r="6" fill="#00d4aa" fill-opacity="0.45"/>
+  </g>
+</svg>
