@@ -158,7 +158,7 @@ export function ArtistGrid({ artists }: ArtistGridProps) {
       {filtered.length === 0 && (
         <div className="border-b border-line py-20 text-center">
           <p className="display text-3xl text-paper">No one by that name</p>
-          <p className="mt-3 text-sm text-smoke">Try fewer letters or clear the genre.</p>
+          <p className="mt-3 text-sm text-smoke">Not on an upcoming bill, or spelled with more vowels than you remember. Try fewer letters or clear the genre.</p>
         </div>
       )}
 

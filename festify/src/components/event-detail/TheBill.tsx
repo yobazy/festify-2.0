@@ -17,7 +17,7 @@ export function TheBill({ artists }: TheBillProps) {
           <>
             <h2 className="display text-3xl text-paper">Lineup TBA</h2>
             <p className="mt-2 text-sm text-smoke">
-              Nothing announced yet. Save the event and check back.
+              Nothing announced yet. The promoter is either building suspense or still asleep. Save the show and check back.
             </p>
           </>
         ) : (

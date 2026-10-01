@@ -123,7 +123,7 @@ export default async function PlaylistsPage() {
 
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pt-4">
         <p className="meta">
-          Every lineup, as a playlist. Ranked by the strength of the whole bill.
+          Every lineup, as a playlist. Learn the words now, before you&apos;re front left pretending you knew them all along.
         </p>
         {!user && (
           <Link
@@ -162,7 +162,7 @@ export default async function PlaylistsPage() {
 
         {!user ? (
           <p className="pt-8 text-sm text-smoke">
-            Browse without an account. Sign in when you want to save.
+            Browse all you like. Sign in when you want to keep something.
           </p>
         ) : savedPlaylists.length === 0 ? (
           <p className="pt-8 text-sm text-smoke">

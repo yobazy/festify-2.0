@@ -22,7 +22,7 @@ export default function SignupPage() {
 
         <h1 className="display mt-10 text-5xl text-paper">Join</h1>
         <p className="mt-3 text-sm text-smoke">
-          Keep artists, events and playlists across devices.
+          Keep your artists, shows and playlists on every device, including the one you&apos;ll find down the back of a sofa on Sunday.
         </p>
 
         <form action={action} className="mt-8 space-y-6">

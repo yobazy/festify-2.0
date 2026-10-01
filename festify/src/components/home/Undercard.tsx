@@ -18,7 +18,7 @@ export function Undercard({ artists }: UndercardProps) {
       <div className="page">
         <SectionHead
           title="Undercard"
-          note="Billed under the headliner on upcoming shows. Get there for the opener."
+          note="Billed under the headliner. Get there early and you can say you saw them first."
           aside={{ href: "/artists", label: "All artists" }}
         />
       </div>

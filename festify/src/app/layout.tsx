@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s — Front Left",
   },
   description:
-    "Upcoming shows and festivals ranked by the strength of the whole lineup. Hear the lineup before you go.",
+    "Upcoming shows and festivals ranked by the strength of the whole lineup. Hear it before you go.",
   // The site is dark by design; stop Dark Reader from re-inverting it.
   other: { "darkreader-lock": "true" },
 };

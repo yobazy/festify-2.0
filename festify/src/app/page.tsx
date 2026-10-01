@@ -122,8 +122,8 @@ export default async function HomePage() {
         <section className="page border-b border-line pb-12 pt-24">
           <h1 className="display text-6xl text-paper sm:text-8xl">Front Left</h1>
           <p className="mt-6 max-w-md text-sm text-smoke">
-            Nothing listed yet. Shows sync from EDMTrain and Resident Advisor; check
-            back shortly.
+            Nothing on yet. Shows sync from EDMTrain and Resident Advisor; check back
+            shortly.
           </p>
         </section>
       )}

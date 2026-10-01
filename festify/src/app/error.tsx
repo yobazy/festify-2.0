@@ -13,7 +13,7 @@ export default function Error({
     <div className="page flex min-h-[70svh] flex-col justify-center">
       <h1 className="display text-5xl text-paper sm:text-7xl">Couldn&apos;t load that.</h1>
       <p className="mt-4 max-w-md text-sm text-smoke">
-        Something on our side. Try again, or go back to the shows.
+        That one&apos;s on us. Try again, or go back to the shows while we have a word with the sound guy.
       </p>
       <div className="mt-8 flex items-center gap-6">
         <Button onClick={reset}>Try again</Button>

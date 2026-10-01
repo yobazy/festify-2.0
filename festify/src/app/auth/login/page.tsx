@@ -32,7 +32,7 @@ export default function LoginPage() {
         </Link>
 
         <h1 className="display mt-10 text-5xl text-paper">Sign in</h1>
-        <p className="mt-3 text-sm text-smoke">Your saves, your bill.</p>
+        <p className="mt-3 text-sm text-smoke">Your saves are where you left them, which is more than we can say for your lighter.</p>
 
         <form action={action} className="mt-8 space-y-6">
           <input type="hidden" name="next" value={nextPath} />

@@ -107,7 +107,7 @@ export function ForYou({ events, artists, isSignedIn }: ForYouProps) {
         note={
           hasTaste
             ? `${followedArtists.length} followed, ${savedEvents.length} saved. Shows matched to that.`
-            : "Pick a few genres or follow artists. Matching shows turn up here, on this device."
+            : "Tell us what you like: a few genres, a few artists. Matching shows turn up here, on this device."
         }
         aside={
           hasTaste
@@ -168,7 +168,7 @@ export function ForYou({ events, artists, isSignedIn }: ForYouProps) {
 
       {hasTaste && recommendedEvents.length === 0 && (
         <p className="mt-8 text-sm text-smoke">
-          Nothing on the calendar matches yet. Follow a few more artists from the shows page.
+          Nothing on the calendar matches yet. Follow a few more artists from the shows page, or admit you only like one DJ.
         </p>
       )}
     </section>

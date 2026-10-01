@@ -250,8 +250,8 @@ export function EventGrid({ events }: EventGridProps) {
           <p className="mt-3 text-sm text-smoke">
             {hasActiveFilters
               ? place?.kind === "city"
-                ? "Widen the dates, or try the whole state."
-                : "Widen the dates or clear a filter."
+                ? "Widen the dates, or try the whole state. Sometimes the good night is a drive away."
+                : "Widen the dates or clear a filter. You've out-niched the calendar."
               : "Shows sync from EDMTrain and Resident Advisor. Check back shortly."}
           </p>
         </div>

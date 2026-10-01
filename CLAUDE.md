@@ -102,6 +102,7 @@ After completing any significant task:
 - Lineups are typeset as poster billing via `Billing` (`lib/lineup.ts`: `rankLineup`, `billingTiers`). Use `artistsNotNamedIn(artists, event_name)` before billing under a title: many listings are titled after the acts and would stutter
 - Motion: one orchestrated moment per page at most (event page billing stagger), springs on press; no per-section fade-ups or card entrance staggers
 - Voice: dry and specific, sentence case, no hype or exclamation marks. Errors say what happened and what to do; empty states invite an action
+- Voice reference: Juan Forte's "Meet front left" (https://www.juanforte.co.uk/post/clkwght), the piece the name comes from. Take from it: talk to "you" like a friend at the bar, mock-serious about trivial rave stuff, concrete scene detail (a stranger's sofa at 8am, warm Red Stripe) instead of adjectives, a short deadpan line after a longer one, occasional self-deprecation. Keep his tone, not his exclamation marks. Jokes go in low-stakes spots (empty states, 404, error page, footer, page intros), at most one per screen; buttons, filters, forms and real error instructions stay plain
 - `<meta name="darkreader-lock">` is set in layout metadata because the site is dark by design; Dark Reader otherwise repaints it and hides tiles
 - Spotify avatar URLs come from arbitrary CDN hosts: render them with a plain `<img>`, not `next/image`
 - `PLACEHOLDER_IMAGE` is now `placeholder-artist.svg`; `src/app/apple-icon.png` is still the old purple tile and needs regenerating from `logo.svg`
